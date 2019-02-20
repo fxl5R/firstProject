@@ -3,7 +3,6 @@ import React,{Component} from 'react';
 import {
     View,
     Text,
-    Image,
     StyleSheet,
     StatusBar,
     Platform
@@ -17,23 +16,26 @@ const StatusBarShape={
     backgroundColor:PropTypes.string,
     barStyle:PropTypes.oneOf(['default', 'light-content', 'dark-content']),
     hidden:PropTypes.bool
-}
+    };
 export default class NavigationBar extends  Component{
     static propTypes={
         style:PropTypes.object,
         title:PropTypes.string,
         titleView:PropTypes.element,
         hide:PropTypes.bool,
+
+
         leftButton: PropTypes.element,
+        leftButtonTitle:PropTypes.string,
         rightButton:PropTypes.element,
         statusBar :PropTypes.shape(StatusBarShape)
-    }
+    };
     static defaultProps={
         statusBar:{
             barStyle: 'light-content',
             hidden:false
         }
-    }
+    };
     /*构造方法*/
     constructor(props){
         super(props);
@@ -43,11 +45,12 @@ export default class NavigationBar extends  Component{
         }
     }
     render(){
-        let status=<View style={[styles.statusBar,this.props.statusBar]}>
+        let status=
+            <View style={[styles.statusBar,this.props.statusBar]}>
             <StatusBar {...this.props.statusBar}/>
-        </View>
+            </View>;
         let titleView=this.props.titleView?this.props.titleView:   //如果用户同时自定义了title和tileView，分级，先判断titleView空值：如果没有设置titleView
-            <Text style={styles.title}>{this.props.title}</Text>
+            <Text style={styles.title}>{this.props.title}</Text>;
         let content=<View style={styles.navBar}>
             {this.props.leftButton}
             <View style={styles.titleViewContainer}>
@@ -55,7 +58,7 @@ export default class NavigationBar extends  Component{
                 {titleView}
                 {this.props.rightButton}
             </View>
-        </View>
+        </View>;
         return(
             <View style={[styles.container,this.props.style]}>
                 {status}
@@ -66,13 +69,13 @@ export default class NavigationBar extends  Component{
 }
 const styles=StyleSheet.create({
     container:{
-        backgroundColor:'gray'
+        backgroundColor:'green'
     },
     navBar:{
         justifyContent: 'space-between',
         alignItems: 'center',
         height:Platform.OS==='ios'?NAVBAR_HEIGHT_IOS:NAVBAR_HEIGHT_ANDROID,
-        backgroundColor: 'gray',
+        backgroundColor: 'green',
         flexDirection: 'row'
     },
     titleViewContainer:{             //绝对位置显示
@@ -91,4 +94,4 @@ const styles=StyleSheet.create({
     statusBar:{
         height: Platform.OS==='ios'?STATUS_BAR_HEIGHT:0,
     }
-})
+});

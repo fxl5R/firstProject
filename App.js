@@ -8,13 +8,13 @@
 
 import React, {Component} from 'react';
 import {
-    Platform,
     StyleSheet,
     View,
     Text,
     Image,
     TouchableOpacity,     //返回按钮可单击
-} from 'react-native';
+    Button
+    } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
 import NavigationBar from "./NavigationBar";
@@ -44,6 +44,7 @@ export default class App extends Component<Props> {
         );
     }
       render() {
+        const {navigation}=this.props;
     return (
       <View style={styles.container}>
           <TabNavigator>
@@ -78,7 +79,7 @@ export default class App extends Component<Props> {
                       <NavigationBar
                           title={'Message'}
                           style={{
-                              backgroundColor:'gray'
+                              backgroundColor:'green'
                           }}
                           leftButton={
                               this.renderButton(require('./res/images/ic_back.png'))
@@ -94,6 +95,9 @@ export default class App extends Component<Props> {
                             }}>
                           TTTestBBBack
                       </Text>
+                      <Button title="go to MsgBox" onPress={()=>{
+                          navigation.navigate('MsgBox')
+                      }}/>
                   </View>
               </TabNavigator.Item>
               <TabNavigator.Item
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
    },
    text:{
       fontSize:26
-   }
+   },
    button:{
        width:22,
        height:22,
