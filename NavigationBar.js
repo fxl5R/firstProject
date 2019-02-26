@@ -7,7 +7,7 @@ import {
     StatusBar,
     Platform
 }from 'react-native';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 /*定义常量*/
 const NAVBAR_HEIGHT_ANDROID=50;
 const NAVBAR_HEIGHT_IOS=44;
@@ -32,10 +32,25 @@ export default class NavigationBar extends  Component{
     };
     static defaultProps={
         statusBar:{
+            color:'#B0C4DE',
             barStyle: 'light-content',
             hidden:false
         }
     };
+/*    static HeaderBackButton={
+        headerButton: (
+            <Button
+                onPress={()=>alert('this is headerbtn')}
+            />
+        )
+    }*/
+    getButtonElement(data) {
+        return (
+            <View>
+                {data? data : null}
+            </View>
+        );
+    }
     /*构造方法*/
     constructor(props){
         super(props);
@@ -51,13 +66,13 @@ export default class NavigationBar extends  Component{
             </View>;
         let titleView=this.props.titleView?this.props.titleView:   //如果用户同时自定义了title和tileView，分级，先判断titleView空值：如果没有设置titleView
             <Text style={styles.title}>{this.props.title}</Text>;
-        let content=<View style={styles.navBar}>
-            {this.props.leftButton}
+        let content=this.props.hide?null:
+            <View style={styles.navBar}>
+            {this.getButtonElement(this.props.leftButton)}
             <View style={styles.titleViewContainer}>
-                {this.props.leftButton}
                 {titleView}
-                {this.props.rightButton}
             </View>
+            {this.getButtonElement(this.props.rightButton)}
         </View>;
         return(
             <View style={[styles.container,this.props.style]}>
@@ -69,13 +84,13 @@ export default class NavigationBar extends  Component{
 }
 const styles=StyleSheet.create({
     container:{
-        backgroundColor:'green'
+        backgroundColor:'#B0C4DE'
     },
     navBar:{
         justifyContent: 'space-between',
         alignItems: 'center',
         height:Platform.OS==='ios'?NAVBAR_HEIGHT_IOS:NAVBAR_HEIGHT_ANDROID,
-        backgroundColor: 'green',
+        backgroundColor: '#B0C4DE',
         flexDirection: 'row'
     },
     titleViewContainer:{             //绝对位置显示

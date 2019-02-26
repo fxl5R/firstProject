@@ -2,10 +2,10 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "27.0.3"
+        buildToolsVersion = "28.0.3"
         minSdkVersion = 16
-        compileSdkVersion = 27
-        targetSdkVersion = 26
+        compileSdkVersion = 28
+        targetSdkVersion = 28
         supportLibVersion = "27.1.1"
     }
     repositories {
@@ -31,7 +31,17 @@ allprojects {
         }
     }
 }
+subprojects{
+    afterEvaluate {project ->
+        if(project.hasProperty("android")){
+            android{
+                rootProject.ext.compileSdkVersion
+                rootProject.ext.buildToolsVersion
 
+            }
+         }
+    }
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.4'

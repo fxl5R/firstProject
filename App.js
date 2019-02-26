@@ -15,36 +15,50 @@ import {
     TouchableOpacity,     //返回按钮可单击
     Button
     } from 'react-native';
-
+/*import {
+    NaviBar,
+    GOBACK_BUTTON,
+    GOBACK_IMAGE,
+    }from 'react-native-pure-navigation-bar';*/
+//import Navigator from '@react-navigation';
 import TabNavigator from 'react-native-tab-navigator';
 import NavigationBar from "./NavigationBar";
-// const instructions = Platform.select({
-//   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-//   android:
-//     'Double tap R on your keyboard to reload,\n' +
-//     'Shake or press menu button for dev menu',
-// });
-// type Props = {};
+import { NavigationActions,createStackNavigator } from 'react-navigation';
+//import {AppStackNavigator} from "./navigators/AppNavigators";
 
-// export default AppStackNavigator;
-
+//export default AppStackNavigator;
 export default class App extends Component<Props> {
     constructor(props){
         super(props);
         this.state={
-            selectedTab:'tb_home',
+            selectedTab:'tb_home'
         };
     }
-    renderButton(image){
+/*    _leftButtonPress=()=>{
+        const {navigation}=this.props;
+        navigation.goBack();
+    }*/
+    onPress=()=>{
+        const {onPress} =this.props;
+        onPress();
+    };
+    static navigationOptions={
+        title:'title-'
+    }
+/*    renderButton(image){
         return(
-            // 响应触发
-        <TouchableOpacity  onPress={this.props.navigator.pop()}>
+            // 响应触发  press:this.props.navigator.pop()
+        <TouchableOpacity  onPress={alert('!!')}>
             <Image style={styles.button} source={image}/>
         </TouchableOpacity>
         );
-    }
+    }*/
       render() {
-        const {navigation}=this.props;
+/*          const navigateAction=NavigationActions.navigate({
+              routeName:'./pages/MsgBox',
+          });
+          this.props.navigation.dispatch('navigateAction');*/
+
     return (
       <View style={styles.container}>
           <TabNavigator>
@@ -56,7 +70,10 @@ export default class App extends Component<Props> {
                   renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#2680F0'}]} source={require('./res/images/ic_hindex.png')} />}
                   badgeText="1"
                   onPress={() => this.setState({ selectedTab: 'tb_home' })}>
-                  <View styles={styles.page1}><Text style={styles.text}>首页1111111</Text></View>
+
+                  <View styles={styles.page1}>
+                      <Text style={styles.text}>首页1111111.1</Text>
+                  </View>
               </TabNavigator.Item>
               <TabNavigator.Item
                   selected={this.state.selectedTab === 'tb_star'}
@@ -79,24 +96,41 @@ export default class App extends Component<Props> {
                       <NavigationBar
                           title={'Message'}
                           style={{
-                              backgroundColor:'green'
+                              backgroundColor:'#C0C0C0'
                           }}
                           leftButton={
-                              this.renderButton(require('./res/images/ic_back.png'))
+                              <View title={'收藏'}>
+                                    <TouchableOpacity
+                                        onPress={function () {
+                                            alert('----返回上页----');
+                                        }}>
+                                        <Image style={styles.button} source={require('./res/images/ic_left-circle.png')}/>
+                                    </TouchableOpacity>
+                              </View>
+
                           }
                           rightButton={
-                              this.renderButton(require('./res/images/ic_star.png'))
+                              <View title={'收藏'}>
+                                  <TouchableOpacity
+                                      onPress={function () {
+                                          alert('----打开收藏----');
+                                      }}>
+                                        <Image style={styles.button} source={require('./res/images/ic_star.png')}/>
+                                    </TouchableOpacity>
+                              </View>
                           }
+
                       />
                       <Text style={styles.text}>消息33333</Text>
-                      <Text style={styles.text} onPress={()=>{
-                                this.props.onCallback('Bbback');
-                                this.props.navigator.pop();
+                      <Text style={styles.text}
+                            onPress={()=>{
+                                alert('test success');
                             }}>
                           TTTestBBBack
                       </Text>
                       <Button title="go to MsgBox" onPress={()=>{
-                          navigation.navigate('MsgBox')
+
+                          NavigationActions.navigate({routeName:'./pages/MsgBox'})
                       }}/>
                   </View>
               </TabNavigator.Item>
@@ -146,8 +180,9 @@ const styles = StyleSheet.create({
       fontSize:26
    },
    button:{
-       width:22,
-       height:22,
-       margin:5
+       width:26,
+       height:26,
+       margin:5,
+       padding:8
    }
 });

@@ -1,31 +1,24 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
 
 import React, {Component} from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Button
-    } from 'react-native';
+import {StyleSheet, Text, View,Button} from 'react-native';
 
 
-type Props = {};
-export default class MsgBox extends Component<Props> {
+export default class HomePage extends Component<Props> {
     render() {
         const {navigation}=this.props;
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>消息盒子</Text>
+                <Text style={styles.welcome}>Welcome to HomePage</Text>
                 <Button
-                    title="Go Back"
+                    title={'go to MsgBox'}
                     onPress={()=>{
-                        navigation.goBack();//返回某一页面的Key
+                        navigation.navigate('MsgBox')
+                    }}
+                />
+                <Button
+                    title={'go to TabNavigator'}
+                    onPress={()=>{
+                        navigation.navigate('MsgBox')
                     }}
                 />
             </View>

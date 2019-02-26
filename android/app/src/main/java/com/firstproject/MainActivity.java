@@ -1,4 +1,4 @@
-package com.firstproject;
+package com.firstProject;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
