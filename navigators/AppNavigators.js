@@ -1,23 +1,47 @@
 
-import {createStackNavigator} from 'react-navigation'
-import App from '../App'
-import HomePage from '../pages/HomePage'
-import MsgBox from '../pages/MsgBox'
+import {createAppContainer,createStackNavigator} from 'react-navigation';
+import HomePage from '../pages/HomePage';
+import MsgBox from '../pages/MsgBox';
+import TabPage from '../pages/TabPage';
 
-export const AppStackNavigator = createStackNavigator({
+
+
+const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
-    IndexHome:{
-        screen:App
-    },
     HomePage:{
         screen:HomePage,
-        /*navigationOptions: ({navigation})=>({
+        navigationOptions:{
             title:'HomePage',
-            headerButtonImage:'true',
-        })*/
+            headerStyle: {
+                backgroundColor: '#ADD8E6',
+            },
+            headerTitleStyle:{
+                flex:1,
+                textAlign: 'center'
+            }
+        }
     },
-    MsgBox:{
-         screen: MsgBox
-     },
+
+    TabPage:{
+        screen:TabPage,
+        navigationOptions:{
+            title:'HomePage',
+            headerButtonImage: 'true',
+        },
+    },
+
+    MsgBox: {
+        screen: MsgBox,
+        navigationOptions: {
+            title: 'MessageBox',
+            headerButtonImage: 'true',
+        },
+    },
+
+
+
 });
+const AppContainer = createAppContainer(AppStackNavigator);
+export default AppContainer;
+

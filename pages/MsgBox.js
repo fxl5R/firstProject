@@ -14,18 +14,16 @@ import {
     Button
     } from 'react-native';
 
-
 type Props = {};
 export default class MsgBox extends Component<Props> {
     render() {
-        const {navigation}=this.props;
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>消息盒子</Text>
                 <Button
-                    title="Go Back"
+                    title="GoBack"
                     onPress={()=>{
-                        navigation.goBack();//返回某一页面的Key
+                        this.props.navigation.goBack()
                     }}
                 />
             </View>
@@ -38,7 +36,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        backgroundColor: '#E1FFFF',
     },
     welcome: {
         fontSize: 20,

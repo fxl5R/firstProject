@@ -64,13 +64,14 @@ export default class NavigationBar extends  Component{
             <View style={[styles.statusBar,this.props.statusBar]}>
             <StatusBar {...this.props.statusBar}/>
             </View>;
-        let titleView=this.props.titleView?this.props.titleView:   //如果用户同时自定义了title和tileView，分级，先判断titleView空值：如果没有设置titleView
+        //如果用户同时自定义了title和tileView，分级，先判断titleView空值：如果没有设置titleView
+        let titleView=this.props.titleView?this.props.titleView:
             <Text style={styles.title}>{this.props.title}</Text>;
         let content=this.props.hide?null:
             <View style={styles.navBar}>
             {this.getButtonElement(this.props.leftButton)}
             <View style={styles.titleViewContainer}>
-                {titleView}
+                {titleView};
             </View>
             {this.getButtonElement(this.props.rightButton)}
         </View>;
