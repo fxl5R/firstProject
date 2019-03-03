@@ -12,6 +12,11 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
+import okhttp3.OkHttpClient;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -39,9 +44,19 @@ public class MainApplication extends Application implements ReactApplication {
     return mReactNativeHost;
   }
 
+  public static OkHttpClient okHttpClient;
   @Override
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+
+    Stetho.initializeWithDefaults(this);
+              initOkHttpClient();
   }
+
+      public void initOkHttpClient(){
+          okHttpClient=new OkHttpClient.Builder()
+                  .addNetworkInterceptor(new StethoInterceptor())
+                  .build();
+      }
 }

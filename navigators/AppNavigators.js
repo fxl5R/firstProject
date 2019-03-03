@@ -10,10 +10,20 @@ import login from '../pages/login';
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
+
+    MsgBox: {
+        screen: MsgBox,
+        navigationOptions: {
+            title: 'MessageBox',
+            headerButtonImage: 'true',
+        },
+    },
+
     Login:{
         screen:login,
         navigationOptions:{header: null}
     },
+
     Guide:{
         screen:guidePage,
         navigationOptions:{
@@ -41,15 +51,6 @@ const AppStackNavigator = createStackNavigator({
             headerButtonImage: 'true',
         },
     },
-
-    MsgBox: {
-        screen: MsgBox,
-        navigationOptions: {
-            title: 'MessageBox',
-            headerButtonImage: 'true',
-        },
-    },
-
 
 
 });

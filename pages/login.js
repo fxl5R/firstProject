@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import { StyleSheet, View,TextInput,Text,Image,PixelRatio} from 'react-native';
+import { StyleSheet, View,TextInput,Text,Image,PixelRatio,AsyncStorage} from 'react-native';
 import Button from '../component/Button';
 
 type Props = {};
