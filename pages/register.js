@@ -26,26 +26,30 @@ const UserSchema = {
 };
 //初始化Realm
 let realm = new Realm({schema: [UserSchema]});
-export default class login extends Component {
+export default class register extends Component {
     constructor(props) {
         super(props);
         this.state={
             text:'',
             password:''
         }
+
     }
-    handle_loginClick(){
-            let users=realm.objects('User').filtered('userName==$0',this.state.text.toString());
-            let user=users[0];
-            let password1=user.userPassword;
-            if(this.state.password===password1){
-                ToastAndroid.show('登录成功',ToastAndroid.SHORT);
-                this.props.navigation.navigate('HomePage');
-            }else{
-                ToastAndroid.show('登录失败，请检查用户名或者密码',ToastAndroid.SHORT)
-            }
-        console.log('name'+this.state.text+'password1'+this.state.password);
-            //realm.close();
+
+    handle_registerClick(){
+        realm.write(()=> {
+            realm.create('User', {
+                id:realm.objects('User').length,
+                userName: [this.state.text].toString(),
+                userPassword: [this.state.password].toString(),
+                userSex: 'female',
+                portrait:'https://b-ssl.duitang.com/uploads/item/201901/09/20190109121033_lxkdt.thumb.300_300_c.jpg',
+                cTime:new Date()
+            })
+        });
+        console.log('name'+this.state.text+'passwd'+this.state.password);
+        ToastAndroid.show("regist success", ToastAndroid.SHORT);
+        this.props.navigation.navigate('login');
     }
     render() {
         return (
@@ -77,7 +81,7 @@ export default class login extends Component {
                     onChangeText={(password)=>this.setState({password})}
                 /></View>
                 <View style={{marginTop: 10}}>
-                    <Button text={'登录'} onPress={this.handle_loginClick.bind(this)}/>
+                    <Button text={'注册'} onPress={this.handle_registerClick.bind(this)}/>
                 </View>
 
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
@@ -86,7 +90,7 @@ export default class login extends Component {
                     </Text>
                     <Text style={styles.style_view_register}
                           onPress={()=>{
-                              this.props.navigation.navigate('register');
+                              this.props.navigation.navigate('MsgBox');
                               /*alert('test success');*/
                           }}>
                         新用户

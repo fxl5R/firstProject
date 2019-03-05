@@ -6,12 +6,19 @@ import SQLiteStorage from 'react-native-sqlite-storage';
 SQLiteStorage.DEBUG(true);
 //SQLite.enablePromise(true);
 //SQLite.enablePromise(false);
-let database_name = "houserent.db";//数据库文件
-let database_version = "1.0";//版本号
-let database_displayname = "MySQLite";
-let database_size = 200000;
+const database_name = "houserent.db";//数据库文件
+const database_version = "1.0";//版本号
+const database_displayname = "MyFirstSQLite";
+const database_size = 200000;
 let db;//=SQLite.openDatabase("houserent", "1.0", "MySQLite", 200000);
 export default class MySQLite extends Component {
+    constructor(){
+        super();
+        this.progress=[];
+        this.state={
+            progress:[]
+        }
+    }
     componentWillUnmount(){
         if(db){
             this._successCB('close');

@@ -5,23 +5,31 @@ import MsgBox from '../pages/MsgBox';
 import TabPage from '../pages/TabPage';
 import guidePage from '../pages/GuidePage';
 import login from '../pages/login';
-
+//import firstRealm from '../pages/firstRealm';
+import register from '../pages/register';
 
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
-
+    Login:{
+        screen:login,
+        navigationOptions:{header: null}
+    },
+    register:{
+        screen:register,
+        navigationOptions:{header:null}
+    },
+    /*firstRealm: {
+        screen: firstRealm,
+        navigationOptions: {
+            title:'Realm实战',
+        },
+    },*/
     MsgBox: {
         screen: MsgBox,
         navigationOptions: {
             title: 'MessageBox',
-            headerButtonImage: 'true',
         },
-    },
-
-    Login:{
-        screen:login,
-        navigationOptions:{header: null}
     },
 
     Guide:{
@@ -51,7 +59,6 @@ const AppStackNavigator = createStackNavigator({
             headerButtonImage: 'true',
         },
     },
-
 
 });
 const AppContainer = createAppContainer(AppStackNavigator);
