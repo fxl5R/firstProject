@@ -26,6 +26,7 @@ const UserSchema = {
 };
 //初始化Realm
 let realm = new Realm({schema: [UserSchema]});
+realm.close();
 export default class register extends Component {
     constructor(props) {
         super(props);
@@ -47,13 +48,14 @@ export default class register extends Component {
                 cTime:new Date()
             })
         });
-        console.log('name'+this.state.text+'passwd'+this.state.password);
-        ToastAndroid.show("regist success", ToastAndroid.SHORT);
-        this.props.navigation.navigate('login');
+        console.log('name'+this.state.text+'password'+this.state.password);
+        ToastAndroid.show("用户"+this.state.text+"成功注册，跳转中", ToastAndroid.SHORT);
+        this.props.navigation.navigate('Login');
+
     }
     render() {
         return (
-            <View style={{backgroundColor:'#B0C4DE',flex:1}}>
+            <View style={{backgroundColor:'#F5F5F5',flex:1}}>
                 <Image
                     style={styles.style_image}
                     source={require('../res/images/logo_peo.png')}/>
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
         margin:20
     },
     username:{
-        marginTop:100,
+        marginTop:50,
         height:48,
         backgroundColor:'white',
         justifyContent:'center',

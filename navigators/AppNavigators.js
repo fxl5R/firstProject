@@ -7,6 +7,9 @@ import guidePage from '../pages/GuidePage';
 import login from '../pages/login';
 //import firstRealm from '../pages/firstRealm';
 import register from '../pages/register';
+//import HouseDetail from "../component/HouseDetail";
+//import SearchResults from '../component/SearchResults';
+
 
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
@@ -24,6 +27,32 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions: {
             title:'Realm实战',
         },
+    },*/
+/*    SearchResults:{
+        screen:SearchResults,
+        navigationOptions:{
+            title:'Result',
+            headerStyle: {
+                backgroundColor: '#ADD8E6',
+            },
+            headerTitleStyle:{
+                flex:1,
+                textAlign: 'center'
+            }
+        }
+    },
+    houseDetail:{
+        screen:'houseDetail',
+        navigationOptions:{
+            title:'房屋信息',
+            headerStyle: {
+                backgroundColor: '#ADD8E6',
+            },
+            headerTitleStyle:{
+                flex:1,
+                textAlign: 'center'
+            }
+        }
     },*/
     MsgBox: {
         screen: MsgBox,
@@ -51,14 +80,12 @@ const AppStackNavigator = createStackNavigator({
             }
         }
     },
-
     TabPage:{
         screen:TabPage,
         navigationOptions:{
-            title:'HomePage',
-            headerButtonImage: 'true',
-        },
-    },
+            header:null
+        }
+    }
 
 });
 const AppContainer = createAppContainer(AppStackNavigator);

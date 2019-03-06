@@ -40,19 +40,19 @@ export default class login extends Component {
             let password1=user.userPassword;
             if(this.state.password===password1){
                 ToastAndroid.show('登录成功',ToastAndroid.SHORT);
-                this.props.navigation.navigate('HomePage');
+                this.props.navigation.navigate('TabPage');
             }else{
                 ToastAndroid.show('登录失败，请检查用户名或者密码',ToastAndroid.SHORT)
             }
         console.log('name'+this.state.text+'password1'+this.state.password);
-            //realm.close();
+
     }
     render() {
         return (
-            <View style={{backgroundColor:'#B0C4DE',flex:1}}>
+            <View style={{backgroundColor:'#DCDCDC',flex:1}}>
                 <Image
                     style={styles.style_image}
-                    source={require('../res/images/logo_peo.png')}/>
+                    source={require('../res/images/house.png')}/>
                 <View style={styles.username}>
                 <TextInput
                     style={styles.edit}
@@ -98,20 +98,11 @@ export default class login extends Component {
 }
 const styles = StyleSheet.create({
     style_image:{
-        borderRadius:35,
-        height:70,
-        width:70,
-        marginTop:70,
+        //borderRadius:35,
+        height:80,
+        width:120,
+        marginTop:80,
         alignSelf:'center',
-    },
-    style_user_input:{
-        backgroundColor:'#fff',
-        marginTop:10,
-        height:35,
-    },
-    style_pwd_input:{
-        backgroundColor:'#fff',
-        height:35,
     },
     style_view_commit:{
         marginTop:15,
@@ -148,7 +139,7 @@ const styles = StyleSheet.create({
         margin:20
     },
     username:{
-        marginTop:100,
+        marginTop:50,
         height:48,
         backgroundColor:'white',
         justifyContent:'center',
