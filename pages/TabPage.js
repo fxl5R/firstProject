@@ -12,19 +12,21 @@ import {
     View,
     Text,
     Image,
-    TouchableOpacity,     //返回按钮可单击
     Navigator,
     FlatList,
     ActivityIndicator,
-    TouchableHighlight
+    TouchableHighlight, YellowBox, ListView, Alert
 } from 'react-native';
 import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Kohana } from 'react-native-textinput-effects';
 //import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TabNavigator from 'react-native-tab-navigator';
-import HouseCell from '../component/HouseCell';
 import HouseDetail from '../component/HouseDetail';
+import {createStackNavigator} from "react-navigation";
+
+import * as realm from "realm";
+import HouseCell from '../component/HouseCell';
 
 
 //自定义搜索栏
@@ -109,6 +111,9 @@ export default class TabPage extends Component<Props> {
             });
         }
     };
+    GetClickedItem (area_name) {
+        Alert.alert(area_name);
+    }
     //设置第一栏
     _renderHeader = () => {
         //const fontFamily = Icon.getFontFamily(FontAwesome5_Regular);
@@ -150,34 +155,12 @@ export default class TabPage extends Component<Props> {
     };*/
 
     render() {
-        let myHouseJSON = [
-            {
-                "0": {
-                    student_id: 1,
-                    student_name: "Ashish",
-                    student_class: "React",
-                    student_subject: "React native"
-                },
-                "1": {
-                    student_id: 2,
-                    student_name: "Ashish1",
-                    student_class: "React1",
-                    student_subject: "React native1"
-                },
-                "2": {
-                    student_id: 3,
-                    student_name: "",
-                    student_class: "",
-                    student_subject: ""
-                },
-                "3": {
-                    student_id: 4,
-                    student_name: "",
-                    student_class: "",
-                    student_subject: ""
-                }
-            }
-        ];
+        let myHouseList = <ListView
+            renderHeader={this._renderHeader()}
+            renderRow={this._renderRow}
+            dataSource={this.state.listSource}
+            renderRow={this._renderRow}
+            automaticallyAdjustContentInsets={false}/>;
         return (
             <View style={styles.container}>
                 <TabNavigator>
@@ -191,10 +174,9 @@ export default class TabPage extends Component<Props> {
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
                                 <SearchBar />
-                                    <FlatList
-                                        ListHeaderComponent={this._renderHeader()}
+                                    <ListView
+                                        renderHeader={this._renderHeader()}
                                         renderRow={this._renderRow}
-                                        ItemSeparatorComponent={this._renderSeparator}
                                         data={myHouseJSON}
                                         renderItem={({ item }) => (
                                             <View style={{ flex: 1, flexDirection: "column" }}>
@@ -252,6 +234,14 @@ export default class TabPage extends Component<Props> {
     }
 }
 
+
+/*
+export default TabPage = createStackNavigator(
+    {
+        First: { screen: HDetail },
+
+        Second: { screen: HDetail }
+    });*/
 const styles = StyleSheet.create({
     container: {
         flex: 1,

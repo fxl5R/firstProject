@@ -104,6 +104,7 @@ export default class login extends Component {
         );
     }
 }
+
 const styles = StyleSheet.create({
     style_image:{
         //borderRadius:35,

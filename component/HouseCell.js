@@ -5,41 +5,74 @@ import {
     Image,
     View,
     TouchableHighlight,
-    Text
+    Text, ListView, Alert, TouchableOpacity
 } from 'react-native';
+import * as realm from "realm";
 
-export default class HouseCell extends Component {
+class HouseCell extends Component {
     constructor(props) {
         super(props);
         this.state = {};
+        let mydata = realm.objects('House_Info');
+
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+        this.state = {
+            dataSource: ds.cloneWithRows(mydata),
+        };
     }
-    render() {
-        let {houseData} = this.props;
+    GetClickedItem (house_id) {
+        Alert.alert(house_id);
+    }
+    ListViewItemSeparator = () => {
         return (
-            <TouchableHighlight
-                onPress={this.props.onSelect}
+            <View
+                style={{
+                    height: .5,
+                    width: "100%",
+                    backgroundColor: "#000",
+                }}
+            />
+        );
+    };
+    render() {
+
+        return (
+            <ListView
+                dataSource={this.state.dataSource}
+                renderSeparator={this.ListViewItemSeparator}
+                renderRow={(rowData) => <View style={{flex:1, flexDirection: 'column'}} >
+
+            <TouchableOpacity
+                onPress={this.GetClickedItem.bind(this, rowData.house_id)}
                 underlayColor='#F5FCFF'>
                 <View style={{backgroundColor: '#FFF'}}>
                     <View style={{padding: 10, flexDirection: 'row'}}>
-                        <Image style={styles.thumb} source={{uri: houseData.logo}}/>
+                        <Image style={styles.thumb} source={{uri: rowData.house_pic}}/>
+
                         <View style={{flex: 2, paddingLeft: 10}}>
-                            <Text style={{fontSize: 16}}>{houseData.title}</Text>
-                            <Text style={{marginTop: 8, marginBottom: 8}}>{houseData.company}</Text>
-                            <Text style={{color: '#999'}}>{houseData.info}</Text>
+                            <Text style={{fontSize: 16}}>{rowData.area_name}</Text>
+                            <Text style={{marginTop: 8, marginBottom: 8}}>{rowData.lease_type}</Text>
+                            <Text style={{color: '#999'}}>{rowData.house_floor}</Text>
                         </View>
+
                         <View style={{flex: 1, paddingLeft: 10}}>
-                            <Text style={{color: '#999', textAlign: 'right'}}>{houseData.date}</Text>
-                            <Text style={{marginTop: 8, color: 'red', textAlign: 'right'}}>{houseData.salary}</Text>
+                            <Text style={{color: '#999', textAlign: 'right'}}>{rowData.publish_time}</Text>
+                            <Text style={{marginTop: 8, color: 'red', textAlign: 'right'}}>{rowData.rent_fee}</Text>
                         </View>
                     </View>
+
                     <View style={{padding: 10, flexDirection: 'row'}}>
-                        <Text style={styles.companyTag}>{houseData.companyPosition}</Text>
-                        <Text style={styles.companyTag}>{houseData.companyPerson}</Text>
-                        <Text style={styles.companyTag}>{houseData.companyService}</Text>
+                        <Text style={styles.companyTag}>{rowData.house_decorate}</Text>
+                        <Text style={styles.companyTag}>{rowData.total_area}</Text>
+                        <Text style={styles.companyTag}>{rowData.toward_direct}</Text>
                     </View>
-                    <View style={styles.separator}/>
+
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
+                </View>
+                }
+            />
         );
     }
 }
@@ -79,4 +112,4 @@ const styles = StyleSheet.create({
         borderColor: '#E8E8E8'
     },
 });
-//module.exports = SearchResults;
+module.exports = HouseCell;

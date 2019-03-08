@@ -49,7 +49,7 @@ export default class register extends Component {
                 cTime:new Date()
             });
         });
-        realm.close();
+        //realm .close();
         console.log('name'+this.state.text+'password'+this.state.password);
         ToastAndroid.show("用户"+this.state.text+"成功注册，跳转中", ToastAndroid.SHORT);
         this.props.navigation.navigate('Login');
