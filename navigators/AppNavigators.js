@@ -1,5 +1,6 @@
 
 import {createAppContainer,createStackNavigator} from 'react-navigation';
+
 import HomePage from '../pages/HomePage';
 import MsgBox from '../pages/MsgBox';
 import TabPage from '../pages/TabPage';
@@ -9,6 +10,7 @@ import login from '../pages/login';
 import register from '../pages/register';
 //import HouseDetail from "../component/HouseDetail";
 //import SearchResults from '../component/SearchResults';
+//import MapLocation from '../util/MapLocation';
 
 
 const AppStackNavigator = createStackNavigator({
@@ -17,6 +19,12 @@ const AppStackNavigator = createStackNavigator({
     Login:{
         screen:login,
         navigationOptions:{header: null}
+    },
+    TabPage:{
+        screen:TabPage,
+        navigationOptions:{
+            header:null
+        }
     },
     register:{
         screen:register,
@@ -80,12 +88,13 @@ const AppStackNavigator = createStackNavigator({
             }
         }
     },
-    TabPage:{
-        screen:TabPage,
+/*    MapLocation:{
+        screen:MapLocation,
         navigationOptions:{
             header:null
         }
-    }
+    }*/
+
 
 });
 const AppContainer = createAppContainer(AppStackNavigator);

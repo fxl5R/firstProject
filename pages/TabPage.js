@@ -12,40 +12,45 @@ import {
     View,
     Text,
     Image,
-    TouchableOpacity,     //返回按钮可单击,
+    TouchableOpacity,     //返回按钮可单击
     Navigator,
     FlatList,
     ActivityIndicator,
+    TouchableHighlight
 } from 'react-native';
+import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Kohana } from 'react-native-textinput-effects';
+//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TabNavigator from 'react-native-tab-navigator';
 import HouseCell from '../component/HouseCell';
 import HouseDetail from '../component/HouseDetail';
+
 
 //自定义搜索栏
 class SearchBar extends Component {
     render() {
         return (
             <View style={styles.searchBar}>
-                <Text style={{color:'#FFF', fontSize:20}}>搜索</Text>
                 <View style={styles.searchInput}>
-                    <Image source={require('../res/images/ic_search.png')} style={{width:15,height:15,marginRight:8}}/>
-                    <Text style={{color:'#ADD8E6',fontSize:13}}>输入小区名或地址</Text>
+                    <Kohana
+                        style={[styles.textInput]}
+                        label={'输入小区名或地址'}
+                        iconClass={MaterialsIcon}
+                        iconName={'search'}
+                        iconColor={'#B0C4DE'}
+                        iconSize={18}
+                        labelStyle={{color:'#B0C4DE'}}
+                        inputPadding={10}
+                        useNativeDriver
+                        onChangeText={(searchString)=>this.setState({searchString})}
+                    />
                 </View>
             </View>
         );
     }
 }
-//设置第一栏
-let _listHeader = function () {
-    return (
-        <View style={styles.headerBody}>
-            <Image style={{width:52,height:50}} source={require('../res/images/ic_department.png')}/>
-            <View style={{paddingLeft:20}}>
-                <Text style={[{fontSize:16},{color:'#778899'}]}>添加房屋</Text>
-            </View>
-        </View>
-    )
-};
+
 //设置尾部
 /*let renderFooter = () => {
     if (!this.state.loading) return null;
@@ -64,15 +69,16 @@ export default class TabPage extends Component<Props> {
     //构造函数
     constructor(props){
         super(props);
-        //let DataSource= new ListView.DtaataSource({rowHasChanged: (r1, r2)=>r1 !== r2});
         this.state={
             selectedTab:'tb_home',
             refreshing: false,
-            //listSource:DataSource.cloneWithRows(this._genRows({}))
+            searchString:''
         };
-        //this._renderRow = this._renderRow.bind(this);//bind onPress()
+        this._renderHeader = this._renderHeader.bind(this);
+        this._renderRow = this._renderRow.bind(this);
+        this._renderSeparator=this._renderSeparator.bind(this);
     }
-    componentDidMount() {
+/*    componentDidMount() {
         this.makeRemoteRequest();
     }
     makeRemoteRequest = () => {
@@ -92,7 +98,7 @@ export default class TabPage extends Component<Props> {
             .catch(error => {
                 this.setState({ error, loading: false });
             });
-    };
+    };*/
     _selectHouse(house:Object) {
         let {navigator} = this.props;
         if (navigator) {
@@ -102,10 +108,37 @@ export default class TabPage extends Component<Props> {
                 params: {house: house}
             });
         }
-    }
+    };
+    //设置第一栏
+    _renderHeader = () => {
+        //const fontFamily = Icon.getFontFamily(FontAwesome5_Regular);
+        return (
+            <View>
+                <View style={[styles.headerBody,{flexDirection:'row'}]}>
+                    <TouchableHighlight style={styles.headerClick}
+                                        onPress={()=>{this.props.navigation.navigate('MsgBox')}}>
+                        <View>
+                            <Icon name="city" size={50} color="#E6E6FA" light />
+                            <Text style={styles.fontClick}>添加房屋</Text>
+                        </View>
+                    </TouchableHighlight>
+                    <TouchableHighlight style={styles.headerClick}
+                                        onPress={()=>{this.props.navigation.navigate('MapLocation')}}>
+                        <View>
+                            <Icon name="map-marked-alt" size={50} color="#E6E6FA" light/>
+                            <Text style={styles.fontClick}>地图找房</Text>
+                        </View>
+                    </TouchableHighlight>
+                </View>
+            </View>
+            )
+    };
     _renderRow(houseData) {
         return (<HouseCell onSelect={() => this._selectHouse(houseData)} houseData={houseData}/>);
-    }
+    };
+    _renderSeparator = () => {
+        return <View style={{height:1,backgroundColor:'gray'}}/>;
+    };
 
     /*    _leftButtonPress=()=>{
             const {navigation}=this.props;
@@ -154,27 +187,26 @@ export default class TabPage extends Component<Props> {
                         title="发现"
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hindex.png')} />}
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#2680F0'}]} source={require('../res/images/ic_hindex.png')} />}
-                        badgeText="1"
+                        /*badgeText="1"*/
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
-                            <View style={styles.container}>
                                 <SearchBar />
                                     <FlatList
+                                        ListHeaderComponent={this._renderHeader()}
                                         renderRow={this._renderRow}
+                                        ItemSeparatorComponent={this._renderSeparator}
                                         data={myHouseJSON}
                                         renderItem={({ item }) => (
                                             <View style={{ flex: 1, flexDirection: "column" }}>
-                                                <Text style={styles.text}>{item[0]}</Text>
-                                                <Text style={styles.text}>{item[1]}</Text>
-                                                <Text style={styles.text}>{item[2]}</Text>
-                                                <Text style={styles.text}>{item[3]}</Text>
+                                                <Text style={styles.text}>{item[0].student_subject}</Text>
+                                                <Text style={styles.text}>{item[1].student_subject}</Text>
+                                                <Text style={styles.text}>{item[2].student_subject}</Text>
+                                                <Text style={styles.text}>{item[3].student_subject}</Text>
                                             </View>
                                         )}
                                         keyExtractor={(item, index) => index.toString()}
                                         /*renderFooter={renderFooter}*/
-                                        renderHeader={_listHeader}
                                     />
-                            </View>
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
@@ -259,26 +291,37 @@ const styles = StyleSheet.create({
     searchBar: {
         backgroundColor: '#B0C4DE',
         flexDirection: 'row',
-        padding: 10,
+        padding: 15,//zan
         justifyContent: 'center',
         alignItems: 'center'
     },
     headerBody: {
-        padding: 20,
-        backgroundColor: '#B0C4DE',
-        marginBottom: 15,
+        padding: 8,
+        backgroundColor: '#6495ED',
+        marginBottom: 20,
         flexDirection: 'row'
     },
     searchInput: {
         borderRadius: 15,
-        backgroundColor: '#F5F5F5',
-        paddingTop: 7,
-        paddingBottom: 7,
-        marginLeft: 10,
-        marginRight: 10,
+        paddingTop: 4,
+        paddingBottom: 4,
+        marginLeft: 4,
+        marginRight: 4,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        flex: 1
+        flex: 1,
+        paddingVertical: 0,//垂直内边距设置为0
     },
+    fontClick:{
+        color:'#E6E6FA',
+        fontSize:15,
+        fontFamily: 'hanyihuo',
+    },
+    headerClick:{
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor: '#6495ED',
+        flex:1
+    }
 });

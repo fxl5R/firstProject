@@ -16,13 +16,14 @@ class MsgBox extends Component{
     static navigationOptions =
         {
             title: 'MainActivity',
+            header:null
         };
 
     GoToSecondActivity = () =>
     {
         this.props.navigation.navigate('Second');
 
-    }
+    };
 
     constructor(){
 
@@ -36,7 +37,7 @@ class MsgBox extends Component{
 
             Student_Subject : ''
 
-        }
+        };
 
         realm = new Realm({
             schema: [{name: 'Student_Info',
@@ -69,7 +70,7 @@ class MsgBox extends Component{
 
         Alert.alert("Student Details Added Successfully.")
 
-    }
+    };
 
     render() {
 
@@ -122,6 +123,7 @@ class HDetail extends Component
     static navigationOptions =
         {
             title: 'ShowDataActivity',
+            header:null
         };
 
     constructor() {
@@ -159,7 +161,7 @@ class HDetail extends Component
                 }}
             />
         );
-    }
+    };
 
     render()
     {

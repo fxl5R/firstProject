@@ -13,9 +13,13 @@
     "react-native": "^0.58.5",
     "react-native-dimension": "^1.0.6",
     "react-native-gesture-handler": "^1.0.15",
+    "react-native-image-picker": "^0.28.0",
+    "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-pure-navigation-bar": "^1.4.9",
     "react-native-sqlite-storage": "^3.3.9",
     "react-native-tab-navigator": "^0.3.4",
+    "react-native-textinput-effects": "^0.5.1",
+    "react-native-vector-icons": "^6.3.0",
     "react-navigation": "^3.2.3",
     "react-navigation-stack": "^1.0.10",
     "realm": "^2.24.0",
@@ -29,5 +33,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "res/fonts"
+    ]
   }
 }

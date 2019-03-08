@@ -1,20 +1,26 @@
 package com.firstProject;
 
 import com.facebook.react.ReactActivity;
-import io.realm.react.RealmReactPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.shell.MainReactPackage;
+import com.facebook.soloader.SoLoader;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.shell.MainReactPackage;
+
+import io.realm.react.RealmReactPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 
 import java.util.Arrays;
 import java.util.List;
-import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
+
 import org.pgsqlite.SQLitePluginPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.imagepicker.ImagePickerPackage;
 import android.os.Bundle;
 import com.facebook.stetho.Stetho;
-
 
 public class MainActivity extends ReactActivity {
 
@@ -47,7 +53,7 @@ public class MainActivity extends ReactActivity {
         );
     }
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Stetho.initializeWithDefaults(this);
-      }
+            super.onCreate(savedInstanceState);
+            Stetho.initializeWithDefaults(this);
+          }
 }

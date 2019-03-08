@@ -1,6 +1,7 @@
 
 
 import React, {Component} from 'react';
+//import SplashScreen from "rn-splash-screen";
 
 import {
     StyleSheet,
@@ -9,7 +10,11 @@ import {
     View,
     TextInput, ToastAndroid,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button from '../component/Button';
+
+//关掉启动白屏
+//SplashScreen.hide();
 const Realm = require('realm');
 
 const UserSchema = {
@@ -41,6 +46,7 @@ export default class login extends Component {
             if(this.state.password===password1){
                 ToastAndroid.show('登录成功',ToastAndroid.SHORT);
                 this.props.navigation.navigate('TabPage');
+                realm.close();
             }else{
                 ToastAndroid.show('登录失败，请检查用户名或者密码',ToastAndroid.SHORT)
             }
@@ -53,6 +59,7 @@ export default class login extends Component {
                 <Image
                     style={styles.style_image}
                     source={require('../res/images/house.png')}/>
+                <KeyboardAwareScrollView>
                 <View style={styles.username}>
                 <TextInput
                     style={styles.edit}
@@ -76,6 +83,7 @@ export default class login extends Component {
                     textAlign='center'
                     onChangeText={(password)=>this.setState({password})}
                 /></View>
+                </KeyboardAwareScrollView>
                 <View style={{marginTop: 10}}>
                     <Button text={'登录'} onPress={this.handle_loginClick.bind(this)}/>
                 </View>
@@ -104,16 +112,6 @@ const styles = StyleSheet.create({
         marginTop:80,
         alignSelf:'center',
     },
-    style_view_commit:{
-        marginTop:15,
-        marginLeft:10,
-        marginRight:10,
-        backgroundColor:'#63B8FF',
-        height:35,
-        borderRadius:5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     style_view_unlogin:{
         fontSize:12,
         color:'#63B8FF',
@@ -134,9 +132,6 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff',
         paddingRight:15,
         paddingLeft:15
-    },
-    editGroup:{
-        margin:20
     },
     username:{
         marginTop:50,

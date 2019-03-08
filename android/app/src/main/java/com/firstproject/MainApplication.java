@@ -10,6 +10,10 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.imagepicker.ImagePickerPackage;
+import io.realm.react.RealmReactPackage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +21,7 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import okhttp3.OkHttpClient;
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -30,6 +35,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new ImagePickerPackage(),
             new RealmReactPackage(),
             new RNGestureHandlerPackage()
       );
@@ -54,6 +61,7 @@ public class MainApplication extends Application implements ReactApplication {
 
     Stetho.initializeWithDefaults(this);
               initOkHttpClient();
+
   }
 
       public void initOkHttpClient(){

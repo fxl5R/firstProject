@@ -9,6 +9,7 @@ import {
     View,
     TextInput, ToastAndroid,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button from '../component/Button';
 const Realm = require('realm');
 
@@ -26,7 +27,7 @@ const UserSchema = {
 };
 //初始化Realm
 let realm = new Realm({schema: [UserSchema]});
-realm.close();
+
 export default class register extends Component {
     constructor(props) {
         super(props);
@@ -46,8 +47,9 @@ export default class register extends Component {
                 userSex: 'female',
                 portrait:'https://b-ssl.duitang.com/uploads/item/201901/09/20190109121033_lxkdt.thumb.300_300_c.jpg',
                 cTime:new Date()
-            })
+            });
         });
+        realm.close();
         console.log('name'+this.state.text+'password'+this.state.password);
         ToastAndroid.show("用户"+this.state.text+"成功注册，跳转中", ToastAndroid.SHORT);
         this.props.navigation.navigate('Login');
@@ -59,6 +61,7 @@ export default class register extends Component {
                 <Image
                     style={styles.style_image}
                     source={require('../res/images/logo_peo.png')}/>
+                <KeyboardAwareScrollView>
                 <View style={styles.username}>
                 <TextInput
                     style={styles.edit}
@@ -82,6 +85,7 @@ export default class register extends Component {
                     textAlign='center'
                     onChangeText={(password)=>this.setState({password})}
                 /></View>
+                </KeyboardAwareScrollView>
                 <View style={{marginTop: 10}}>
                     <Button text={'注册'} onPress={this.handle_registerClick.bind(this)}/>
                 </View>
@@ -119,16 +123,6 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff',
         height:35,
     },
-    style_view_commit:{
-        marginTop:15,
-        marginLeft:10,
-        marginRight:10,
-        backgroundColor:'#63B8FF',
-        height:35,
-        borderRadius:5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     style_view_unlogin:{
         fontSize:12,
         color:'#63B8FF',
@@ -149,9 +143,6 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff',
         paddingRight:15,
         paddingLeft:15
-    },
-    editGroup:{
-        margin:20
     },
     username:{
         marginTop:50,
