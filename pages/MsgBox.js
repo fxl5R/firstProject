@@ -100,6 +100,7 @@ class MsgBox extends Component{
             });
         });
         Alert.alert("House Details Added Successfully.")
+        //realm.close();
     };
 
     render() {
@@ -253,6 +254,7 @@ class HDetail extends Component
                             <Text style={styles.textViewContainer} >{'楼层 = ' + rowData.house_floor}</Text>
                             <Text style={styles.textViewContainer} >{'房屋描述 = ' + rowData.house_description}</Text>
                             <Text style={styles.textViewContainer} >{'小区名 = ' + rowData.area_name}</Text>
+
                         </TouchableOpacity>
 
                     </View> }

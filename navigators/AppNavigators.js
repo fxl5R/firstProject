@@ -10,21 +10,22 @@ import login from '../pages/login';
 import register from '../pages/register';
 //import HouseDetail from "../component/HouseDetail";
 //import SearchResults from '../component/SearchResults';
-//import MapLocation from '../util/MapLocation';
+import MapLocation from '../util/MapLocation';
 
 
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
-    Login:{
-        screen:login,
-        navigationOptions:{header: null}
-    },
-    TabPage:{
+
+   TabPage:{
         screen:TabPage,
         navigationOptions:{
             header:null
         }
+    },
+    Login:{
+        screen:login,
+        navigationOptions:{header: null}
     },
     register:{
         screen:register,
@@ -88,12 +89,12 @@ const AppStackNavigator = createStackNavigator({
             }
         }
     },
-/*    MapLocation:{
+    MapLocation:{
         screen:MapLocation,
         navigationOptions:{
             header:null
         }
-    }*/
+    },
 
 
 });

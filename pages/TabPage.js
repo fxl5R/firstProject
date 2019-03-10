@@ -6,16 +6,20 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     View,
     Text,
     Image,
-    Navigator,
     FlatList,
     ActivityIndicator,
-    TouchableHighlight, YellowBox, ListView, Alert
+    TouchableHighlight,
+    YellowBox,
+    ListView,
+    Alert,
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -23,12 +27,38 @@ import { Kohana } from 'react-native-textinput-effects';
 //import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TabNavigator from 'react-native-tab-navigator';
 import HouseDetail from '../component/HouseDetail';
-import {createStackNavigator} from "react-navigation";
-
-import * as realm from "realm";
+import {HouseSchema} from '../component/HouseCell';
 import HouseCell from '../component/HouseCell';
 
+//import * as realm from "realm";
 
+/*//初始化Realm
+let realm = new Realm({schema: [HouseSchema]});*/
+/*
+const HouseSchema={
+    name: 'House_Info',
+    properties:
+        {
+            house_publisher: 'string',
+            publish_time: 'date',
+            lease_type: 'string',
+            area_name: 'string',
+            unit_build:'string',
+            total_area:'string',
+            door_model:'string',
+            toward_direct:'string',
+            house_floor:'string',
+            house_decorate:'string',
+            rent_fee:'string',
+            pay_type:'string',
+            house_pic:'string',
+            house_description:'string',
+            owner_tel:'string',
+            certification:{type: 'int',default: 0,optional: true}
+        }};
+*/
+
+//const Realm=require('realm');
 //自定义搜索栏
 class SearchBar extends Component {
     render() {
@@ -67,6 +97,8 @@ class SearchBar extends Component {
         </View>
     );
 };*/
+
+//const modelSchema=[HouseSchema];
 export default class TabPage extends Component<Props> {
     //构造函数
     constructor(props){
@@ -74,49 +106,27 @@ export default class TabPage extends Component<Props> {
         this.state={
             selectedTab:'tb_home',
             refreshing: false,
-            searchString:''
+            searchString:'',
+            dataVersion: 0,
+            //dataSource:ds.cloneWithRows(mydata),
         };
         this._renderHeader = this._renderHeader.bind(this);
-        this._renderRow = this._renderRow.bind(this);
+        this._renderItem = this._renderItem.bind(this);
         this._renderSeparator=this._renderSeparator.bind(this);
     }
-/*    componentDidMount() {
-        this.makeRemoteRequest();
-    }
-    makeRemoteRequest = () => {
-        const { page, seed } = this.state;
-        const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
-        this.setState({ loading: true });
-        fetch(url)
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    data: page === 1 ? res.results : [...this.state.data, ...res.results],
-                    error: res.error || null,
-                    loading: false,
-                    refreshing: false
-                });
-            })
-            .catch(error => {
-                this.setState({ error, loading: false });
-            });
-    };*/
-    _selectHouse(house:Object) {
+
+    _selectHouse(isHouseData:Object) {
         let {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'HouseDetail',
                 component: HouseDetail,
-                params: {house: house}
+                params: {house:isHouseData}
             });
         }
     };
-    GetClickedItem (area_name) {
-        Alert.alert(area_name);
-    }
     //设置第一栏
     _renderHeader = () => {
-        //const fontFamily = Icon.getFontFamily(FontAwesome5_Regular);
         return (
             <View>
                 <View style={[styles.headerBody,{flexDirection:'row'}]}>
@@ -138,74 +148,71 @@ export default class TabPage extends Component<Props> {
             </View>
             )
     };
-    _renderRow(houseData) {
-        return (<HouseCell onSelect={() => this._selectHouse(houseData)} houseData={houseData}/>);
+    _renderItem=({item:isHouseData}) => {
+        return (
+            <TouchableHighlight
+                id={isHouseData.house_id}
+                onPress={this._selectHouse(isHouseData.house_id)}>
+                    <HouseCell/>
+            </TouchableHighlight>
+        );
     };
+        /*<TouchableHighlight onPress={() => this._selectHouse(_isHouseData)} >
+        <HouseCell/>
+        </TouchableHighlight>}*/
     _renderSeparator = () => {
         return <View style={{height:1,backgroundColor:'gray'}}/>;
     };
 
-    /*    _leftButtonPress=()=>{
-            const {navigation}=this.props;
-            navigation.goBack();
-        }*/
-/*    onPress=()=>{
-        const {onPress} =this.props;
-        onPress();
-    };*/
-
     render() {
-        let myHouseList = <ListView
-            renderHeader={this._renderHeader()}
-            renderRow={this._renderRow}
-            dataSource={this.state.listSource}
-            renderRow={this._renderRow}
-            automaticallyAdjustContentInsets={false}/>;
+        /*let A=realm.objects('House_Info');
+        let houseData=Object.values(A);*/
+        /*let mydata = new Realm({schema:modelSchema}).objects('House_Info');
+        let isHouseData=mydata.filtered("certification == $0", null)
+            .sorted("door_model", true);*/
+
+        //let isHouseData=Array.from(result).toString();
         return (
             <View style={styles.container}>
                 <TabNavigator>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_home'}
-                        selectedTitleStyle={{color:'#2680F0'}}
+                        selectedTitleStyle={{color:'#B0C4DE'}}
                         title="发现"
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hindex.png')} />}
-                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#2680F0'}]} source={require('../res/images/ic_hindex.png')} />}
-                        /*badgeText="1"*/
+                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hindex.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
-                                <SearchBar />
-                                    <ListView
-                                        renderHeader={this._renderHeader()}
-                                        renderRow={this._renderRow}
-                                        data={myHouseJSON}
-                                        renderItem={({ item }) => (
-                                            <View style={{ flex: 1, flexDirection: "column" }}>
-                                                <Text style={styles.text}>{item[0].student_subject}</Text>
-                                                <Text style={styles.text}>{item[1].student_subject}</Text>
-                                                <Text style={styles.text}>{item[2].student_subject}</Text>
-                                                <Text style={styles.text}>{item[3].student_subject}</Text>
-                                            </View>
-                                        )}
-                                        keyExtractor={(item, index) => index.toString()}
-                                        /*renderFooter={renderFooter}*/
-                                    />
+                            <SearchBar/>
+                            {/*<FlatList
+                                data={isHouseData}
+                                ListHeaderComponent={this._renderHeader()}
+                                renderItem={this._renderItem}
+                                ItemSeparatorComponent={this._renderSeparator()}
+                                extraData={this.state}
+                                keyExtractor={(item) => item.id}
+                            />*/}
+                            <ScrollView>
+                            <HouseCell/>
+                            </ScrollView>
+
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_star'}
-                        selectedTitleStyle={{color:'#2680F0'}}
+                        selectedTitleStyle={{color:'#B0C4DE'}}
                         title="收藏"
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hstar.png')} />}
-                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#2680F0'}]} source={require('../res/images/ic_hstar.png')} />}
+                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hstar.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_star' })}>
                         <View styles={styles.page2}><Text style={styles.text}>收藏22222</Text></View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_msg'}
-                        selectedTitleStyle={{color:'#2680F0'}}
+                        selectedTitleStyle={{color:'#B0C4DE'}}
                         title="消息"
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hmsg1.png')} />}
-                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#2680F0'}]} source={require('../res/images/ic_hmsg1.png')} />}
+                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hmsg1.png')} />}
                         badgeText="1"
                         onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
                         <View styles={styles.page3}>
@@ -221,10 +228,10 @@ export default class TabPage extends Component<Props> {
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_profile'}
-                        selectedTitleStyle={{color:'#2680F0'}}
+                        selectedTitleStyle={{color:'#B0C4DE'}}
                         title="我"
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hprofile.png')} />}
-                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#2680F0'}]} source={require('../res/images/ic_hprofile.png')} />}
+                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hprofile.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_profile' })}>
                         <View styles={styles.page4}><Text style={styles.text}>我4444444</Text></View>
                     </TabNavigator.Item>
@@ -313,5 +320,9 @@ const styles = StyleSheet.create({
         alignItems:'center',
         backgroundColor: '#6495ED',
         flex:1
-    }
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#E8E8E8',
+    },
 });

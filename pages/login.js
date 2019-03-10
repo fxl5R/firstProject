@@ -16,7 +16,6 @@ import Button from '../component/Button';
 //关掉启动白屏
 //SplashScreen.hide();
 const Realm = require('realm');
-
 const UserSchema = {
     name: 'User',                          // 表名
     primaryKey: 'id',                           // 设置id为主键
@@ -29,8 +28,10 @@ const UserSchema = {
         cTime: { type: 'date', optional: true } // 创建时间
     },
 };
+
 //初始化Realm
 let realm = new Realm({schema: [UserSchema]});
+realm.close();
 export default class login extends Component {
     constructor(props) {
         super(props);
@@ -41,9 +42,9 @@ export default class login extends Component {
     }
     handle_loginClick(){
             let users=realm.objects('User').filtered('userName==$0',this.state.text.toString());
-            let user=users[0];
-            let password1=user.userPassword;
-            if(this.state.password===password1){
+            let user=users[0];                                     //从realm中查询到的是results数组类型，需要指定某一个数来进行判断
+            let password1=user.userPassword;                       //从realm中取出username为textinput中的密码
+            if(this.state.password===password1){                   //判断密码
                 ToastAndroid.show('登录成功',ToastAndroid.SHORT);
                 this.props.navigation.navigate('TabPage');
                 realm.close();
