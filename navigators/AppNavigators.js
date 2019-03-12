@@ -8,20 +8,32 @@ import guidePage from '../pages/GuidePage';
 import login from '../pages/login';
 //import firstRealm from '../pages/firstRealm';
 import register from '../pages/register';
-//import HouseDetail from "../component/HouseDetail";
+import HouseDetail from "../component/HouseDetail";
+import HouseCell from '../component/HouseCell';
+import navigatorExpo from '../navigators/navigatorExpo';
 //import SearchResults from '../component/SearchResults';
 import MapLocation from '../util/MapLocation';
+//import {StatusBar} from "react-native";
+
+import LandLordPage from '../pages/LandLordPage';
+
+
 
 
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
-
    TabPage:{
         screen:TabPage,
         navigationOptions:{
             header:null
         }
+    },
+    LandLordPage:{
+       screen:LandLordPage,
+        navigationOptions:{
+           header:null
+            }
     },
     Login:{
         screen:login,
@@ -49,9 +61,9 @@ const AppStackNavigator = createStackNavigator({
                 textAlign: 'center'
             }
         }
-    },
-    houseDetail:{
-        screen:'houseDetail',
+    },*/
+    HouseDetail:{
+        screen:HouseDetail,
         navigationOptions:{
             title:'房屋信息',
             headerStyle: {
@@ -62,12 +74,18 @@ const AppStackNavigator = createStackNavigator({
                 textAlign: 'center'
             }
         }
-    },*/
+    },
+    HouseCell: {
+        screen: HouseCell,
+        navigationOptions:{
+            header:null
+        }
+    },
     MsgBox: {
         screen: MsgBox,
-        navigationOptions: {
-            title: 'MessageBox',
-        },
+        navigationOptions:{
+            header:null
+        }
     },
 
     Guide:{
@@ -95,7 +113,9 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
-
+    navigatorExpo:{
+        screen:navigatorExpo
+    },
 
 });
 const AppContainer = createAppContainer(AppStackNavigator);

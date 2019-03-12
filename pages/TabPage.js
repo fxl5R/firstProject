@@ -30,7 +30,6 @@ import HouseDetail from '../component/HouseDetail';
 import {HouseSchema} from '../component/HouseCell';
 import HouseCell from '../component/HouseCell';
 
-//import * as realm from "realm";
 
 /*//初始化Realm
 let realm = new Realm({schema: [HouseSchema]});*/
@@ -58,7 +57,7 @@ const HouseSchema={
         }};
 */
 
-//const Realm=require('realm');
+const Realm=require('realm');
 //自定义搜索栏
 class SearchBar extends Component {
     render() {
@@ -98,7 +97,7 @@ class SearchBar extends Component {
     );
 };*/
 
-//const modelSchema=[HouseSchema];
+const modelSchema=[HouseSchema];
 export default class TabPage extends Component<Props> {
     //构造函数
     constructor(props){
@@ -153,7 +152,9 @@ export default class TabPage extends Component<Props> {
             <TouchableHighlight
                 id={isHouseData.house_id}
                 onPress={this._selectHouse(isHouseData.house_id)}>
+                <View>
                     <HouseCell/>
+                </View>
             </TouchableHighlight>
         );
     };
@@ -167,10 +168,11 @@ export default class TabPage extends Component<Props> {
     render() {
         /*let A=realm.objects('House_Info');
         let houseData=Object.values(A);*/
-        /*let mydata = new Realm({schema:modelSchema}).objects('House_Info');
-        let isHouseData=mydata.filtered("certification == $0", null)
-            .sorted("door_model", true);*/
-
+        let mydata = new Realm({schema:modelSchema}).objects('House_Info');
+        let result=mydata.filtered("certification == $0", null)
+            .sorted("door_model", true);
+        let isHouseData=JSON.stringify(result);
+        console.log('testtttt success'+Array.from(isHouseData).toString());
         //let isHouseData=Array.from(result).toString();
         return (
             <View style={styles.container}>
@@ -184,18 +186,17 @@ export default class TabPage extends Component<Props> {
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
                             <SearchBar/>
-                            {/*<FlatList
-                                data={isHouseData}
+                            <FlatList
+                                //data={isHouseData} 报错待解决
                                 ListHeaderComponent={this._renderHeader()}
                                 renderItem={this._renderItem}
                                 ItemSeparatorComponent={this._renderSeparator()}
                                 extraData={this.state}
                                 keyExtractor={(item) => item.id}
-                            />*/}
+                            />
                             <ScrollView>
                             <HouseCell/>
                             </ScrollView>
-
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
@@ -233,7 +234,13 @@ export default class TabPage extends Component<Props> {
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hprofile.png')} />}
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hprofile.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_profile' })}>
-                        <View styles={styles.page4}><Text style={styles.text}>我4444444</Text></View>
+                        <View styles={styles.page4}>
+                            <Text style={styles.text}
+                                  onPress={()=>{
+                                      this.props.navigation.navigate('LandLordPage');
+                                      /*alert('test success');*/
+                                  }}>我4444444</Text>
+                        </View>
                     </TabNavigator.Item>
                 </TabNavigator>
             </View>

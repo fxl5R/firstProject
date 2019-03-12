@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, ToastAndroid, View} from 'react-native';
+import {Platform, ScrollView,  StyleSheet, Text, ToastAndroid, View} from 'react-native';
 
 import HouseCell from '../component/HouseCell';
 import {HouseSchema} from '../component/HouseCell';
@@ -19,14 +19,16 @@ export default class MapLocation extends Component<Props> {
         let isHouseData=mydata.filtered("certification == $0", null)
             .sorted("door_model", true);
         if(isHouseData){
-            console.log('testtttt success'+isHouseData);
+            console.log('testtttt success'+JSON.stringify(isHouseData));
         }else {
             ToastAndroid.show('!!import failed!!',ToastAndroid.SHORT);
         }
         return (
+            <ScrollView>
             <View style={styles.container}>
                 <HouseCell/>
             </View>
+            </ScrollView>
         );
     }
 }

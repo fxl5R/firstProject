@@ -5,17 +5,21 @@ import {
     Image,
     View,
     TouchableHighlight,
-    Text, ListView, Alert, TouchableOpacity
+    Text,
+    ListView,
+    TouchableOpacity,
+    Platform, Button
 } from 'react-native';
+import HouseDetail from "./HouseDetail";
+//import HouseDetail from '../component/HouseDetail';
+//import {createAppContainer, createStackNavigator} from 'react-navigation';
 
 const Realm=require('realm');
-//export {HouseSchema};
-/*export */
-
 export const HouseSchema={
     name: 'House_Info',
     properties:
         {
+            //house_id:'int',
             house_publisher: 'string',
             publish_time: 'date',
             lease_type: 'string',
@@ -34,8 +38,7 @@ export const HouseSchema={
             certification:{type: 'int',default: 0,optional: true}
         }};
 
-//let realm =new Realm({schema: [HouseSchema]});
-class HouseCell extends Component {
+export default class HouseCell extends Component {
     constructor(props) {
         super(props);
         let mydata = new Realm({schema: [HouseSchema]}).objects('House_Info');
@@ -45,13 +48,28 @@ class HouseCell extends Component {
             isHouseData:mydata.filtered("certification == $0", null)
                 .sorted("door_model", true)
         };
+        //this.props.navigation.navigate.bind(this);
+        this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
     }
 
-    GetClickedItem (dataSource) {
+    /*GetClickedItem(house_publisher){
         //Alert.alert(house_publisher);
-        Alert.alert(constructor.isPrototypeOf(dataSource).toString());
-    }
+        //Alert.alert(constructor.isPrototypeOf(dataSource).toString());this.props.navigator.push
+       this.props.navigation.navigate('HouseDetail',{
+            house_publisher: 'Jaacckkkk',
+    });
+    }*/
+/*    GetClickedItem(){
+        this.props.navigation.navigate('Details', {
+            itemId: 886,
+            otherParam: 'anything you want here',
+            });}*/
+    GoToHouseDetail() {
+        console.log(this.props.navigation);
+        console.log('eeeeeeeeeeeeeeeeeeeeee');
+        this.props.navigation && this.props.navigation.navigate('HouseDetail');
 
+    };
 
     ListViewItemSeparator = () => {
         return (
@@ -65,14 +83,16 @@ class HouseCell extends Component {
         );
     };
     render() {
-
+        //const { navigate } = this.props.navigation;  //occur TypeError:undefined is not an object
         return (
+            <View style = {styles.MainContainer }>
             <ListView
                 dataSource={this.state.dataSource}
                 renderSeparator={this.ListViewItemSeparator}
                 renderRow={(rowData) =>
                     <View style={{flex:1, flexDirection: 'column'}}>
-                    <TouchableOpacity onPress={this.GetClickedItem.bind(this, rowData.house_publisher)}>
+                    {/*<TouchableOpacity onPress={this.GetClickedItem.bind(this, rowData.house_publisher)}>*/}
+                    <TouchableOpacity onPress={this.GoToHouseDetail}>
                         <View style={{backgroundColor: '#FFF'}}>
                             <View style={{padding: 10, flexDirection: 'row'}}>
                                 <Image style={styles.thumb} source={require('../res/images/house.png')}/>
@@ -99,13 +119,49 @@ class HouseCell extends Component {
                 </View>
                 }
             />
+            </View>
+
         );
     }
 }
 
-//const isHouseData=this.state.isHouseData;
+/*const RootStack = createStackNavigator(
+    {
+        HouseCell: { screen: HouseCell },
+
+        HouseDetail: { screen: HouseDetail }
+    },
+    {
+        initialRouteName: 'HouseCell',
+    });
+
+const HouseInfo = createAppContainer(RootStack);
+export default HouseInfo;*/
+/*
+export default class HouseInfo extends React.Component {
+    render() {
+        return <AppContainer/>;
+    }
+}
+
+export default HouseCell = createStackNavigator(
+    {
+        HouseCell: { screen: HouseCell },
+        HouseDetail: { screen: HouseDetail }
+
+    });
+
+*/
+
+
 // 样式
 const styles = StyleSheet.create({
+    MainContainer :{
+        flex:1,
+        //justifyContent: 'center',
+        paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+        margin: 10
+    },
     textContainer: {
         flex: 1
     },
@@ -142,5 +198,5 @@ const styles = StyleSheet.create({
 });
 //module.exports = HouseCell;
 //module.exports = HouseSchema;
-export default HouseCell;
+//export default HouseCell;
 

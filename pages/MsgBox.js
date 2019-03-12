@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 
-import { StyleSheet, Platform, View, Image, Text, TextInput, TouchableOpacity, Alert, YellowBox, ListView,ScrollView } from 'react-native';
+import {
+    StyleSheet,
+    Platform,
+    View,
+    Image,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Alert,
+    YellowBox,
+    ListView,
+    ScrollView,
+    Dimensions
+} from 'react-native';
 
 let Realm = require('realm');
 
 let realm ;
 
 import { createStackNavigator } from 'react-navigation';
+import BackHeader from "../component/BackHeader";
 
 /*const MainNavigator = createStackNavigator({
     Profile: {screen: ProfileScreen},
@@ -105,8 +119,11 @@ class MsgBox extends Component{
 
     render() {
         return (
+
             <ScrollView keyboardShouldPersistTaps={'handled'}>
-            <View style={styles.MainContainer}>
+            <BackHeader navigation={this.props.navigation} title={'填写房屋信息'}/>
+            <View style={[styles.MainContainer,{justifyContent:'center'}]}>
+
                 <TextInput
                     placeholder="姓名"
                     style = { styles.TextInputStyle }
@@ -275,8 +292,9 @@ export default MsgBox = createStackNavigator(
 const styles = StyleSheet.create({
 
     MainContainer :{
+        alignItems:'center',
         flex:1,
-        //justifyContent: 'center',
+        justifyContent: 'center',
         paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
         margin: 10
     },
@@ -284,8 +302,8 @@ const styles = StyleSheet.create({
     TextInputStyle:
         {
             borderWidth: 1,
-            borderColor: '#009688',
-            width: '100%',
+            borderColor: '#6495ED',
+            width: '80%',
             height: 40,
             borderRadius: 10,
             marginBottom: 10,
@@ -293,11 +311,10 @@ const styles = StyleSheet.create({
         },
 
     button: {
-
-        width: '100%',
+        width: '80%',
         height: 40,
         padding: 10,
-        backgroundColor: '#4CAF50',
+        backgroundColor: '#B0C4DE',
         borderRadius:7,
         marginTop: 12
     },
@@ -308,7 +325,6 @@ const styles = StyleSheet.create({
     },
 
     textViewContainer: {
-
         textAlignVertical:'center',
         padding:10,
         fontSize: 20,
