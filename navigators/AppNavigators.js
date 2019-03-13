@@ -17,7 +17,8 @@ import MapLocation from '../util/MapLocation';
 
 import LandLordPage from '../pages/LandLordPage';
 import PersonalProfile from '../pages/Mine/PersonalProfile';
-
+import CommentPage from '../pages/CommentPage';
+import ImagePickerExample from '../component/antComponent';
 
 
 
@@ -31,6 +32,13 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+    ImagePickerExample:{
+       screen:ImagePickerExample,
+        navigationOptions:{
+            header:null
+        }
+
+    },
     LandLordPage:{
        screen:LandLordPage,
         navigationOptions:{
@@ -40,6 +48,12 @@ const AppStackNavigator = createStackNavigator({
     PersonalProfile:{
       screen:PersonalProfile,
         navigationOptions:{
+            header:null
+        }
+    },
+    CommentPage:{
+       screen:CommentPage,
+       navigationOptions:{
             header:null
         }
     },

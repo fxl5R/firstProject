@@ -256,7 +256,10 @@ class LandLordPage extends React.Component {
                     <View style={{flex:1,alignItems:'flex-end'}}>
                         <TouchableOpacity onPress={()=>{this.buttonItemAction(6)}}>
                             <View style={{flexDirection:'row',height:32,alignItems:'center'}}>
-                                <Text style={{fontSize:12}}>添加评论</Text>
+                                <Text style={{fontSize:12}}onPress={()=>{
+                                    this.props.navigation.navigate('CommentPage');
+                                    /*alert('test success');*/
+                                }}>添加评论</Text>
                                 <Image source={require('../res/images/ic_center_right_arrow.png')}
                                        style={{width:12,height:18,marginRight:15}}/>
                             </View>

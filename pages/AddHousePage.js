@@ -21,6 +21,7 @@ let realm ;
 
 import { createStackNavigator } from 'react-navigation';
 import BackHeader from "../component/BackHeader";
+import ImagePickerExample from "../component/antComponent";
 
 /*const MainNavigator = createStackNavigator({
     Profile: {screen: ProfileScreen},
@@ -185,6 +186,7 @@ class AddHousePage extends Component{
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ House_Pic: text })} }/>
+                <ImagePickerExample navigation={this.props.navigation}/>
                 <TextInput
                     placeholder="房屋描述"
                     style = { styles.TextInputStyle }

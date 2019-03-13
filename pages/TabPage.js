@@ -162,7 +162,7 @@ export default class TabPage extends Component<Props> {
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hindex.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
-                            <SearchBarD/>
+                            <SearchBarD {...this.props}/>
                             <FlatList
                                 //data={isHouseData} 报错待解决
                                 ListHeaderComponent={this._renderHeader()}
@@ -200,7 +200,7 @@ export default class TabPage extends Component<Props> {
                         badgeText="1"
                         onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
                         <View styles={styles.page3}>
-                            <NormalHeader navigation={this.props.navigation} title={'信息通知'}/>
+                            <NormalHeader navigation={this.props.navigation} title={'消息栏'}/>
                             <MsgCard
                                 msgtitle={'用户123'}
                                 msgbrief={'消息梗概消息梗概'}

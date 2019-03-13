@@ -57,14 +57,20 @@ class PersonalProfile extends React.Component<Props> {
             arrowRight={true}
           />
         </View>
+        <View style={{alignItems:'center',justifyContent: 'center',paddingTop:20}}>
+          <TouchableOpacity  activeOpacity={0.7} style={styles.button0} >
+              <Text style={styles.TextStyle}> 确认提交 </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
-  }
+  }//onPress={this.itemButtonAction(0)}
 
   /**
    * 点击了头像
    */
   onPictureClick = () => {
+    this.props.navigation.navigate('ImagePickerExample');
     console.log('点击了头像');
   }
 
@@ -124,7 +130,21 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 25,
     backgroundColor:'white'
-  }
+  },
+  TextStyle:{
+    fontSize:15,
+    color:'#fff',
+    textAlign:'center',
+  },
+  button0: {
+    width: '100%',
+    height: 40,
+    padding: 10,
+    backgroundColor: '#B0C4DE',
+    borderRadius:7,
+    marginTop: 14,
+    elevation: 1
+  },
 });
 
 export default PersonalProfile;
