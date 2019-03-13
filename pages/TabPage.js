@@ -13,12 +13,7 @@ import {
     Text,
     Image,
     FlatList,
-    ActivityIndicator,
     TouchableHighlight,
-    YellowBox,
-    ListView,
-    Alert,
-    TouchableOpacity,
     ScrollView
 } from 'react-native';
 import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
@@ -29,33 +24,8 @@ import TabNavigator from 'react-native-tab-navigator';
 import HouseDetail from '../component/HouseDetail';
 import {HouseSchema} from '../component/HouseCell';
 import HouseCell from '../component/HouseCell';
-
-
-/*//初始化Realm
-let realm = new Realm({schema: [HouseSchema]});*/
-/*
-const HouseSchema={
-    name: 'House_Info',
-    properties:
-        {
-            house_publisher: 'string',
-            publish_time: 'date',
-            lease_type: 'string',
-            area_name: 'string',
-            unit_build:'string',
-            total_area:'string',
-            door_model:'string',
-            toward_direct:'string',
-            house_floor:'string',
-            house_decorate:'string',
-            rent_fee:'string',
-            pay_type:'string',
-            house_pic:'string',
-            house_description:'string',
-            owner_tel:'string',
-            certification:{type: 'int',default: 0,optional: true}
-        }};
-*/
+import MinePage from './MinePage';
+import BackHeader from "../component/BackHeader";
 
 const Realm=require('realm');
 //自定义搜索栏
@@ -130,7 +100,7 @@ export default class TabPage extends Component<Props> {
             <View>
                 <View style={[styles.headerBody,{flexDirection:'row'}]}>
                     <TouchableHighlight style={styles.headerClick}
-                                        onPress={()=>{this.props.navigation.navigate('MsgBox')}}>
+                                        onPress={()=>{this.props.navigation.navigate('AddHousePage')}} >
                         <View>
                             <Icon name="city" size={50} color="#E6E6FA" light />
                             <Text style={styles.fontClick}>添加房屋</Text>
@@ -217,7 +187,11 @@ export default class TabPage extends Component<Props> {
                         badgeText="1"
                         onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
                         <View styles={styles.page3}>
-                            <Text style={styles.text}>消息33333</Text>
+                            <Text style={styles.text}
+                                  onPress={()=>{
+                                      this.props.navigation.navigate('LandLordPage');
+                                      /*alert('test success');*/
+                                  }}>消息33333</Text>
                             <Text style={styles.text}
                                   onPress={()=>{
                                       this.props.navigation.navigate('MsgBox');
@@ -235,11 +209,7 @@ export default class TabPage extends Component<Props> {
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hprofile.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_profile' })}>
                         <View styles={styles.page4}>
-                            <Text style={styles.text}
-                                  onPress={()=>{
-                                      this.props.navigation.navigate('LandLordPage');
-                                      /*alert('test success');*/
-                                  }}>我4444444</Text>
+                            <ScrollView><MinePage navigation={this.props.navigation}/></ScrollView>
                         </View>
                     </TabNavigator.Item>
                 </TabNavigator>

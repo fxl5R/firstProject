@@ -2,7 +2,8 @@
 import {createAppContainer,createStackNavigator} from 'react-navigation';
 
 import HomePage from '../pages/HomePage';
-import MsgBox from '../pages/MsgBox';
+import AddHousePage from '../pages/AddHousePage';
+import PublishResult from '../pages/PublishResult';
 import TabPage from '../pages/TabPage';
 import guidePage from '../pages/GuidePage';
 import login from '../pages/login';
@@ -23,6 +24,7 @@ import LandLordPage from '../pages/LandLordPage';
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
+
    TabPage:{
         screen:TabPage,
         navigationOptions:{
@@ -81,8 +83,14 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
-    MsgBox: {
-        screen: MsgBox,
+    AddHousePage: {
+        screen: AddHousePage,
+        navigationOptions:{
+            header:null
+        }
+    },
+    PublishResult:{
+        screen: PublishResult,
         navigationOptions:{
             header:null
         }

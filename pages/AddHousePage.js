@@ -25,7 +25,7 @@ import BackHeader from "../component/BackHeader";
 /*const MainNavigator = createStackNavigator({
     Profile: {screen: ProfileScreen},
 });*/
-class MsgBox extends Component{
+class AddHousePage extends Component{
 
     static navigationOptions =
         {
@@ -85,7 +85,6 @@ class MsgBox extends Component{
                         certification:{type: 'int',default: 0,optional: true}
                     }}]
         });
-
     }
 
     add_House=()=>{
@@ -113,15 +112,17 @@ class MsgBox extends Component{
                 certification: null
             });
         });
-        Alert.alert("House Details Added Successfully.")
+        Alert.alert("成功添加房屋信息");
+        this.props.navigation.navigate('PublishResult');
         //realm.close();
     };
 
     render() {
         return (
-
+            <View>
+            <BackHeader navigation={this.props.navigation} {...this.props.BackHeader} title={'填写房屋信息'}/>
             <ScrollView keyboardShouldPersistTaps={'handled'}>
-            <BackHeader navigation={this.props.navigation} title={'填写房屋信息'}/>
+
             <View style={[styles.MainContainer,{justifyContent:'center'}]}>
 
                 <TextInput
@@ -198,13 +199,12 @@ class MsgBox extends Component{
                 <TouchableOpacity onPress={this.add_House} activeOpacity={0.7} style={styles.button} >
                     <Text style={styles.TextStyle}> 提交出租信息 </Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity onPress={this.GoToSecondActivity} activeOpacity={0.7} style={styles.button} >
                     <Text style={styles.TextStyle}> 查看所有房屋信息 </Text>
                 </TouchableOpacity>
-
             </View>
             </ScrollView>
+            </View>
 
         );
     }
@@ -283,9 +283,9 @@ class HDetail extends Component
     }
 }
 
-export default MsgBox = createStackNavigator(
+export default AddHousePage = createStackNavigator(
     {
-        First: { screen: MsgBox },
+        First: { screen: AddHousePage },
 
         Second: { screen: HDetail }
     });
