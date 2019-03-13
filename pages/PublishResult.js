@@ -2,7 +2,7 @@
  * 房屋信息提交结果
  */
 'use strict';
-import React from 'react';
+import React, { Component } from 'react';
 import {
     Image,
     ImageBackground,
@@ -21,7 +21,7 @@ let {height, width} = Dimensions.get('window');
 console.log('pingmugao:'+height+'pingmukuan:'+width);
 
 
-class PublishResult extends React.Component {
+class PublishResult extends Component {
     constructor(props) {
         super(props);
         this.buttonBackAction=this.buttonBackAction.bind(this);

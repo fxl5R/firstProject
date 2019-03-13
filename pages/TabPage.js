@@ -14,43 +14,42 @@ import {
     Image,
     FlatList,
     TouchableHighlight,
-    ScrollView
+    ScrollView,
+    Alert
 } from 'react-native';
-import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
+//import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { Kohana } from 'react-native-textinput-effects';
+//import { Kohana } from 'react-native-textinput-effects';
 //import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TabNavigator from 'react-native-tab-navigator';
 import HouseDetail from '../component/HouseDetail';
 import {HouseSchema} from '../component/HouseCell';
 import HouseCell from '../component/HouseCell';
 import MinePage from './MinePage';
-import BackHeader from "../component/BackHeader";
+import {NormalHeader} from "../component/BackHeader";
+
+import {MsgCard, SearchBarD} from '../component/antComponent';
 
 const Realm=require('realm');
+/*
 //自定义搜索栏
 class SearchBar extends Component {
     render() {
         return (
-            <View style={styles.searchBar}>
-                <View style={styles.searchInput}>
-                    <Kohana
-                        style={[styles.textInput]}
-                        label={'输入小区名或地址'}
-                        iconClass={MaterialsIcon}
-                        iconName={'search'}
-                        iconColor={'#B0C4DE'}
-                        iconSize={18}
-                        labelStyle={{color:'#B0C4DE'}}
-                        inputPadding={10}
-                        useNativeDriver
-                        onChangeText={(searchString)=>this.setState({searchString})}
-                    />
-                </View>
+            <View style={{ marginTop: 10 }}>
+                <SearchBar
+                    value={this.state.value}
+                    placeholder="输入小区名或地址"
+                    onSubmit={value => Alert.alert(value)}
+                    onCancel={this.clear}
+                    onChange={this.onChange}
+                    showCancelButton
+                />
             </View>
         );
     }
 }
+*/
 
 //设置尾部
 /*let renderFooter = () => {
@@ -78,7 +77,15 @@ export default class TabPage extends Component<Props> {
             searchString:'',
             dataVersion: 0,
             //dataSource:ds.cloneWithRows(mydata),
+            value: '',
+        },
+        this.onChange = value => {
+                this.setState({ value });
+            };
+        this.clear = () => {
+            this.setState({ value: '' });
         };
+
         this._renderHeader = this._renderHeader.bind(this);
         this._renderItem = this._renderItem.bind(this);
         this._renderSeparator=this._renderSeparator.bind(this);
@@ -142,7 +149,7 @@ export default class TabPage extends Component<Props> {
         let result=mydata.filtered("certification == $0", null)
             .sorted("door_model", true);
         let isHouseData=JSON.stringify(result);
-        console.log('testtttt success'+Array.from(isHouseData).toString());
+        //console.log('testtttt success'+Array.from(isHouseData).toString());
         //let isHouseData=Array.from(result).toString();
         return (
             <View style={styles.container}>
@@ -155,7 +162,7 @@ export default class TabPage extends Component<Props> {
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hindex.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
-                            <SearchBar/>
+                            <SearchBarD/>
                             <FlatList
                                 //data={isHouseData} 报错待解决
                                 ListHeaderComponent={this._renderHeader()}
@@ -176,7 +183,13 @@ export default class TabPage extends Component<Props> {
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hstar.png')} />}
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hstar.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_star' })}>
-                        <View styles={styles.page2}><Text style={styles.text}>收藏22222</Text></View>
+                        <View styles={styles.page2}>
+                            <Text style={styles.text}
+                                  onPress={()=>{
+                                      this.props.navigation.navigate('LandLordPage');
+                                      /*alert('test success');*/
+                                  }}>收藏22222</Text>
+                        </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_msg'}
@@ -187,18 +200,19 @@ export default class TabPage extends Component<Props> {
                         badgeText="1"
                         onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
                         <View styles={styles.page3}>
-                            <Text style={styles.text}
-                                  onPress={()=>{
-                                      this.props.navigation.navigate('LandLordPage');
-                                      /*alert('test success');*/
-                                  }}>消息33333</Text>
-                            <Text style={styles.text}
-                                  onPress={()=>{
-                                      this.props.navigation.navigate('MsgBox');
-                                      /*alert('test success');*/
-                                  }}>
-                                TTTestBBBack
-                            </Text>
+                            <NormalHeader navigation={this.props.navigation} title={'信息通知'}/>
+                            <MsgCard
+                                msgtitle={'用户123'}
+                                msgbrief={'消息梗概消息梗概'}
+                                imgUri={'http://sowcar.com/t6/681/1552475145x986907160.png'}
+                                extra={'一条消息'}
+                                footerextracontent={'2019-2-22 16:40:34'}/>
+                            <MsgCard
+                                msgtitle={'用户123'}
+                                msgbrief={'消息梗概消息梗概'}
+                                imgUri={'http://sowcar.com/t6/681/1552475175x2890174339.png'}
+                                extra={'一条消息'}
+                                footerextracontent={'2019-2-22 16:40:34'}/>
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item

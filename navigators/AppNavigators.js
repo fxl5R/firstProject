@@ -14,9 +14,9 @@ import HouseCell from '../component/HouseCell';
 import navigatorExpo from '../navigators/navigatorExpo';
 //import SearchResults from '../component/SearchResults';
 import MapLocation from '../util/MapLocation';
-//import {StatusBar} from "react-native";
 
 import LandLordPage from '../pages/LandLordPage';
+import PersonalProfile from '../pages/Mine/PersonalProfile';
 
 
 
@@ -36,6 +36,12 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions:{
            header:null
             }
+    },
+    PersonalProfile:{
+      screen:PersonalProfile,
+        navigationOptions:{
+            header:null
+        }
     },
     Login:{
         screen:login,
@@ -95,7 +101,6 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
-
     Guide:{
         screen:guidePage,
         navigationOptions:{

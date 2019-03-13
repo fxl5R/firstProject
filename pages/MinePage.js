@@ -36,13 +36,13 @@ export default class MinePage extends Component {
                 <ScrollView style={{ flex: 1 }}>
                     <View style={styles.partContainer}>
                         <FormWithPicture
-                            nickName={'大陈'}
-                            contactText={'188****6910'}
+                            nickName={'用户234'}
+                            contactText={'134****6810'}
                             pictureUri={'../res/images/logo_peo.png'}
                             onFormClick={() => this.personalProfile()}
                         />
                         <FormWithPairText
-                            leftText="我的积分"
+                            leftText="实名认证"
 
                             onFormClick={() => {}}
                             cutOffLine={false}
@@ -50,18 +50,18 @@ export default class MinePage extends Component {
                     </View>
                     <View style={styles.partContainer}>
                         <FormArrowToDetail
-                            leftText={'我的主队'}
+                            leftText={'我的收藏'}
                             onFormClick={() => this.mySupportTeam()}
                             cutOffLine={false}
                         />
                     </View>
                     <View style={styles.partContainer}>
                         <FormArrowToDetail
-                            leftText={'意见与反馈'}
+                            leftText={'我的评论'}
                             onFormClick={() => this.helpAndFeedback()}
                         />
                         <FormArrowToDetail
-                            leftText={'给个好评鼓励一下吧'}
+                            leftText={'意见与反馈'}
                             onFormClick={() => this.evaluateApp()}
                         />
                         <FormArrowToDetail
@@ -71,7 +71,7 @@ export default class MinePage extends Component {
                         />
                     </View>
                     <Button
-                        style={{ marginTop: 15}}
+                        style={{ marginTop: 15,paddingTop:20}}
                         text="退出登录"
                         onButtonClick={() => this.logout()}
                     />
