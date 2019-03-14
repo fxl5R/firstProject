@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button from '../component/Button';
-const Realm = require('realm');
+import realm from '../util/realm.js';
+//const Realm = require('realm.js');
 
 const UserSchema = {
     name: 'User',                          // 表名
@@ -26,8 +27,8 @@ const UserSchema = {
     },
 };
 //初始化Realm
-let realm = new Realm({schema: [UserSchema]});
-realm.close();
+//let realm.js = new Realm({schema: [UserSchema]});
+//realm.js.close();
 export default class register extends Component {
     constructor(props) {
         super(props);
@@ -49,7 +50,7 @@ export default class register extends Component {
                 cTime:new Date()
             });
         });
-        realm.close();
+        //realm.js.close();
         console.log('name'+this.state.text+'password'+this.state.password);
         ToastAndroid.show("用户"+this.state.text+"成功注册，跳转中", ToastAndroid.SHORT);
         this.props.navigation.navigate('Login');
@@ -91,12 +92,19 @@ export default class register extends Component {
                 </View>
 
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
-                    <Text style={styles.style_view_unlogin}>
+                    {/*<Text style={styles.style_view_unlogin}>
                         忘记密码?
+                    </Text>*/}
+                    <Text style={styles.style_view_unlogin}
+                          onPress={()=>{
+                              this.props.navigation.navigate('Login');
+                              /*alert('test success');*/
+                          }}>
+                        已有账号
                     </Text>
                     <Text style={styles.style_view_register}
                           onPress={()=>{
-                              this.props.navigation.navigate('MsgBox');
+                              this.props.navigation.navigate('AddHousePage');
                               /*alert('test success');*/
                           }}>
                         新用户

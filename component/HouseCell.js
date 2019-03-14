@@ -11,17 +11,15 @@ import {
     Platform, Button
 } from 'react-native';
 import HouseDetail from "./HouseDetail";
-//import HouseDetail from '../component/HouseDetail';
-//import {createAppContainer, createStackNavigator} from 'react-navigation';
+import realm from '../util/realm.js';
 
-const Realm=require('realm');
-export const HouseSchema={
+/*export const HouseSchema={
     name: 'House_Info',
     properties:
         {
             //house_id:'int',
             house_publisher: 'string',
-            publish_time: 'date',
+            publish_time: 'string',
             lease_type: 'string',
             area_name: 'string',
             unit_build:'string',
@@ -36,12 +34,13 @@ export const HouseSchema={
             house_description:'string',
             owner_tel:'string',
             certification:{type: 'int',default: 0,optional: true}
-        }};
+        }};*/
 
 export default class HouseCell extends Component {
     constructor(props) {
         super(props);
-        let mydata = new Realm({schema: [HouseSchema]}).objects('House_Info');
+        //let mydata =new Realm({schema: [HouseSchema]}).objects('House_Info');
+        let mydata=realm.objects('House_Info');
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             dataSource: ds.cloneWithRows(mydata),
@@ -104,7 +103,7 @@ export default class HouseCell extends Component {
                                 </View>
 
                                 <View style={{flex: 1, paddingLeft: 10}}>
-                                    <Text style={{color: '#999', textAlign: 'right'}}>{rowData.publish_time.toString()}</Text>
+                                    <Text style={{color: '#999', textAlign: 'right'}}>{rowData.publish_time}</Text>
                                     <Text style={{marginTop: 8, color: 'red', textAlign: 'right'}}>{rowData.rent_fee}</Text>
                                 </View>
                             </View>

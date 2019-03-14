@@ -58,7 +58,7 @@ export default class MinePage extends Component {
                     <View style={styles.partContainer}>
                         <FormArrowToDetail
                             leftText={'我的评论'}
-                            onFormClick={() => this.helpAndFeedback()}
+                            onFormClick={() => this.myComments()}
                         />
                         <FormArrowToDetail
                             leftText={'意见与反馈'}
@@ -81,7 +81,7 @@ export default class MinePage extends Component {
     }
 
     /**
-     * 跳转至 ‘个人资料页面’
+     * 跳转至 个人资料
      */
     personalProfile = () => {
         console.log('点击了个人资料');
@@ -89,22 +89,22 @@ export default class MinePage extends Component {
     }
 
     /**
-     * 跳转至 ‘我的收藏页面’
+     * 跳转至 我的收藏
      */
     mySupportTeam = () => {
         this.props.navigation.navigate('MineStarTeam');
     }
 
     /**
-     * 跳转至 ‘帮助与反馈’
+     * 跳转至 评论管理
      */
-    helpAndFeedback = () => {
-        console.log('点击了意见与反馈');
-        this.props.navigation.navigate('HelpAndFeedback');
+    myComments = () => {
+        console.log('点击了评论管理');
+        this.props.navigation.navigate('CommentManager');
     }
 
     /**
-     * 跳转至 ‘评价App页面’
+     * 跳转至 评价App页面
      */
     evaluateApp = () => {
         console.log('点击了评价App页面');
@@ -112,7 +112,7 @@ export default class MinePage extends Component {
     }
 
     /**
-     * 跳转至 ‘关于页面’
+     * 跳转至 关于页面
      */
     aboutTheApp = () => {
         console.log('点击了关于');
@@ -120,7 +120,7 @@ export default class MinePage extends Component {
     }
 
     /**
-     * 跳转至 ‘登录页面’
+     * 跳转至 登录页面
      */
     logout = () => {
         console.log('点击了退出登录');

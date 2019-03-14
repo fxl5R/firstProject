@@ -9,12 +9,16 @@ import {
     Image,
     FlatList,
     TextInput,
-    TouchableHighlight
+    TouchableHighlight, TouchableOpacity
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 import Icon from'react-native-vector-icons/FontAwesome';
 import MOCK from 'mockjs'
+import {TextareaItem} from '@ant-design/react-native';
+import ImagePickerExample from "../component/antComponent";
+import Comment from "../component/Comment";
+
 // pp2={
 //     avatar:'http://dummyimage.com/600x300/f7d8d3)'
 // }
@@ -29,8 +33,13 @@ export default class CommentPage extends Component {
             ping: {},
             huifu: [],
             content:'',
-            _isSending: false
-        }
+            _isSending: false,
+            commentContent:''
+        },
+        this.onChange = commentContent => {
+            // console.log(val);
+        this.setState({ commentContent });
+        };
     }
 
     componentDidMount() {
@@ -39,7 +48,7 @@ export default class CommentPage extends Component {
     }
 
     _getData() {
-        fetch('http://rapapi.org/mockjs/22101/api/pinglun')
+        fetch('http:/example.com')
             .then( (response) => response.json() )
             .then( (data) => {
                 let pp = MOCK.mock(data).pinglist;
@@ -57,7 +66,7 @@ export default class CommentPage extends Component {
     }
 
     _getDataHuiFu() {
-        fetch('http://rapapi.org/mockjs/22101/api/pinglun/huifu')
+        fetch('http:/example.com')
             .then( (response) => response.json() )
             .then( (data) => {
                 // console.log(data)
@@ -98,7 +107,7 @@ export default class CommentPage extends Component {
     }
 
     _submit() {
-        if(!this.state.content) {
+        if(!this.state.commentContent) {
             return alert('留言不能为空')
         }
         if( this.state._isSending){
@@ -107,7 +116,7 @@ export default class CommentPage extends Component {
         this.setState({
             _isSending:true
         },() => {
-            fetch('http://rapapi.org/mockjs/22101/api/pinglun/huifupost',{
+            fetch('http:/example.com',{
                 method:'POST',
                 headers: {
                     'Accept':'application/json',
@@ -133,7 +142,7 @@ export default class CommentPage extends Component {
                             date1: "1994-04-20",
                             key: "120000199" + i +"31207725X",
                             name1: "Cynthia Perez",
-                            content1:this.state.content
+                            content1:this.state.commentContent
                         }].concat(liuyanContent);
 
                         i++;
@@ -149,25 +158,16 @@ export default class CommentPage extends Component {
     }
 
     render() {
-        // console.log(this.state.huifu)
-        // console.log(pp2.avatar)
-        // console.log(this.state.ping2)
-        // console.log(this.state.ping2.pinglist)
-        // console.log(this.state.ping2.pinglist)
-        // console.log(this.state.ping2.pinglist.avatar1)
-
         return (
             <View style={styles.container}>
-                <View style={ styles.myCircle } >
-                    <Text style={ styles.myCircleText }>我的圈子</Text>
-                    <Icon name="angle-right" size={ 30 } color="black"/>
-                </View>
-
+                <Comment
+                    navigaiton={this.props.navigation}
+                    onSubmitClick={()=>this._submit.bind(this)}
+                />
                 <ScrollView
-                    automaticallAdjustContentInsert = { false }
-                    style={ styles.ScrollView}
-                >
-                    <View style={ styles.infoBox }>
+                    automaticallAdjustContentInsert = { true }
+                    style={ styles.ScrollView}>
+                    {/*<View style={ styles.infoBox }>
                         <View style={ styles.infoxBoxTop}>
                             <Image style={ styles.avatar } source={{ uri : this.state.ping.avatar1 }}/>
                             <Text style={ styles.name1}>{this.state.ping.name1}</Text>
@@ -178,16 +178,17 @@ export default class CommentPage extends Component {
                         <View>
                             <Text style={ styles.infoxDate }>{ this.state.ping.date1 }</Text>
                         </View>
-                    </View>
-                    <View style={{margin:16,
+                    </View>*/}
+                    <View style={{
+                        //margin:16,
                         borderWidth:1,
                         borderColor:'rgba(0,0,0,0.2)',
-                        flexDirection:'row',
-                        justifyContent:'space-between',
+                        //flexDirection:'row',
+                        //justifyContent:'space-between',
                         borderRadius:4,
                         alignItems:'center'
                     }}>
-                        <TextInput
+                        {/*<TextInput
                             placeholder='写下你的评论'
                             underlineColorAndroid="transparent"
                             keybordType='numeric'
@@ -199,27 +200,18 @@ export default class CommentPage extends Component {
                                 })
                             } }
                         >
-                        </TextInput>
-
-                        <TouchableHighlight onPress={ this._submit.bind(this) }>
-                            <View style={{
-                                width:50,
-                                height:72,
-                                backgroundColor:'#ff7454',
-                                justifyContent:'center',
-                                alignItems:"center",
-                                borderRadius:4,
-                            }}>
-                                <Text style={{color:'white',fontSize:17,letterSpacing:20}}>提 交</Text>
-                            </View>
-                        </TouchableHighlight>
+                        </TextInput>*/}
+                        <TextareaItem
+                            value={this.state.commentContent}
+                            onChange={this.onChange}
+                            rows={4} placeholder="写下你的评论" count={150}
+                        />
                     </View>
-                    <FlatList
+                    <ImagePickerExample navigation={this.props.navigation}/>
+                    {/*<FlatList
                         data= { this.state.huifu }
                         renderItem = { this._renderItemHuiFu }
-                    />
-
-
+                    />*/}
                 </ScrollView>
             </View>
         );

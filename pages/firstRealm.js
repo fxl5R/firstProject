@@ -12,7 +12,7 @@ import {
     PixelRatio
 } from 'react-native';
 import Button from '../component/Button';
-const Realm = require('realm');
+const Realm = require('realm.js');
 class CustomButton extends Component {
     render() {
         return (

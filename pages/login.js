@@ -12,10 +12,12 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button from '../component/Button';
+import realm from '../util/realm.js';
 
 //关掉启动白屏
 //SplashScreen.hide();
-const Realm = require('realm');
+//const Realm = require('realm.js');
+/*
 const UserSchema = {
     name: 'User',                          // 表名
     primaryKey: 'id',                           // 设置id为主键
@@ -28,10 +30,11 @@ const UserSchema = {
         cTime: { type: 'date', optional: true } // 创建时间
     },
 };
+*/
 
 //初始化Realm
-let realm = new Realm({schema: [UserSchema]});
-realm.close();
+//let realm.js = new Realm({schema: [UserSchema]});
+//realm.js.close();
 export default class login extends Component {
     constructor(props) {
         super(props);
@@ -47,7 +50,7 @@ export default class login extends Component {
             if(this.state.password===password1){                   //判断密码
                 ToastAndroid.show('登录成功',ToastAndroid.SHORT);
                 this.props.navigation.navigate('TabPage');
-                realm.close();
+                //realm.js.close();
             }else{
                 ToastAndroid.show('登录失败，请检查用户名或者密码',ToastAndroid.SHORT)
             }
