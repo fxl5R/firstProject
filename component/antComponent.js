@@ -2,7 +2,9 @@
 
 import React, { Component } from 'react';
 import {Text, TouchableHighlight, View, Alert, StyleSheet} from 'react-native';
-import { Card, WhiteSpace, WingBlank,SearchBar,ImagePicker } from '@ant-design/react-native';
+
+import { Card, WhiteSpace, WingBlank,SearchBar,ImagePicker, TextareaItem } from '@ant-design/react-native';
+
 import PropTypes from 'prop-types';
 
 
@@ -114,7 +116,7 @@ class SearchBar extends Component {
         );
     }
 }*/
-const data = [{
+const imagesdata = [{
     url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
     id: '2121',
 }, {
@@ -124,10 +126,10 @@ const data = [{
 
  export default class ImagePickerExample extends Component {
     state = {
-        files: data,
+        files: imagesdata,
     }
     onChange = (files, type, index) => {
-        console.log(files, type, index);
+        console.log('图片选择onononChange'+files, type, index);
         this.setState({
             files,
         });
@@ -140,7 +142,7 @@ const data = [{
                 <ImagePicker
                     files={files}
                     onChange={this.onChange}
-                    onImageClick={(index, fs) => console.log(index, fs)}
+                    onImageClick={(index, fs) => console.log('图片点击click'+index, fs)}
                     selectable={files.length < 5}
                     accept="image/gif,image/jpeg,image/jpg,image/png"
                 />

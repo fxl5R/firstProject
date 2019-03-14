@@ -1,31 +1,36 @@
 
 import {createAppContainer,createStackNavigator} from 'react-navigation';
 
+import login from '../pages/login';
+import register from '../pages/register';
 import HomePage from '../pages/HomePage';
-import AddHousePage from '../pages/AddHousePage';
-import PublishResult from '../pages/PublishResult';
 import TabPage from '../pages/TabPage';
 import guidePage from '../pages/GuidePage';
-import login from '../pages/login';
-//import firstRealm from '../pages/firstRealm';
-import register from '../pages/register';
-import HouseDetail from "../component/HouseDetail";
+import AddHousePage from '../pages/AddHousePage';
+import PublishResult from '../pages/PublishResult';
+import LandLordPage from '../pages/LandLordPage';
+import CommentPage from '../pages/CommentPage';
+
+import ImagePickerExample from '../component/antComponent';
+import HouseDetail from '../component/HouseDetail';
 import HouseCell from '../component/HouseCell';
 import navigatorExpo from '../navigators/navigatorExpo';
 //import SearchResults from '../component/SearchResults';
 import MapLocation from '../util/MapLocation';
 
-import LandLordPage from '../pages/LandLordPage';
+
 import PersonalProfile from '../pages/Mine/PersonalProfile';
-import CommentPage from '../pages/CommentPage';
-import ImagePickerExample from '../component/antComponent';
+import CommentManager from '../pages/Mine/CommentManager';
 
 
 
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
-
+    register:{
+        screen:register,
+        navigationOptions:{header:null}
+    },
    TabPage:{
         screen:TabPage,
         navigationOptions:{
@@ -51,6 +56,12 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+    CommentManager:{
+       screen:CommentManager,
+        navigationOptions:{
+            header:null
+        }
+    },
     CommentPage:{
        screen:CommentPage,
        navigationOptions:{
@@ -61,10 +72,7 @@ const AppStackNavigator = createStackNavigator({
         screen:login,
         navigationOptions:{header: null}
     },
-    register:{
-        screen:register,
-        navigationOptions:{header:null}
-    },
+
     /*firstRealm: {
         screen: firstRealm,
         navigationOptions: {

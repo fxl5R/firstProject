@@ -23,14 +23,14 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 //import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TabNavigator from 'react-native-tab-navigator';
 import HouseDetail from '../component/HouseDetail';
-import {HouseSchema} from '../component/HouseCell';
+//import {HouseSchema} from '../component/HouseCell';
 import HouseCell from '../component/HouseCell';
 import MinePage from './MinePage';
 import {NormalHeader} from "../component/BackHeader";
 
 import {MsgCard, SearchBarD} from '../component/antComponent';
 
-const Realm=require('realm');
+
 /*
 //自定义搜索栏
 class SearchBar extends Component {
@@ -66,7 +66,7 @@ class SearchBar extends Component {
     );
 };*/
 
-const modelSchema=[HouseSchema];
+//const modelSchema=[HouseSchema];
 export default class TabPage extends Component<Props> {
     //构造函数
     constructor(props){
@@ -143,12 +143,11 @@ export default class TabPage extends Component<Props> {
     };
 
     render() {
-        /*let A=realm.objects('House_Info');
+        /*let A=realm.js.objects('House_Info');
         let houseData=Object.values(A);*/
-        let mydata = new Realm({schema:modelSchema}).objects('House_Info');
-        let result=mydata.filtered("certification == $0", null)
-            .sorted("door_model", true);
-        let isHouseData=JSON.stringify(result);
+        //let mydata = new Realm({schema:modelSchema}).objects('House_Info');
+        //let isHouseData=mydata.filtered("certification == $0", null).sorted("door_model", true);
+        //let isHouseData=JSON.stringify(result);
         //console.log('testtttt success'+Array.from(isHouseData).toString());
         //let isHouseData=Array.from(result).toString();
         return (

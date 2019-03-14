@@ -14,25 +14,20 @@ import {
     ScrollView,
     Dimensions
 } from 'react-native';
-
-let Realm = require('realm');
-
-let realm ;
+import { Tag, WhiteSpace } from '@ant-design/react-native';
 
 import { createStackNavigator } from 'react-navigation';
 import BackHeader from "../component/BackHeader";
 import ImagePickerExample from "../component/antComponent";
 
-/*const MainNavigator = createStackNavigator({
-    Profile: {screen: ProfileScreen},
-});*/
+import realm from '../util/realm.js';
+//标签被选中时回调
+function onChange(selected) {
+    console.log(`tag selected: ${selected}`);
+}
+
 class AddHousePage extends Component{
 
-    static navigationOptions =
-        {
-            title: 'MainActivity',
-            header:null
-        };
 
     GoToSecondActivity = () =>
     {
@@ -63,29 +58,6 @@ class AddHousePage extends Component{
             Owner_Tel:'',            //房主联系电话
             Certification:''         //是否已认证
         };
-
-        realm = new Realm({
-            schema: [{name: 'House_Info',
-                properties:
-                    {
-                        house_publisher: 'string',
-                        publish_time: 'date',
-                        lease_type: 'string',
-                        area_name: 'string',
-                        unit_build:'string',
-                        total_area:'string',
-                        door_model:'string',
-                        toward_direct:'string',
-                        house_floor:'string',
-                        house_decorate:'string',
-                        rent_fee:'string',
-                        pay_type:'string',
-                        house_pic:'string',
-                        house_description:'string',
-                        owner_tel:'string',
-                        certification:{type: 'int',default: 0,optional: true}
-                    }}]
-        });
     }
 
     add_House=()=>{
@@ -93,10 +65,11 @@ class AddHousePage extends Component{
         realm.write(() => {
             let ID = realm.objects('House_Info').length + 1;
 
-            realm.create('House_Info', {
+            realm.create('House_Info',
+                {
                 house_id: ID,
                 house_publisher: this.state.House_Publisher,
-                publish_time: new Date(),
+                publish_time: new Date().toLocaleDateString(),
                 lease_type : this.state.Lease_Type,
                 area_name: this.state.Area_Name,
                 unit_build: this.state.Unit_Build,
@@ -108,6 +81,7 @@ class AddHousePage extends Component{
                 rent_fee: this.state.Rent_Fee,
                 pay_type: this.state.Pay_Type,
                 house_pic: this.state.House_Pic,
+                support_set:this.state.Support_Set,
                 house_description: this.state.House_Description,
                 owner_tel: this.state.Owner_Tel,
                 certification: null
@@ -115,17 +89,14 @@ class AddHousePage extends Component{
         });
         Alert.alert("成功添加房屋信息");
         this.props.navigation.navigate('PublishResult');
-        //realm.close();
     };
 
     render() {
         return (
             <View>
-            <BackHeader navigation={this.props.navigation} {...this.props.BackHeader} title={'填写房屋信息'}/>
+            <BackHeader navigation={this.props.navigation} title={'填写房屋信息'}/>
             <ScrollView keyboardShouldPersistTaps={'handled'}>
-
             <View style={[styles.MainContainer,{justifyContent:'center'}]}>
-
                 <TextInput
                     placeholder="姓名"
                     style = { styles.TextInputStyle }
@@ -187,6 +158,16 @@ class AddHousePage extends Component{
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ House_Pic: text })} }/>
                 <ImagePickerExample navigation={this.props.navigation}/>
+                <View style={{flexDirection: 'row'}}>
+                <WhiteSpace />
+                <Tag onChange={onChange} afterClose={() => {console.log('afterClose');}}>设施齐全</Tag>
+                <WhiteSpace />
+                </View>
+                <TextInput
+                    placeholder="配套设施"
+                    style = { styles.TextInputStyle }
+                    underlineColorAndroid = "transparent"
+                    onChangeText = { ( text ) => { this.setState({ Support_Set: text })} }/>
                 <TextInput
                     placeholder="房屋描述"
                     style = { styles.TextInputStyle }
@@ -197,7 +178,6 @@ class AddHousePage extends Component{
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ Owner_Tel: text })} }/>
-
                 <TouchableOpacity onPress={this.add_House} activeOpacity={0.7} style={styles.button} >
                     <Text style={styles.TextStyle}> 提交出租信息 </Text>
                 </TouchableOpacity>
