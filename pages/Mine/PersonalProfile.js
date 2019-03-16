@@ -10,16 +10,26 @@ import {
 } from 'react-native';
 import FormWithPairText from '../../component/Form/FormWithPairText';
 import BackHeader from "../../component/BackHeader";
+import { Modal} from '@ant-design/react-native';
+import realm from "../../util/realm";
 
-
+let userdatas=realm.objects('User').filtered("online == $0", 1);
+let userdata=userdatas[0];
 class PersonalProfile extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props);
+    this.state={
+        uNickName:'',
+        uSex:'',
+        uLocation:'',
+      }
   }
 //this.props.loginParams.user ? this.props.loginParams.user.sex :
   render() {
-    return (
+      const { navigation } = this.props;
+      const nickName = navigation.getParam('nickName', 'NO-Name');//接收从MinePage传递的NickName
+      return (
       <View style={styles.container}>
         <BackHeader navigation={this.props.navigation} title={'修改资料'}/>
         <View style={styles.partContainer}>
@@ -36,7 +46,7 @@ class PersonalProfile extends React.Component<Props> {
           </TouchableOpacity>
           <FormWithPairText
             leftText={'昵称'}
-            rightText={'暂无填写'}
+            rightText={nickName}
             onFormClick={() => this.onNickNameClick()}
             style={{ paddingVertical: 15 }}
             arrowRight={true}
@@ -58,7 +68,26 @@ class PersonalProfile extends React.Component<Props> {
           />
         </View>
         <View style={{alignItems:'center',justifyContent: 'center',paddingTop:20}}>
-          <TouchableOpacity  activeOpacity={0.7} style={styles.button0} >
+          <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.button0}
+              onPress={()=>{
+                  realm.write(() => {
+
+                      realm.create('User', {id:userdata.id,online: 1}, true);//更新用户昵称
+                      //更新用户性别
+                      if(symboll==='0'){
+                          realm.create('User', {id:userdata.id,userSex:'男'}, true);
+                      }else if(symboll==='1'){
+                          realm.create('User', {id:userdata.id,userSex:'女'}, true);
+                      }
+
+                      realm.create('User', {id:userdata.id,online: 1}, true);//更新用户所在地
+
+
+                  });
+              }}
+          >
               <Text style={styles.TextStyle}> 确认提交 </Text>
           </TouchableOpacity>
         </View>
@@ -86,7 +115,12 @@ class PersonalProfile extends React.Component<Props> {
    * 点击了性别
    */
   onSexClick = () => {
-    console.log('点击了性别')
+    console.log('点击了性别');
+    Modal.operation([
+              { text: '男', onPress:( ) => {this.setState(uSex)}},
+              { text: '女', onPress: () => {const symboll='1'} },
+          ]);
+
   }
 
   /**

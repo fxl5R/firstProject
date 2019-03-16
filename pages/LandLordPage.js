@@ -74,12 +74,13 @@ class LandLordPage extends React.Component {
             toastShort('点击拨打电话...');
         }else if(position === 5 || position ===0){
             //点击评论
-            InteractionManager.runAfterInteractions(() => {
+            this.props.navigation.navigate('CommentManager');
+            /*InteractionManager.runAfterInteractions(() => {
                 navigator.push({
                     component: Comment,
                     name: 'Comment'
                 });
-            });
+            });*/
         }
     }
     //渲染房东基本信息布局
@@ -151,7 +152,7 @@ class LandLordPage extends React.Component {
                 <TouchableOpacity onPress={()=>{this.buttonItemAction(3)}}>
                     <View style={{flexDirection:'row',height:35,alignItems:'center',flex:1}}>
                         <Image source={require('../res/images/store/merchants/ic_merchants_location.png')}
-                               style={{width:16,height:18,marginLeft:15}}/>
+                               style={{width:16,height:20,marginLeft:15}}/>
                         <Text style={{color:'#000',fontSize:12,marginLeft:8}}>测试房主地址123号</Text>
                         <View style={{flex:1,alignItems:'flex-end'}}>
                             <Image source={require('../res/images/ic_center_right_arrow.png')}

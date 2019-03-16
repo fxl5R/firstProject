@@ -42,8 +42,8 @@ export default class CommentManager extends React.Component {
 
     render() {
         const tabs = [
-            { title: '我发出的' },
-            { title: '我收到的' },
+            { title: '发出的' },
+            { title: '收到的' },
         ];
         /*const style = {
             alignItems: 'center',
@@ -54,7 +54,7 @@ export default class CommentManager extends React.Component {
         return (
 
             <View style={{ flex: 1 }}>
-                <BackHeader navigation={this.props.navigation} title={'评论管理'}/>
+                <BackHeader navigation={this.props.navigation} title={'评论查看'}/>
                 {/*<Tabs tabs={tabs}>
                     <View style={style}>
                         <Text>Content of First Tab</Text>

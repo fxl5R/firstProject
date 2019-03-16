@@ -25,7 +25,7 @@ export default class MapLocation extends Component<Props> {
         return (
             <ScrollView>
             <View style={styles.container}>
-                <HouseCell/>
+                <HouseCell navigation={this.props.navigation}/>
             </View>
             </ScrollView>
         );

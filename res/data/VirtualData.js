@@ -36,7 +36,7 @@ export const COMMENT_DATA={
     },{
        "username":"jiangqq",
         "nickname":"王五",
-        "content":"这家店的菜还是不错的,推荐推荐",
+        "content":"测试评论123测试评论123测试评论123测试评论123测试评论123",
         "createTime":"2016-08-22 12:34:12",
         "icon":"",
         "imges":[

@@ -28,7 +28,11 @@ function onChange(selected) {
 
 class AddHousePage extends Component{
 
-
+    static navigationOptions =
+        {
+            title: 'AddHouseActivity',
+            header:null
+        };
     GoToSecondActivity = () =>
     {
         this.props.navigation.navigate('Second');
@@ -55,6 +59,7 @@ class AddHousePage extends Component{
             House_Pic:'',            //图片描述
             Support_Set:'',          //配套设施
             House_Description:'',    //房屋描述
+            House_Location:'',       //房产地址
             Owner_Tel:'',            //房主联系电话
             Certification:''         //是否已认证
         };
@@ -83,6 +88,7 @@ class AddHousePage extends Component{
                 house_pic: this.state.House_Pic,
                 support_set:this.state.Support_Set,
                 house_description: this.state.House_Description,
+                house_location:this.state.House_Location,
                 owner_tel: this.state.Owner_Tel,
                 certification: null
             });
@@ -174,6 +180,11 @@ class AddHousePage extends Component{
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ House_Description: text })} }/>
                 <TextInput
+                    placeholder="房屋地址"
+                    style = { styles.TextInputStyle }
+                    underlineColorAndroid = "transparent"
+                    onChangeText = { ( text ) => { this.setState({ House_Location: text })} }/>
+                <TextInput
                     placeholder="联系方式"
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
@@ -253,7 +264,6 @@ class HDetail extends Component
                             <Text style={styles.textViewContainer} >{'楼层 = ' + rowData.house_floor}</Text>
                             <Text style={styles.textViewContainer} >{'房屋描述 = ' + rowData.house_description}</Text>
                             <Text style={styles.textViewContainer} >{'小区名 = ' + rowData.area_name}</Text>
-
                         </TouchableOpacity>
 
                     </View> }

@@ -49,7 +49,7 @@ export class MsgCard extends Component<Props> {
 }
 
 //自定义搜索栏
-export class SearchBarD extends Component {
+export class SearchBarA extends Component {
     constructor(props) {
         super(props);
         super(...arguments);
@@ -64,6 +64,7 @@ export class SearchBarD extends Component {
         };
     }
     render() {
+
         return (
             <View>
                 <SearchBar
@@ -74,10 +75,9 @@ export class SearchBarD extends Component {
                         input_color_icon:'../res/image/ic_search.png'}}
                     value={this.state.value}
                     placeholder="输入小区名或地址"
-                    onSubmit={value => Alert.alert(value)}
+                    //onSubmit={value => Alert.alert(value)}
                     onCancel={this.clear}
                     onChange={this.onChange}
-                    showCancelButton
                 />
             </View>
         );
@@ -116,13 +116,13 @@ class SearchBar extends Component {
         );
     }
 }*/
-const imagesdata = [{
-    url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-    id: '2121',
-}, {
-    url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
-    id: '2122',
-}];
+const imagesdata = [/*{
+     url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
+     id: '2121',
+/*, {
+     url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
+     id: '2122',
+ }*/];
 
  export default class ImagePickerExample extends Component {
     state = {

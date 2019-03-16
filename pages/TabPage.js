@@ -15,58 +15,19 @@ import {
     FlatList,
     TouchableHighlight,
     ScrollView,
-    Alert
 } from 'react-native';
-//import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-//import { Kohana } from 'react-native-textinput-effects';
 //import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TabNavigator from 'react-native-tab-navigator';
 import HouseDetail from '../component/HouseDetail';
-//import {HouseSchema} from '../component/HouseCell';
 import HouseCell from '../component/HouseCell';
 import MinePage from './MinePage';
 import {NormalHeader} from "../component/BackHeader";
 
-import {MsgCard, SearchBarD} from '../component/antComponent';
+import {MsgCard, SearchBarA} from '../component/antComponent';
+import MDropDown from '../component/ActionMenu/MDropDown';
 
 
-/*
-//自定义搜索栏
-class SearchBar extends Component {
-    render() {
-        return (
-            <View style={{ marginTop: 10 }}>
-                <SearchBar
-                    value={this.state.value}
-                    placeholder="输入小区名或地址"
-                    onSubmit={value => Alert.alert(value)}
-                    onCancel={this.clear}
-                    onChange={this.onChange}
-                    showCancelButton
-                />
-            </View>
-        );
-    }
-}
-*/
-
-//设置尾部
-/*let renderFooter = () => {
-    if (!this.state.loading) return null;
-    return (
-        <View
-            style={{
-                paddingVertical: 20,
-                borderTopWidth: 1,
-                borderColor: "#CED0CE"
-            }}>
-            <ActivityIndicator animating size="large" />
-        </View>
-    );
-};*/
-
-//const modelSchema=[HouseSchema];
 export default class TabPage extends Component<Props> {
     //构造函数
     constructor(props){
@@ -79,28 +40,17 @@ export default class TabPage extends Component<Props> {
             //dataSource:ds.cloneWithRows(mydata),
             value: '',
         },
-        this.onChange = value => {
-                this.setState({ value });
-            };
-        this.clear = () => {
-            this.setState({ value: '' });
-        };
+        this.onChange = value => { this.setState({ value });};
+        this.clear = () => { this.setState({ value: '' }); };
 
         this._renderHeader = this._renderHeader.bind(this);
-        this._renderItem = this._renderItem.bind(this);
-        this._renderSeparator=this._renderSeparator.bind(this);
     }
-
-    _selectHouse(isHouseData:Object) {
-        let {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'HouseDetail',
-                component: HouseDetail,
-                params: {house:isHouseData}
-            });
-        }
-    };
+    //父组件接受子组件的参数，并改变 state
+    handleChange(val) {
+        this.setState({
+            key: val
+        });
+    }
     //设置第一栏
     _renderHeader = () => {
         return (
@@ -109,14 +59,14 @@ export default class TabPage extends Component<Props> {
                     <TouchableHighlight style={styles.headerClick}
                                         onPress={()=>{this.props.navigation.navigate('AddHousePage')}} >
                         <View>
-                            <Icon name="city" size={50} color="#E6E6FA" light />
+                            <Icon name="city" size={40} color="#E6E6FA" light />
                             <Text style={styles.fontClick}>添加房屋</Text>
                         </View>
                     </TouchableHighlight>
                     <TouchableHighlight style={styles.headerClick}
                                         onPress={()=>{this.props.navigation.navigate('MapLocation')}}>
                         <View>
-                            <Icon name="map-marked-alt" size={50} color="#E6E6FA" light/>
+                            <Icon name="map-marked-alt" size={40} color="#E6E6FA" light/>
                             <Text style={styles.fontClick}>地图找房</Text>
                         </View>
                     </TouchableHighlight>
@@ -124,32 +74,9 @@ export default class TabPage extends Component<Props> {
             </View>
             )
     };
-    _renderItem=({item:isHouseData}) => {
-        return (
-            <TouchableHighlight
-                id={isHouseData.house_id}
-                onPress={this._selectHouse(isHouseData.house_id)}>
-                <View>
-                    <HouseCell/>
-                </View>
-            </TouchableHighlight>
-        );
-    };
-        /*<TouchableHighlight onPress={() => this._selectHouse(_isHouseData)} >
-        <HouseCell/>
-        </TouchableHighlight>}*/
-    _renderSeparator = () => {
-        return <View style={{height:1,backgroundColor:'gray'}}/>;
-    };
 
     render() {
-        /*let A=realm.js.objects('House_Info');
-        let houseData=Object.values(A);*/
-        //let mydata = new Realm({schema:modelSchema}).objects('House_Info');
-        //let isHouseData=mydata.filtered("certification == $0", null).sorted("door_model", true);
-        //let isHouseData=JSON.stringify(result);
-        //console.log('testtttt success'+Array.from(isHouseData).toString());
-        //let isHouseData=Array.from(result).toString();
+
         return (
             <View style={styles.container}>
                 <TabNavigator>
@@ -161,17 +88,12 @@ export default class TabPage extends Component<Props> {
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hindex.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
-                            <SearchBarD {...this.props}/>
-                            <FlatList
-                                //data={isHouseData} 报错待解决
-                                ListHeaderComponent={this._renderHeader()}
-                                renderItem={this._renderItem}
-                                ItemSeparatorComponent={this._renderSeparator()}
-                                extraData={this.state}
-                                keyExtractor={(item) => item.id}
-                            />
+                            <SearchBarA />
+                            {this._renderHeader()}
+
+                            <MDropDown {...this.state}  onChange={(val) => {this.handleChange(val)}} />
                             <ScrollView>
-                            <HouseCell/>
+                            <HouseCell navigation={this.props.navigation}/>
                             </ScrollView>
                         </View>
                     </TabNavigator.Item>
@@ -185,9 +107,9 @@ export default class TabPage extends Component<Props> {
                         <View styles={styles.page2}>
                             <Text style={styles.text}
                                   onPress={()=>{
-                                      this.props.navigation.navigate('LandLordPage');
+                                      this.props.navigation.navigate('MDropDown');
                                       /*alert('test success');*/
-                                  }}>收藏22222</Text>
+                                  }}>房源</Text>
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
@@ -283,9 +205,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     headerBody: {
+        //marginTop:2,
         padding: 8,
         backgroundColor: '#6495ED',
-        marginBottom: 20,
+        //marginBottom:10,
         flexDirection: 'row'
     },
     searchInput: {

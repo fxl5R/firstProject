@@ -12,23 +12,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button from '../component/Button';
 import realm from '../util/realm.js';
-//const Realm = require('realm.js');
 
-const UserSchema = {
-    name: 'User',                          // 表名
-    primaryKey: 'id',                           // 设置id为主键
-    properties: {                               // 属性
-        id: { type:'int', indexed: true },        // 用户ID
-        userName: 'string',                        // 用户名称
-        userPassword: 'string',                    // 用户密码
-        userSex: 'string',                      // 用户性别
-        portrait: 'string',               // 头像
-        cTime: { type: 'date', optional: true } // 创建时间
-    },
-};
-//初始化Realm
-//let realm.js = new Realm({schema: [UserSchema]});
-//realm.js.close();
 export default class register extends Component {
     constructor(props) {
         super(props);
@@ -45,9 +29,10 @@ export default class register extends Component {
                 id:realm.objects('User').length,
                 userName: [this.state.text].toString(),
                 userPassword: [this.state.password].toString(),
-                userSex: 'female',
+                userSex: 'sex',
                 portrait:'https://b-ssl.duitang.com/uploads/item/201901/09/20190109121033_lxkdt.thumb.300_300_c.jpg',
-                cTime:new Date()
+                nickName:'安租用户'+Math.floor(Math.random() * 10000),
+                cTime:new Date().toLocaleTimeString()
             });
         });
         //realm.js.close();

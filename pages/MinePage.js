@@ -6,20 +6,23 @@ import {
     Platform,
     TouchableOpacity,
     Image,
-    Text
+    Text, ToastAndroid
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import FormArrowToDetail from '../component/Form/FormArrowToDetail';
 import FormWithPicture from '../component/Form/FormWithPicture';
 import FormWithPairText from '../component/Form/FormWithPairText';
 import Button from '../component/Button';
+import realm from '../util/realm.js';
 
 export default class MinePage extends Component {
 
     constructor(props) {
         super(props);
+        let userdatas=realm.objects('User').filtered("online == $0", 1);
+        let userdata=userdatas[0];
         this.state = {
-
+            thisUser:userdata
         }
         this.logout=this.logout.bind(this);
     }
@@ -36,21 +39,20 @@ export default class MinePage extends Component {
                 <ScrollView style={{ flex: 1 }}>
                     <View style={styles.partContainer}>
                         <FormWithPicture
-                            nickName={'用户234'}
-                            contactText={'134****6810'}
+                            nickName={this.state.thisUser.nickName}
+                            contactText={this.state.thisUser.userName}
                             pictureUri={'../res/images/logo_peo.png'}
                             onFormClick={() => this.personalProfile()}
                         />
                         <FormWithPairText
                             leftText="实名认证"
-
                             onFormClick={() => {}}
                             cutOffLine={false}
                         />
                     </View>
                     <View style={styles.partContainer}>
                         <FormArrowToDetail
-                            leftText={'我的收藏'}
+                            leftText={'房屋管理'}
                             onFormClick={() => this.mySupportTeam()}
                             cutOffLine={false}
                         />
@@ -61,11 +63,11 @@ export default class MinePage extends Component {
                             onFormClick={() => this.myComments()}
                         />
                         <FormArrowToDetail
-                            leftText={'意见与反馈'}
+                            leftText={'我的收藏'}
                             onFormClick={() => this.evaluateApp()}
                         />
                         <FormArrowToDetail
-                            leftText={'关于App'}
+                            leftText={'安全中心'}
                             onFormClick={() => this.aboutTheApp()}
                             cutOffLine={false}
                         />
@@ -73,7 +75,13 @@ export default class MinePage extends Component {
                     <Button
                         style={{ marginTop: 15,paddingTop:20}}
                         text="退出登录"
-                        onButtonClick={() => this.logout()}
+                        onPress={() => {
+                            this.props.navigation.navigate('Login')
+                            realm.write(() => {
+                                realm.create('User', {id:this.state.thisUser.id,online: 0}, true);//更新离线状态
+                                ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
+                            });
+                        }}
                     />
                 </ScrollView>
             </View>
@@ -85,7 +93,10 @@ export default class MinePage extends Component {
      */
     personalProfile = () => {
         console.log('点击了个人资料');
-        this.props.navigation.navigate('PersonalProfile');
+        this.props.navigation.navigate('PersonalProfile', {
+            nickName: this.state.thisUser.nickName,
+            id:this.state.thisUser.id
+        });
     }
 
     /**
@@ -104,18 +115,18 @@ export default class MinePage extends Component {
     }
 
     /**
-     * 跳转至 评价App页面
+     * 跳转至 我的收藏
      */
     evaluateApp = () => {
-        console.log('点击了评价App页面');
+        console.log('点击了我的收藏页面');
         this.props.navigation.navigate('EvaluateApp');
     }
 
     /**
-     * 跳转至 关于页面
+     * 跳转至 安全中心
      */
     aboutTheApp = () => {
-        console.log('点击了关于');
+        console.log('点击了安全中心');
         this.props.navigation.navigate('AboutApp');
     }
 
@@ -123,6 +134,7 @@ export default class MinePage extends Component {
      * 跳转至 登录页面
      */
     logout = () => {
+        ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
         console.log('点击了退出登录');
         const resetAction = NavigationActions.reset({
             index: 0,

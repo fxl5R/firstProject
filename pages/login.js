@@ -40,7 +40,8 @@ export default class login extends Component {
         super(props);
         this.state={
             text:'',
-            password:''
+            password:'',
+            online:''
         }
     }
     handle_loginClick(){
@@ -49,6 +50,10 @@ export default class login extends Component {
             let password1=user.userPassword;                       //从realm中取出username为textinput中的密码
             if(this.state.password===password1){                   //判断密码
                 ToastAndroid.show('登录成功',ToastAndroid.SHORT);
+                realm.write(() => {
+                    realm.create('User', {id:user.id,online: 1}, true);//更新在线状态
+                });
+                /*user.online=1;//更新在线状态*/
                 this.props.navigation.navigate('TabPage');
                 //realm.js.close();
             }else{

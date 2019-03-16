@@ -40,12 +40,13 @@ User.schema = {
         userSex: 'string',                      // 用户性别
         portrait: 'string',                     // 头像
         nickName:'string',                      // 昵称
+        online: {type: 'int', optional: true }, //判断用户在线1:在线 0:离线
         userLocation:{type:'string',optional:true},         // 用户所在地
         userTel:{type:'string',optional:true},              // 用户联系电话
-        isRealPeople:{type:'int',default: 0,optional:true}, // 是否实名认证
+        isRealPeople:{type:'int',default: 0,optional:true}, // 是否实名认证1：实名0：未实名
         IDCardNO:{type:'string',optional:true},             // 身份证号
         realName:{type:'string',optional:true},             // 真实姓名
-        cTime:   { type: 'string'}                // 创建时间  toLocaleTimeString
+        cTime:   { type: 'string'}               // 创建时间  toLocaleTimeString
     }
 };
 class Comments extends Realm.Object {}
@@ -56,20 +57,20 @@ Comments.schema = {
         id: { type:'int', indexed: true },     // 评论ID，主键
         content:'string',                      // 评论内容
         from_uid:'int',                        // 评论用户id
-        to_uid:  'int',                        // 评论目标用户id
+        to_uid:  'int',                        // 评论的目标用户id
         commentTime: { type: 'string', optional: true } // 创建时间 toLocaleTimeString
     }
 };
-class Comments extends Realm.Object {}
-Comments.schema = {
-    name: 'Comments',
+class Reply extends Realm.Object {}
+Reply.schema = {
+    name: 'Reply',
     primaryKey: 'id',
     properties: {                              // 属性
-        id: { type:'int', indexed: true },     // 评论ID，主键
-        content:'string',                      // 评论内容
-        from_uid:'int',                        // 评论用户id
-        to_uid:  'int',                        // 评论目标用户id
-        commentTime: { type: 'string', optional: true } // 创建时间 toLocaleTimeString
+        id: { type:'int', indexed: true },     // 回复ID，主键
+        comment_id:'int',                      // 回复的目标评论id
+        to_uid:'int',                          // 回复的目标用户id
+        from_uid:'int',                        // 回复用户id
+        replyTime: { type: 'string', optional: true } // 创建时间 toLocaleTimeString
     }
 };
 class Collections extends Realm.Object {}

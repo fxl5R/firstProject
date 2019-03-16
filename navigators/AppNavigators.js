@@ -21,28 +21,45 @@ import MapLocation from '../util/MapLocation';
 
 import PersonalProfile from '../pages/Mine/PersonalProfile';
 import CommentManager from '../pages/Mine/CommentManager';
+import RealConfirm from '../pages/Mine/RealConfirm';
 
-
+import MDropDown from '../component/ActionMenu/MDropDown';
 
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
-    register:{
-        screen:register,
-        navigationOptions:{header:null}
-    },
-   TabPage:{
+    TabPage:{
         screen:TabPage,
         navigationOptions:{
             header:null
         }
     },
+    MDropDown:{
+        screen:MDropDown,
+        navigationOptions:{
+            header:null
+        }
+    },
+    register:{
+        screen:register,
+        navigationOptions:{header:null}
+    },
+    navigatorExpo:{
+        screen:navigatorExpo
+    },
+
     ImagePickerExample:{
        screen:ImagePickerExample,
         navigationOptions:{
             header:null
         }
 
+    },
+    HouseDetail:{
+        screen:HouseDetail,
+        navigationOptions:{
+            header:null
+        }
     },
     LandLordPage:{
        screen:LandLordPage,
@@ -65,6 +82,12 @@ const AppStackNavigator = createStackNavigator({
     CommentPage:{
        screen:CommentPage,
        navigationOptions:{
+            header:null
+        }
+    },
+    RealConfirm:{
+        screen:RealConfirm,
+        navigationOptions:{
             header:null
         }
     },
@@ -92,19 +115,7 @@ const AppStackNavigator = createStackNavigator({
             }
         }
     },*/
-    HouseDetail:{
-        screen:HouseDetail,
-        navigationOptions:{
-            title:'房屋信息',
-            headerStyle: {
-                backgroundColor: '#ADD8E6',
-            },
-            headerTitleStyle:{
-                flex:1,
-                textAlign: 'center'
-            }
-        }
-    },
+
     HouseCell: {
         screen: HouseCell,
         navigationOptions:{
@@ -147,9 +158,6 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions:{
             header:null
         }
-    },
-    navigatorExpo:{
-        screen:navigatorExpo
     },
 
 });

@@ -57,7 +57,7 @@ class PublishResult extends Component {
                             <Text style={styles.TextStyle}> 管理房屋 </Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={this.itemButtonAction(1)} activeOpacity={0.7} style={styles.button1} >
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('RealConfirm')}} activeOpacity={0.7} style={styles.button1} >
                             <Text style={{ textAlign:'center',color:'#B0C4DE',fontSize:15,}}> 立即认证 </Text>
                         </TouchableOpacity>
                         </View>
