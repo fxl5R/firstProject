@@ -30,57 +30,72 @@ import realm from '../util/realm.js';
     return resultMessages;
 }*/
 
+let mydata=realm.objects('House_Info').filtered("certification == $0", null)
+    .sorted("publish_time", true);
+let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 export default class HouseCell extends Component {
 
     constructor(props) {
         super(props);
-        //a:{this.props.value1}/////////////house_location CONTAINS %@ OR
 
-        let mydata=realm.objects('House_Info').filtered("certification == $0", null).filtered("area_name CONTAINS[c] $0",this.props.value1)
-            .sorted("publish_time", true);
-        //let mydata=mydatas.filtered("area_name CONTAINS[c] $0",this.props.value1);
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        console.log('testSearch!!!11111'+mydata);
         this.state = {
             dataSource: ds.cloneWithRows(mydata),
-            /*isHouseData:mydata.filtered("certification == $0", null)
-                .sorted("publish_time", false)*/
+            searchString:props.value1,
+            type:'',
+            door:'',
+            decorate:'',
+            sort:''
         };
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
     }
 
+
+  /**  将父组件传来的props转为子组件的state
+  *    进行关键字查询
+  **/
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            searchString: nextProps.searchString,
+            dataSource:ds.cloneWithRows(mydata
+                .filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1))//搜索‘由TabPage的SearchBar传递来的searchstring关键字’
+        });
+        console.log('testSearch!!!2222'+this.state.dataSource);
+    }
+
+    /**
+     * 根据house_id跳转房源详情
+     **/
     GoToHouseDetail(house_id) {
-        console.log('house_idis'+house_id.toString());
-        //Alert.alert(house_id.toString());
-        console.log(this.props.navigation);
-        console.log('eeeeeeeeeeeeeeeeeeeeee');
         this.props.navigation.navigate('HouseDetail',{
             itemId: house_id});
-
     };
+
     ListViewItemSeparator = () => {
         return (
             <View
                 style={{
                     height: .5,
                     width: "100%",
-                    backgroundColor: "#000",
-                }}
+                    backgroundColor: "#000",}}
             />
         );
     };
-    //渲染房屋展示卡片列表
+
+    /**
+     * 渲染房屋展示卡片列表
+     **/
     render() {
 
         return (
             <View style = {styles.MainContainer }>
                 <Text>{this.props.value1}</Text>
-
             <ListView
                 dataSource={this.state.dataSource}
                 renderSeparator={this.ListViewItemSeparator}
                 renderRow={(rowData) =>
                     <View style={{flex:1, flexDirection: 'column'}}>
-                    {/*<TouchableOpacity onPress={this.GetClickedItem.bind(this, rowData.house_id)}>*/}
                     <TouchableOpacity onPress={this.GoToHouseDetail.bind(this,rowData.house_id)}>
                         <View style={{backgroundColor: '#FFF'}}>
                             <View style={{padding: 10, flexDirection: 'row'}}>
@@ -114,7 +129,7 @@ export default class HouseCell extends Component {
     }
 }
 
-// 样式
+
 const styles = StyleSheet.create({
     MainContainer :{
         flex:1,

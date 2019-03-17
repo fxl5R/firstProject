@@ -93,7 +93,8 @@ export default class TabPage extends Component<Props> {
 
                                 value={this.state.value1}
                                 placeholder="输入小区名或地址"
-                                onSubmit={value1 => Alert.alert(value1)}
+                                //onSubmit={value1 => Alert.alert(value1)}
+                                cancelText={'进入'}
                                 onCancel={this.clear}
                                 onChange={this.onChange}
                             />
