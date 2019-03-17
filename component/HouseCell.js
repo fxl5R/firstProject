@@ -31,14 +31,19 @@ import realm from '../util/realm.js';
 }*/
 
 export default class HouseCell extends Component {
+
     constructor(props) {
         super(props);
-        let mydata=realm.objects('House_Info');
+        //a:{this.props.value1}/////////////house_location CONTAINS %@ OR
+
+        let mydata=realm.objects('House_Info').filtered("certification == $0", null).filtered("area_name CONTAINS[c] $0",this.props.value1)
+            .sorted("publish_time", true);
+        //let mydata=mydatas.filtered("area_name CONTAINS[c] $0",this.props.value1);
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             dataSource: ds.cloneWithRows(mydata),
-            isHouseData:mydata.filtered("certification == $0", null)
-                .sorted("publish_time", true)
+            /*isHouseData:mydata.filtered("certification == $0", null)
+                .sorted("publish_time", false)*/
         };
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
     }
@@ -68,6 +73,8 @@ export default class HouseCell extends Component {
 
         return (
             <View style = {styles.MainContainer }>
+                <Text>{this.props.value1}</Text>
+
             <ListView
                 dataSource={this.state.dataSource}
                 renderSeparator={this.ListViewItemSeparator}

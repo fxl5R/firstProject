@@ -14,10 +14,12 @@ export default class MDropDown extends Component {
             sort: '',
         };
     }
+/*
     componentDidMount() {
         //子组件给父组件的方法传参
         this.props.onChange('newVal');
     }
+*/
 
     render() {
         let dataType = [{

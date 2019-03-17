@@ -15,17 +15,18 @@ import {
     FlatList,
     TouchableHighlight,
     ScrollView,
+    Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 //import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TabNavigator from 'react-native-tab-navigator';
-import HouseDetail from '../component/HouseDetail';
 import HouseCell from '../component/HouseCell';
 import MinePage from './MinePage';
 import {NormalHeader} from "../component/BackHeader";
 
 import {MsgCard, SearchBarA} from '../component/antComponent';
 import MDropDown from '../component/ActionMenu/MDropDown';
+import {SearchBar} from "@ant-design/react-native";
 
 
 export default class TabPage extends Component<Props> {
@@ -38,19 +39,19 @@ export default class TabPage extends Component<Props> {
             searchString:'',
             dataVersion: 0,
             //dataSource:ds.cloneWithRows(mydata),
-            value: '',
+            value1: '',
         },
-        this.onChange = value => { this.setState({ value });};
-        this.clear = () => { this.setState({ value: '' }); };
+        this.onChange = value1 => { this.setState({ value1 });};
+        this.clear = () => { this.setState({ value1: '' }); };
 
         this._renderHeader = this._renderHeader.bind(this);
     }
-    //父组件接受子组件的参数，并改变 state
+/*    //父组件接受子组件的参数，并改变 state
     handleChange(val) {
         this.setState({
             key: val
         });
-    }
+    }*/
     //设置第一栏
     _renderHeader = () => {
         return (
@@ -88,12 +89,19 @@ export default class TabPage extends Component<Props> {
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hindex.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
-                            <SearchBarA />
+                            <SearchBar
+
+                                value={this.state.value1}
+                                placeholder="输入小区名或地址"
+                                onSubmit={value1 => Alert.alert(value1)}
+                                onCancel={this.clear}
+                                onChange={this.onChange}
+                            />
                             {this._renderHeader()}
 
-                            <MDropDown {...this.state}  onChange={(val) => {this.handleChange(val)}} />
+                            <MDropDown {...this.state} />
                             <ScrollView>
-                            <HouseCell navigation={this.props.navigation}/>
+                            <HouseCell navigation={this.props.navigation} value1={this.state.value1}/>
                             </ScrollView>
                         </View>
                     </TabNavigator.Item>

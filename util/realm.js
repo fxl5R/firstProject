@@ -11,7 +11,7 @@ House_Info.schema = {
             house_publisher: 'string',    //发布人
             publish_time: 'string',       //发布时间 toLocaleDateString()
             lease_type: 'string',         //出租类型：整租/合租
-            area_name: 'string',          //出租类型：整租/合租
+            area_name: 'string',          //小区名
             unit_build:'string',          //楼栋（单元）
             total_area:'string',          //总面积
             door_model:'string',          //户型（室房厅厕）
