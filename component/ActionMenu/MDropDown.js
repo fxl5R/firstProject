@@ -1,25 +1,46 @@
+
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import {Text, View, DeviceEventEmitter, Alert} from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
+
+
 
 
 export default class MDropDown extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             typee: '',
             door: '',
             decorate: '',
             sort: '',
         };
+
     }
 /*
     componentDidMount() {
-        //子组件给父组件的方法传参
-        this.props.onChange('newVal');
+        setTimeout(() => {
+            // 发布 msg 事件
+            DeviceEventEmitter.emit('sendTypee', {typee:this.state.typee});
+        }, 1000);
     }
 */
+    handleChange1 = (typee) => {
+        this.setState({typee});
+        this.props.setValue1(this.state.typee)
+    };
+    handleChange2 = (door) => {
+        this.setState({door});
+        this.props.setValue2(this.state.door)
+    };
+    handleChange3 = (decorate) => {
+        this.setState({decorate});
+        this.props.setValue3(this.state.decorate)
+    };
+    handleChange4 = (sort) => {
+        this.setState({sort});
+        this.props.setValue4(this.state.sort)
+    };
 
     render() {
         let dataType = [{
@@ -59,6 +80,7 @@ export default class MDropDown extends Component {
             value: '不限',
         }];
         let {typee,door,decorate,sort}=this.state;
+
         return (
             <View>
             <View style={{ flexDirection: 'row',marginEnd:-5 }}>
@@ -68,7 +90,7 @@ export default class MDropDown extends Component {
                         data={dataType}
                         ref={this.TypeRef}
                         value={typee}
-                        onChangeText={(typee)=>this.setState({typee})}
+                        onChangeText={this.handleChange1}
                         />
                 </View>
                 <View style={{ flex: 1.2 }}>
@@ -77,7 +99,7 @@ export default class MDropDown extends Component {
                         data={dataDoor}
                         ref={this.DoorRef}
                         value={door}
-                        onChangeText={(door)=>this.setState({door})}
+                        onChangeText={this.handleChange2}
                     />
                 </View>
                 <View style={{ flex: 1 }}>
@@ -86,7 +108,7 @@ export default class MDropDown extends Component {
                         data={dataDecorate}
                         ref={this.DecorateRef}
                         value={decorate}
-                        onChangeText={(decorate)=>this.setState({decorate})}
+                        onChangeText={this.handleChange3}
                     />
                 </View>
                 <View style={{ flex: 1.4 }}>
@@ -95,7 +117,7 @@ export default class MDropDown extends Component {
                         data={dataSort}
                         ref={this.SortRef}
                         value={sort}
-                        onChangeText={(sort)=>this.setState({sort})}
+                        onChangeText={this.handleChange4}
                     />
                 </View>
             </View>

@@ -40,18 +40,30 @@ export default class TabPage extends Component<Props> {
             dataVersion: 0,
             //dataSource:ds.cloneWithRows(mydata),
             value1: '',
+            typee:'',
+            door:'',
+            decorate:'',
+            sort:''
         },
         this.onChange = value1 => { this.setState({ value1 });};
         this.clear = () => { this.setState({ value1: '' }); };
-
         this._renderHeader = this._renderHeader.bind(this);
     }
-/*    //父组件接受子组件的参数，并改变 state
-    handleChange(val) {
-        this.setState({
-            key: val
-        });
-    }*/
+
+    //父组件接收子(MDropDown)组件的参数，并改变state
+    setValue1 = typee => {
+        this.setState({typee});
+    };
+    setValue2 = door => {
+        this.setState({door});
+    };
+    setValue3 = decorate => {
+        this.setState({decorate});
+    };
+    setValue4 = sort => {
+        this.setState({sort});
+    };
+
     //设置第一栏
     _renderHeader = () => {
         return (
@@ -90,7 +102,6 @@ export default class TabPage extends Component<Props> {
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View styles={styles.page1}>
                             <SearchBar
-
                                 value={this.state.value1}
                                 placeholder="输入小区名或地址"
                                 //onSubmit={value1 => Alert.alert(value1)}
@@ -99,10 +110,12 @@ export default class TabPage extends Component<Props> {
                                 onChange={this.onChange}
                             />
                             {this._renderHeader()}
-
-                            <MDropDown {...this.state} />
+                            <MDropDown setValue1={this.setValue1} setValue2={this.setValue2} setValue3={this.setValue3} setValue4={this.setValue4}/>
                             <ScrollView>
-                            <HouseCell navigation={this.props.navigation} value1={this.state.value1}/>
+                            <HouseCell
+                                navigation={this.props.navigation}
+                                value1={this.state.value1}
+                                typee={this.state.typee} door={this.state.door} decorate={this.state.decorate} sort={this.state.sort} />
                             </ScrollView>
                         </View>
                     </TabNavigator.Item>

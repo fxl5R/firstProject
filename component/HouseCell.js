@@ -10,7 +10,8 @@ import {
     TouchableOpacity,
     Platform,
     Button,
-    Alert
+    Alert,
+    DeviceEventEmitter
 } from 'react-native';
 import HouseDetail from "./HouseDetail";
 import realm from '../util/realm.js';
@@ -43,7 +44,7 @@ export default class HouseCell extends Component {
         this.state = {
             dataSource: ds.cloneWithRows(mydata),
             searchString:props.value1,
-            type:'',
+            typee:'',
             door:'',
             decorate:'',
             sort:''
@@ -52,17 +53,25 @@ export default class HouseCell extends Component {
     }
 
 
-  /**  将父组件传来的props转为子组件的state
+  /**  将父组件传来的props转为子(本)组件的state
   *    进行关键字查询
   **/
     componentWillReceiveProps(nextProps) {
         this.setState({
             searchString: nextProps.searchString,
+
             dataSource:ds.cloneWithRows(mydata
                 .filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1))//搜索‘由TabPage的SearchBar传递来的searchstring关键字’
         });
         console.log('testSearch!!!2222'+this.state.dataSource);
     }
+
+    /**  根据从TabPage传递的DropDown参数
+     *    进行关键字查询
+     **/
+
+
+
 
     /**
      * 根据house_id跳转房源详情
@@ -90,7 +99,7 @@ export default class HouseCell extends Component {
 
         return (
             <View style = {styles.MainContainer }>
-                <Text>{this.props.value1}</Text>
+                <Text>{this.props.typee}</Text>
             <ListView
                 dataSource={this.state.dataSource}
                 renderSeparator={this.ListViewItemSeparator}
