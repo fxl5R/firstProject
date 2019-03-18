@@ -44,9 +44,9 @@ export class NormalHeader extends Component<Props> {
         let title=this.props.titleView?this.props.titleView:
             <Text>{this.props.title}</Text>;
         return(
-            <View style={{height:48,backgroundColor:'#B0C4DE',alignItems:'center'}}>
+            <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
                 <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-                    <Text style={{fontSize:18,color:'white'}}>{title}</Text>
+                    <Text style={{fontSize:18,color:'white',align:'center'}}>{title}</Text>
                 </View>
                 <View style={{height:48,width:48}}/>
             </View>

@@ -27,6 +27,7 @@ import {NormalHeader} from "../component/BackHeader";
 import {MsgCard, SearchBarA} from '../component/antComponent';
 import MDropDown from '../component/ActionMenu/MDropDown';
 import {SearchBar} from "@ant-design/react-native";
+import MyCarousel from "../component/MyCarousel";
 
 
 export default class TabPage extends Component<Props> {
@@ -127,23 +128,6 @@ export default class TabPage extends Component<Props> {
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hstar.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_star' })}>
                         <View styles={styles.page2}>
-                            <Text style={styles.text}
-                                  onPress={()=>{
-                                      this.props.navigation.navigate('MDropDown');
-                                      /*alert('test success');*/
-                                  }}>房源</Text>
-                        </View>
-                    </TabNavigator.Item>
-                    <TabNavigator.Item
-                        selected={this.state.selectedTab === 'tb_msg'}
-                        selectedTitleStyle={{color:'#B0C4DE'}}
-                        title="消息"
-                        renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hmsg1.png')} />}
-                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hmsg1.png')} />}
-                        badgeText="1"
-                        onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
-                        <View styles={styles.page3}>
-                            <NormalHeader navigation={this.props.navigation} title={'消息栏'}/>
                             <MsgCard
                                 msgtitle={'用户123'}
                                 msgbrief={'消息梗概消息梗概'}
@@ -156,6 +140,19 @@ export default class TabPage extends Component<Props> {
                                 imgUri={'http://sowcar.com/t6/681/1552475175x2890174339.png'}
                                 extra={'一条消息'}
                                 footerextracontent={'2019-2-22 16:40:34'}/>
+                        </View>
+                    </TabNavigator.Item>
+                    <TabNavigator.Item
+                        selected={this.state.selectedTab === 'tb_msg'}
+                        selectedTitleStyle={{color:'#B0C4DE'}}
+                        title="消息"
+                        renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hmsg1.png')} />}
+                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hmsg1.png')} />}
+                        badgeText="1"
+                        onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
+                        <View styles={styles.page3}>
+                            <NormalHeader navigation={this.props.navigation} title={'消息栏'}/>
+
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item

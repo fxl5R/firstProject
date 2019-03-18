@@ -15,6 +15,7 @@ import {
 import BackHeader from "./BackHeader";
 import realm from "../util/realm";
 import ExpandableText from 'rn-expandable-text';
+import MyCarousel from "./MyCarousel";
 
 let {height, width} = Dimensions.get('window');
 export default class HouseDetail extends Component<Props> {
@@ -27,13 +28,16 @@ export default class HouseDetail extends Component<Props> {
         let house=houses[0];
         return(
             <View style={{height: 240,alignItems: 'center', justifyContent: 'center' }}>
-                <ImageBackground source={require('../res/images/detailbg.jpg')} style={{width:width,height:240}}>
+                {/*<ImageBackground source={require('../res/images/detailbg.jpg')} style={{width:width,height:240}}>
                      <View style={{alignItems:'flex-end',marginRight:10,flexDirection:'row'}}>
                          <Image source={require('../res/images/store/merchants/ic_merchants_location.png')}
                                 style={{width:16,height:20}}/>
                          <Text style={{color:'white',fontSize:13,backgroundColor:'rgba(1,1,1,0)'}}>{house.house_location}</Text>
                      </View>
-                </ImageBackground>
+                    </ImageBackground>
+                */}
+                <MyCarousel/>
+                <Text style={{color:'white',fontSize:13,backgroundColor:'rgba(1,1,1,0)'}}>{house.house_location}</Text>
             </View>
         );
     }

@@ -4,16 +4,14 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
-    ScrollView,
     Image,
-    Platform,
-    Alert, ToastAndroid
+    ToastAndroid,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import FormWithPairText from '../../component/Form/FormWithPairText';
 import BackHeader from "../../component/BackHeader";
-import { Modal} from '@ant-design/react-native';
-import {SimpleItemsDialog} from 'react-native-pickers';
+import {SimpleItemsDialog,AreaPicker} from 'react-native-pickers';
+import AreaJson from '../../res/data/Area.json'
 import realm from "../../util/realm";
 
 let userdatas=realm.objects('User').filtered("online == $0", 1);
@@ -32,18 +30,17 @@ class PersonalProfile extends React.Component<Props> {
 //this.props.loginParams.user ? this.props.loginParams.user.sex :
   render() {
       const { navigation } = this.props;
-      const nickName = navigation.getParam('nickName', 'NO-Name');//接收从MinePage传递的NickName
+      const nickName = navigation.getParam('nickName', 'NO-Name');/*接收从MinePage传递的NickName*/
       return (
       <View style={styles.container}>
         <BackHeader navigation={this.props.navigation} title={'修改资料'}/>
         <View style={styles.partContainer}>
           <TouchableOpacity activeOpacity={0.5} onPress={() => { this.onPictureClick() }}>
             <View style={styles.pictureContainer}>
-              <Text style={[styles.leftText]}>
-                {'头像'}
-              </Text>
+              <Text style={[styles.leftText]}>头像</Text>
+                {/*当用户修改头像时，自动更新效果：未进行修改时显示数据库中的头像*/}
               <Image
-                source={this.state.portrait?{uri:this.state.portrait}:{uri:userdata.portrait}}/*当用户修改头像时，自动更新效果：未进行修改时显示数据库中的头像*/
+                source={this.state.portrait?{uri:this.state.portrait}:{uri:userdata.portrait}}
                 style={styles.image}
               />
             </View>
@@ -55,24 +52,24 @@ class PersonalProfile extends React.Component<Props> {
             style={{ paddingVertical: 15 }}
             arrowRight={true}
           />
-            <FormWithPairText
+            {/*<FormWithPairText
                 leftText={'密码'}
                 rightText={nickName}
                 onFormClick={() => this.onNickNameClick()}
                 style={{ paddingVertical: 15 }}
                 arrowRight={true}
-            />
+            />*/}
           <FormWithPairText
             leftText={'性别'}
-            rightText={'暂无填写'}
-            onFormClick={() => this.onSexClick()}
+            rightText={this.state.uSex?this.state.uSex:userdata.userSex}
+            onFormClick={() => { this.SimpleItemsDialog.show() }}
             style={{ paddingVertical: 15 }}
             arrowRight={true}
           />
           <FormWithPairText
             leftText={'所在地'}
-            rightText={'暂无填写'}
-            onFormClick={() => this.onAddressClick()}
+            rightText={this.state.uLocation?this.state.uLocation:userdata.userLocation}
+            onFormClick={() => { this.AreaPicker.show() }}
             cutOffLine={false}
             style={{ paddingVertical: 15 }}
             arrowRight={true}
@@ -84,28 +81,52 @@ class PersonalProfile extends React.Component<Props> {
               style={styles.button0}
               onPress={()=>{
                   realm.write(() => {
-
-                      realm.create('User', {id:userdata.id,online: 1}, true);//更新用户昵称头像
-
-                      /*更新用户性别*/
-                      if(symboll==='0'){
+                      {/*更新用户头像*/}
+                      if(this.state.portrait){
+                      realm.create('User',{id:userdata.id,portrait:this.state.portrait},true);}
+                      ToastAndroid.show('用户头像更新为'+userdata.portrait,ToastAndroid.SHORT);
+                      {/*更新用户昵称*/}
+                      if(this.state.uNickName){
+                      realm.create('User', {id:userdata.id,nickName:this.state.uNickName}, true);}
+                      {/*更新用户性别*/}
+                      {/*realm.create('User', {id:userdata.id,userSex:this.state.uSex==='男'?'男':'女'}, true);*/}
+                      if(this.state.uSex==='男'){
                           realm.create('User', {id:userdata.id,userSex:'男'}, true);
-                      }else if(symboll==='1'){
+                      }else if(this.state.uSex==='女'){
                           realm.create('User', {id:userdata.id,userSex:'女'}, true);
                       }
-
-                      realm.create('User', {id:userdata.id,online: 1}, true);//更新用户所在地
-
-
+                      {/*更新用户所在地*/}
+                      if(this.state.uLocation){
+                      realm.create('User', {id:userdata.id,userLocation: this.state.uLocation}, true);}
                   });
               }}
           >
-              <Text style={styles.TextStyle}> 确认提交 </Text>
+              <Text style={styles.TextStyle}>确认提交</Text>
           </TouchableOpacity>
         </View>
+
+          {/*弹出选择用户性别窗口*/}
+          <SimpleItemsDialog
+              items={['男' , '女' ]}
+              ref={ref => this.SimpleItemsDialog = ref}
+              onPress={(items) => {
+                  this.setState({uSex:items===1?'女':'男'});
+                  console.log('items:'+items+'state:'+this.state.uSex);
+              }} />
+          {/*弹出选择用户所在地窗口*/}
+          <AreaPicker
+              areaJson={AreaJson}
+              onPickerCancel={() => { }}
+              onPickerConfirm={(value) => {
+                  this.setState({uLocation:value.join("")});
+                  console.log(JSON.stringify(value));
+                  console.log(value.join(""));
+                  {/*alert(value.join(""));*/}
+              }}
+              ref={ref => this.AreaPicker = ref} />
       </View>
     )
-  }//onPress={this.itemButtonAction(0)}
+  }
 
 
 
@@ -113,20 +134,18 @@ class PersonalProfile extends React.Component<Props> {
    * 点击了头像
    */
   onPictureClick = () => {
-    //this.props.navigation.navigate('selectPhoto');
     console.log('点击了头像');
       ImagePicker.openPicker({
           width: 300,
           height: 400,
           cropping: true
       }).then(image => {
-          let source = {uri: image.path};
           this.setState({portrait:image.path});
         console.log(' 图片路径：'+ this.state.portrait);
-          realm.write(() => {
-              realm.create('User', {id:userdata.id,portrait:this.state.portrait}, true);//更新touxiang
+          /*realm.write(() => {
+              realm.create('User', {id:userdata.id,portrait:this.state.portrait}, true);
               ToastAndroid.show('用户头像更新为'+userdata.portrait,ToastAndroid.SHORT);
-          });
+          });*/
       });
       /*ImagePicker.openCamera({
           width:300,
@@ -135,7 +154,7 @@ class PersonalProfile extends React.Component<Props> {
           let source = {uri:image.path};
           this._fetchImage(image);
           this.setState({
-              portrait: source  // 将图片存于本地
+              portrait: source
           });
       });*/
 
@@ -147,23 +166,16 @@ class PersonalProfile extends React.Component<Props> {
    * 点击了昵称
    */
   onNickNameClick = () => {
-    console.log('点击了昵称')
+    console.log('点击了昵称');
     this.props.navigation.navigate('ChangeNickName')
   }
 
-  /**
-   * 点击了性别
-   */
-  onSexClick = () => {
-    console.log('点击了性别');
-    SimpleItemsDialog.show();
-  };
 
   /**
    * 点击了地址
    */
   onAddressClick = () => {
-    console.log('点击了地址')
+    console.log('点击了地址');
     this.props.navigation.navigate('ChangeAddress')
   }
 }
@@ -215,18 +227,6 @@ const styles = StyleSheet.create({
     marginTop: 14,
     elevation: 1
   },
-alertBackground: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-},
-    // 如果要遮罩要显示成半透明状态，这里一定要设置，reba中的a控制透明度，取值在 0.0 ～ 1.0 范围内。
-    alertBox: {
-        width: 200,
-        height: 175,
-        backgroundColor: 'white',
-    },
 
 });
 

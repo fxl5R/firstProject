@@ -11,7 +11,7 @@ import {
     Platform,
     Button,
     Alert,
-    DeviceEventEmitter
+    RefreshControl
 } from 'react-native';
 import HouseDetail from "./HouseDetail";
 import realm from '../util/realm.js';
@@ -43,11 +43,12 @@ export default class HouseCell extends Component {
         console.log('testSearch!!!11111'+mydata);
         this.state = {
             dataSource: ds.cloneWithRows(mydata),
+            isRefreshing: false,
             searchString:props.value1,
             typee:'',
             door:'',
             decorate:'',
-            sort:''
+            sort:'',
         };
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
     }
@@ -58,17 +59,29 @@ export default class HouseCell extends Component {
   **/
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
+
         this.setState({
             searchString: nextProps.value1,
             typee: nextProps.typee > this.props.typee,
             door: nextProps.door > this.props.door,
             decorate: nextProps.decorate > this.props.decorate,
+
             dataSource:ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
                 .filtered("lease_type CONTAINS[c] $0",this.props.typee)
                 .filtered("door_model CONTAINS[c] $0",this.props.door)
                 .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
         });
+
         console.log('testSearch!!!2222'+this.state.dataSource);
+    }
+    _onRefresh() {
+        if(!this.props){ alert('没有更多数据啦！')}
+        if(this.props){
+            this.setState(
+                {dataSource:this.state.dataSource}
+            )
+
+        }
     }
 
     /**  根据从TabPage传递的DropDown参数
@@ -105,6 +118,16 @@ export default class HouseCell extends Component {
         return (
             <View style = {styles.MainContainer }>
             <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.isRefreshing}
+                        onRefresh={this._onRefresh.bind(this)}
+                        tintColor="#ff0000"
+                        title="加载中..."
+                        titleColor="#00ff00"
+                        colors={['#ff0000', '#00ff00', '#0000ff']}
+                        progressBackgroundColor="#ffffff"
+                    />}
                 enableEmptySections = {true}
                 dataSource={this.state.dataSource}
                 renderSeparator={this.ListViewItemSeparator}
