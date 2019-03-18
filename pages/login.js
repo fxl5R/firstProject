@@ -32,9 +32,6 @@ const UserSchema = {
 };
 */
 
-//初始化Realm
-//let realm.js = new Realm({schema: [UserSchema]});
-//realm.js.close();
 export default class login extends Component {
     constructor(props) {
         super(props);

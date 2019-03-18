@@ -15,7 +15,6 @@ import {
     ListView,
     ScrollView, TextInput, ToastAndroid,
 } from 'react-native';
-import { NaviGoBack } from '../../util/CommonUtils';
 import BackHeader from '../../component/BackHeader';
 import realm from '../../util/realm.js';
 
@@ -66,7 +65,7 @@ class RealConfirm extends Component {
                                         id:user.id,
                                         realName:this.state.realName,
                                         IDCardNO:this.state.IDCardNO,
-                                        isRealPeople:1}, true)//更新用户实名认证信息
+                                        isRealPeople:1}, true);/*更新用户实名认证信息*/
                                     ToastAndroid.show('用户真实姓名'+this.state.realName+'身份证号'+this.state.IDCardNO,ToastAndroid.SHORT);
                                 })}
                                 activeOpacity={0.7}

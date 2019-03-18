@@ -28,7 +28,7 @@ export default class FormWithPairText extends Component<Props> {
   }
   render() {
       const defaultCutOffLineStyle: ViewStyle = { borderBottomWidth: 0.5, borderBottomColor: '#D3D3D3' }
-      let cutOffLineStyle: ViewStyle
+      let cutOffLineStyle: ViewStyle;
       cutOffLineStyle = this.props.cutOffLine === undefined ? defaultCutOffLineStyle : this.props.cutOffLine ? defaultCutOffLineStyle : {}
     return (
       <TouchableOpacity activeOpacity={0.5} onPress={() => {this.props.onFormClick()}}>

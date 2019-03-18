@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Platform
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    ScrollView,
+    Image,
+    Platform,
+    Alert, ToastAndroid
 } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import FormWithPairText from '../../component/Form/FormWithPairText';
 import BackHeader from "../../component/BackHeader";
 import { Modal} from '@ant-design/react-native';
+import {SimpleItemsDialog} from 'react-native-pickers';
 import realm from "../../util/realm";
 
 let userdatas=realm.objects('User').filtered("online == $0", 1);
@@ -23,6 +26,7 @@ class PersonalProfile extends React.Component<Props> {
         uNickName:'',
         uSex:'',
         uLocation:'',
+        portrait:''
       }
   }
 //this.props.loginParams.user ? this.props.loginParams.user.sex :
@@ -39,7 +43,7 @@ class PersonalProfile extends React.Component<Props> {
                 {'头像'}
               </Text>
               <Image
-                source={require('../../res/images/logo_peo.png')}
+                source={this.state.portrait?{uri:this.state.portrait}:{uri:userdata.portrait}}/*当用户修改头像时，自动更新效果：未进行修改时显示数据库中的头像*/
                 style={styles.image}
               />
             </View>
@@ -51,6 +55,13 @@ class PersonalProfile extends React.Component<Props> {
             style={{ paddingVertical: 15 }}
             arrowRight={true}
           />
+            <FormWithPairText
+                leftText={'密码'}
+                rightText={nickName}
+                onFormClick={() => this.onNickNameClick()}
+                style={{ paddingVertical: 15 }}
+                arrowRight={true}
+            />
           <FormWithPairText
             leftText={'性别'}
             rightText={'暂无填写'}
@@ -74,8 +85,9 @@ class PersonalProfile extends React.Component<Props> {
               onPress={()=>{
                   realm.write(() => {
 
-                      realm.create('User', {id:userdata.id,online: 1}, true);//更新用户昵称
-                      //更新用户性别
+                      realm.create('User', {id:userdata.id,online: 1}, true);//更新用户昵称头像
+
+                      /*更新用户性别*/
                       if(symboll==='0'){
                           realm.create('User', {id:userdata.id,userSex:'男'}, true);
                       }else if(symboll==='1'){
@@ -95,13 +107,41 @@ class PersonalProfile extends React.Component<Props> {
     )
   }//onPress={this.itemButtonAction(0)}
 
+
+
   /**
    * 点击了头像
    */
   onPictureClick = () => {
-    this.props.navigation.navigate('ImagePickerExample');
+    //this.props.navigation.navigate('selectPhoto');
     console.log('点击了头像');
-  }
+      ImagePicker.openPicker({
+          width: 300,
+          height: 400,
+          cropping: true
+      }).then(image => {
+          let source = {uri: image.path};
+          this.setState({portrait:image.path});
+        console.log(' 图片路径：'+ this.state.portrait);
+          realm.write(() => {
+              realm.create('User', {id:userdata.id,portrait:this.state.portrait}, true);//更新touxiang
+              ToastAndroid.show('用户头像更新为'+userdata.portrait,ToastAndroid.SHORT);
+          });
+      });
+      /*ImagePicker.openCamera({
+          width:300,
+          height:400,
+          cropping:true}).then(image => {
+          let source = {uri:image.path};
+          this._fetchImage(image);
+          this.setState({
+              portrait: source  // 将图片存于本地
+          });
+      });*/
+
+  };
+
+
 
   /**
    * 点击了昵称
@@ -116,12 +156,8 @@ class PersonalProfile extends React.Component<Props> {
    */
   onSexClick = () => {
     console.log('点击了性别');
-    Modal.operation([
-              { text: '男', onPress:( ) => {this.setState(uSex)}},
-              { text: '女', onPress: () => {const symboll='1'} },
-          ]);
-
-  }
+    SimpleItemsDialog.show();
+  };
 
   /**
    * 点击了地址
@@ -179,6 +215,19 @@ const styles = StyleSheet.create({
     marginTop: 14,
     elevation: 1
   },
+alertBackground: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+},
+    // 如果要遮罩要显示成半透明状态，这里一定要设置，reba中的a控制透明度，取值在 0.0 ～ 1.0 范围内。
+    alertBox: {
+        width: 200,
+        height: 175,
+        backgroundColor: 'white',
+    },
+
 });
 
 export default PersonalProfile;

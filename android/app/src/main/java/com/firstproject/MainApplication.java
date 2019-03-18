@@ -3,6 +3,9 @@ package com.firstProject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.beefe.picker.PickerViewPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.horcrux.svg.SvgPackage;
 import io.realm.react.RealmReactPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -36,6 +39,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new PickerViewPackage(),
+            new RNDeviceInfo(),
+            new PickerPackage(),
             new SvgPackage(),
             new VectorIconsPackage(),
             new ImagePickerPackage(),

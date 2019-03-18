@@ -6,14 +6,15 @@ import {
     Platform,
     TouchableOpacity,
     Image,
-    Text, ToastAndroid
+    Text, ToastAndroid, DeviceEventEmitter
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import FormArrowToDetail from '../component/Form/FormArrowToDetail';
 import FormWithPicture from '../component/Form/FormWithPicture';
 import FormWithPairText from '../component/Form/FormWithPairText';
-import Button from '../component/Button';
 import realm from '../util/realm.js';
+import {Modal, WhiteSpace, WingBlank,Button} from "@ant-design/react-native";
+import platform from "../util/platform";
 
 export default class MinePage extends Component {
 
@@ -24,7 +25,7 @@ export default class MinePage extends Component {
         this.state = {
             thisUser:userdata
         }
-        this.logout=this.logout.bind(this);
+        this._loginOut=this._loginOut.bind(this);
     }
 
     render() {
@@ -41,12 +42,12 @@ export default class MinePage extends Component {
                         <FormWithPicture
                             nickName={this.state.thisUser.nickName}
                             contactText={this.state.thisUser.userName}
-                            pictureUri={'../res/images/logo_peo.png'}
+                            pictureUri={{uri:this.state.thisUser.portrait}}
                             onFormClick={() => this.personalProfile()}
                         />
                         <FormWithPairText
                             leftText="实名认证"
-                            onFormClick={() => {}}
+                            onFormClick={() => {this.props.navigation.navigate('RealConfirm')}}
                             cutOffLine={false}
                         />
                     </View>
@@ -72,7 +73,7 @@ export default class MinePage extends Component {
                             cutOffLine={false}
                         />
                     </View>
-                    <Button
+                    {/*<Button
                         style={{ marginTop: 15,paddingTop:20}}
                         text="退出登录"
                         onPress={() => {
@@ -82,7 +83,12 @@ export default class MinePage extends Component {
                                 ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
                             });
                         }}
-                    />
+                    />*/}
+                    <WhiteSpace size="xl" />
+                    <WingBlank >
+                        <Button style={{ borderWidth: platform.borderH }}
+                                onPress={() => {this._loginOut}}>退出登录</Button>
+                    </WingBlank>
                 </ScrollView>
             </View>
         )
@@ -91,20 +97,27 @@ export default class MinePage extends Component {
     /**
      * 跳转至 个人资料
      */
+    /*personalProfile = () => {
+        console.log('点击了个人资料');
+        this.props.navigation.navigate('PersonalProfile', {
+            nickName: this.state.thisUser.nickName,
+            id:this.state.thisUser.id
+        });
+    };*/
     personalProfile = () => {
         console.log('点击了个人资料');
         this.props.navigation.navigate('PersonalProfile', {
             nickName: this.state.thisUser.nickName,
             id:this.state.thisUser.id
         });
-    }
+    };
 
     /**
      * 跳转至 我的收藏
      */
     mySupportTeam = () => {
         this.props.navigation.navigate('MineStarTeam');
-    }
+    };
 
     /**
      * 跳转至 评论管理
@@ -133,7 +146,7 @@ export default class MinePage extends Component {
     /**
      * 跳转至 登录页面
      */
-    logout = () => {
+/*    logout = () => {
         ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
         console.log('点击了退出登录');
         const resetAction = NavigationActions.reset({
@@ -144,6 +157,24 @@ export default class MinePage extends Component {
         });
         this.props.logout();
         this.props.navigation.dispatch(resetAction);
+    }*/
+    _loginOut=() =>{
+        Modal.alert(
+            '确定退出登录？',
+            '',
+            [
+                { text: '取消', onPress: () => { }, style: 'cancel' },
+                {
+                    text: '确定', onPress: () => {
+                        this.props.navigation.navigate('Login');
+                        realm.write(() => {
+                            realm.create('User', {id:this.state.thisUser.id,online: 0}, true);//更新离线状态
+                            ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
+                        });
+                    }
+                },
+            ],
+        );
     }
 }
 

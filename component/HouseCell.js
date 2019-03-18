@@ -57,11 +57,16 @@ export default class HouseCell extends Component {
   *    进行关键字查询
   **/
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
         this.setState({
-            searchString: nextProps.searchString,
-
-            dataSource:ds.cloneWithRows(mydata
-                .filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1))//搜索‘由TabPage的SearchBar传递来的searchstring关键字’
+            searchString: nextProps.value1,
+            typee: nextProps.typee > this.props.typee,
+            door: nextProps.door > this.props.door,
+            decorate: nextProps.decorate > this.props.decorate,
+            dataSource:ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
+                .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                .filtered("door_model CONTAINS[c] $0",this.props.door)
+                .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
         });
         console.log('testSearch!!!2222'+this.state.dataSource);
     }
@@ -96,11 +101,11 @@ export default class HouseCell extends Component {
      * 渲染房屋展示卡片列表
      **/
     render() {
-
+        //if(this.props.typee){Alert.alert(this.props.typee)}else{Alert.alert('without typee value')};<Text>{this.props.typee}</Text>
         return (
             <View style = {styles.MainContainer }>
-                <Text>{this.props.typee}</Text>
             <ListView
+                enableEmptySections = {true}
                 dataSource={this.state.dataSource}
                 renderSeparator={this.ListViewItemSeparator}
                 renderRow={(rowData) =>
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
         flex:1,
         //justifyContent: 'center',
         paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-        margin: 10,
+        margin: 0,
         backgroundColor: '#F5FCFF'
     },
     textContainer: {

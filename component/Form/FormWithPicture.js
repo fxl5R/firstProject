@@ -25,7 +25,8 @@ export default class FormWithPicture extends Component<Props>{
     return (
       <TouchableOpacity activeOpacity={0.5} onPress={() => {this.props.onFormClick()}}>
         <View style={[styles.container]}>
-          <Image source={require('../../res/images/logo_peo.png')} style={styles.leftImage}/>
+          <Image source={this.props.pictureUri} style={styles.leftImage}/>
+          {/*<Image source={require('../../res/images/logo_peo.png')} style={styles.leftImage}/>*/}
           <View style={styles.textContainer}>
             <Text style={[styles.nickNameText]}>
                 {this.props.nickName}

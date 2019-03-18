@@ -23,12 +23,10 @@ import {
     ImageBackground
 } from 'react-native';
 
-import { NaviGoBack } from '../util/CommonUtils';
 import { toastShort } from '../util/ToastUtil';
 import ShortLine from '../component/ShortLine';
 import {COMMENT_DATA} from '../res/data/VirtualData'
 import GridView from '../component/GridView';
-import Comment from  '../component/Comment';
 import BackHeader from '../component/BackHeader';
 
 let {height, width} = Dimensions.get('window');
@@ -36,7 +34,6 @@ let {height, width} = Dimensions.get('window');
 class LandLordPage extends React.Component {
     constructor(props) {
         super(props);
-        this.buttonBackAction=this.buttonBackAction.bind(this);
         this.buttonItemAction=this.buttonItemAction.bind(this);
         this.renderItem = this.renderItem.bind(this);
         this.renderHeaderContent = this.renderHeaderContent.bind(this);
@@ -53,11 +50,6 @@ class LandLordPage extends React.Component {
         hidden:false
     }
 
-    //返回
-    buttonBackAction(){
-        const {navigator} = this.props;
-        return NaviGoBack(navigator);
-    }
     buttonItemAction(position){
         const {navigator} = this.props.navigator;
         if(position === 1){

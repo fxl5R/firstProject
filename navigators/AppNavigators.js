@@ -11,7 +11,6 @@ import PublishResult from '../pages/PublishResult';
 import LandLordPage from '../pages/LandLordPage';
 import CommentPage from '../pages/CommentPage';
 
-import ImagePickerExample from '../component/antComponent';
 import HouseDetail from '../component/HouseDetail';
 import HouseCell from '../component/HouseCell';
 import navigatorExpo from '../navigators/navigatorExpo';
@@ -20,6 +19,7 @@ import MapLocation from '../util/MapLocation';
 
 
 import PersonalProfile from '../pages/Mine/PersonalProfile';
+//import UserInfo from '../pages/Mine/UserInfo';
 import CommentManager from '../pages/Mine/CommentManager';
 import RealConfirm from '../pages/Mine/RealConfirm';
 
@@ -48,13 +48,6 @@ const AppStackNavigator = createStackNavigator({
         screen:navigatorExpo
     },
 
-    ImagePickerExample:{
-       screen:ImagePickerExample,
-        navigationOptions:{
-            header:null
-        }
-
-    },
     HouseDetail:{
         screen:HouseDetail,
         navigationOptions:{
@@ -73,6 +66,13 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+/*    UserInfo:{
+        screen:UserInfo,
+        navigationOptions:{
+            header:null
+        }
+
+    },*/
     CommentManager:{
        screen:CommentManager,
         navigationOptions:{

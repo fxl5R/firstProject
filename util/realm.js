@@ -8,23 +8,23 @@ House_Info.schema = {
     properties:
         {
             house_id:'int',
-            house_publisher: 'string',    //发布人
-            publish_time: 'string',       //发布时间 toLocaleDateString()
-            lease_type: 'string',         //出租类型：整租/合租
-            area_name: 'string',          //小区名
-            unit_build:'string',          //楼栋（单元）
-            total_area:'string',          //总面积
-            door_model:'string',          //户型（室房厅厕）
-            toward_direct:'string',       //朝向
-            house_floor:'string',         //楼层
-            house_decorate:'string',      //装修（毛坯/简单/中等/精装）
-            rent_fee:'string',            //租金
-            pay_type:'string',            //付款类型（一付一/押一付三/半年付/年付）
-            house_pic:'string',           //图片描述
-            support_set:'string',         //配套设施
-            house_description:'string',   //房屋描述
-            house_location:'string',      //房产地址
-            owner_tel:'string',           //房主联系电话
+            house_publisher: 'string',                //发布人
+            publish_time: 'string',                   //发布时间 toLocaleDateString()
+            lease_type:{type:'string',default:'不限'} ,    //出租类型：整租/合租/不限
+            area_name: 'string',                      //小区名
+            unit_build:'string',                      //楼栋（单元）
+            total_area:'string',                      //总面积
+            door_model:{type:'string',default:'不限'},      //户型（室房厅厕）
+            toward_direct:'string',                   //朝向
+            house_floor:'string',                     //楼层
+            house_decorate:{type:'string',default:'不限'},  //装修（毛坯/简单/中等/精装）
+            rent_fee:'string',                        //租金
+            pay_type:'string',                        //付款类型（一付一/押一付三/半年付/年付）
+            house_pic:'string',                       //图片描述
+            support_set:'string',                     //配套设施
+            house_description:'string',               //房屋描述
+            house_location:'string',                  //房产地址
+            owner_tel:'string',                       //房主联系电话
             certification:{type:'int',default: 0,optional: true}//是否后台认证
         }
 };
@@ -38,7 +38,7 @@ User.schema = {
         userName: 'string',                     // 用户名称
         userPassword: 'string',                 // 用户密码
         userSex: 'string',                      // 用户性别
-        portrait: 'string',                     // 头像
+        portrait: {type:'string',default:'../res/images/logo_peo.png'},// 头像
         nickName:'string',                      // 昵称
         online: {type: 'int', optional: true }, //判断用户在线1:在线 0:离线
         userLocation:{type:'string',optional:true},         // 用户所在地

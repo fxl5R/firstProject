@@ -1,9 +1,7 @@
 
 import React, { Component } from 'react';
-import {Text, View, DeviceEventEmitter, Alert} from 'react-native';
+import {Text, View, Alert} from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
-
-
 
 
 export default class MDropDown extends Component {
@@ -15,16 +13,8 @@ export default class MDropDown extends Component {
             decorate: '',
             sort: '',
         };
+    }
 
-    }
-/*
-    componentDidMount() {
-        setTimeout(() => {
-            // 发布 msg 事件
-            DeviceEventEmitter.emit('sendTypee', {typee:this.state.typee});
-        }, 1000);
-    }
-*/
     handleChange1 = (typee) => {
         this.setState({typee});
         this.props.setValue1(this.state.typee)
@@ -88,7 +78,6 @@ export default class MDropDown extends Component {
                     <Dropdown
                         label='出租类型'
                         data={dataType}
-                        ref={this.TypeRef}
                         value={typee}
                         onChangeText={this.handleChange1}
                         />
@@ -97,7 +86,6 @@ export default class MDropDown extends Component {
                     <Dropdown
                         label='房源户型'
                         data={dataDoor}
-                        ref={this.DoorRef}
                         value={door}
                         onChangeText={this.handleChange2}
                     />
@@ -106,7 +94,6 @@ export default class MDropDown extends Component {
                     <Dropdown
                         label='装修'
                         data={dataDecorate}
-                        ref={this.DecorateRef}
                         value={decorate}
                         onChangeText={this.handleChange3}
                     />
@@ -115,7 +102,6 @@ export default class MDropDown extends Component {
                     <Dropdown
                         label='推荐排序'
                         data={dataSort}
-                        ref={this.SortRef}
                         value={sort}
                         onChangeText={this.handleChange4}
                     />
