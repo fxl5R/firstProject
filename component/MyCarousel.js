@@ -6,7 +6,7 @@ import {
     Dimensions
 } from 'react-native'
 import Swiper from 'react-native-swiper'
-const { width } = Dimensions.get('window');
+const { width,height } = Dimensions.get('window');
 
 
 const renderPagination = (index, total, context) => {
@@ -48,7 +48,7 @@ export default class extends Component {
 const styles = {
     wrapper: {
         width:width,
-        height:240
+        height:height * 1/3
     },
     slide: {
         flex: 1,
@@ -70,7 +70,7 @@ const styles = {
         right: 10
     },
     paginationText: {
-        alignItems:'flex-end',
+        justifyContent:'flex-end',
         marginRight:10,
         color: '#B0C4DE',
         fontSize: 20

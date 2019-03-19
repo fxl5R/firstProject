@@ -15,7 +15,7 @@ import {
     FlatList,
     TouchableHighlight,
     ScrollView,
-    Alert
+    Alert, Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 //import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -117,6 +117,7 @@ export default class TabPage extends Component<Props> {
                                 navigation={this.props.navigation}
                                 value1={this.state.value1}
                                 typee={this.state.typee} door={this.state.door} decorate={this.state.decorate} sort={this.state.sort} />
+                                <View style={{height:Platform.OS === 'ios' ? 0:50,}}/>
                             </ScrollView>
                         </View>
                     </TabNavigator.Item>
@@ -152,7 +153,11 @@ export default class TabPage extends Component<Props> {
                         onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
                         <View styles={styles.page3}>
                             <NormalHeader navigation={this.props.navigation} title={'消息栏'}/>
-
+                            <View style={{alignItems:'center'}}>
+                                <View style={{backgroundColor:'grey',justifyContent:'center',height:120,width:'85%',alignItems:'center'}}>
+                                    <Text>testcard</Text>
+                                </View>
+                            </View>
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
@@ -167,6 +172,7 @@ export default class TabPage extends Component<Props> {
                         </View>
                     </TabNavigator.Item>
                 </TabNavigator>
+
             </View>
         );
     }

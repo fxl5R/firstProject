@@ -14,17 +14,27 @@ import {
     ScrollView,
     Dimensions
 } from 'react-native';
-import { Tag, WhiteSpace } from '@ant-design/react-native';
+import {Tag, TextareaItem, WhiteSpace} from '@ant-design/react-native';
 
 import { createStackNavigator } from 'react-navigation';
 import BackHeader from "../component/BackHeader";
 import ImagePickerExample from "../component/antComponent";
 
+import DoorPicker from '../component/DoorPicker';
+import {SimpleItemsDialog,AreaPicker } from 'react-native-pickers';
+
+
 import realm from '../util/realm.js';
+import AreaJson from "../res/data/Area";
+import Toast from "@ant-design/react-native/lib/toast";
+
+const {height, width} = Dimensions.get('window');
+
 //标签被选中时回调
 function onChange(selected) {
     console.log(`tag selected: ${selected}`);
 }
+
 
 class AddHousePage extends Component{
 
@@ -103,23 +113,27 @@ class AddHousePage extends Component{
             <BackHeader navigation={this.props.navigation} title={'填写房屋信息'}/>
             <ScrollView keyboardShouldPersistTaps={'handled'}>
             <View style={[styles.MainContainer,{justifyContent:'center'}]}>
-                <TextInput
-                    placeholder="姓名"
-                    style = { styles.TextInputStyle }
-                    underlineColorAndroid = "transparent"
-                    onChangeText = { ( text ) => { this.setState({ House_Publisher: text })} }/>
-                <TextInput
-                    placeholder="出租类型"
-                    style = { styles.TextInputStyle }
-                    underlineColorAndroid = "transparent"
-                    onChangeText = { ( text ) => { this.setState({ Lease_Type: text })} }/>
+                <View style={{flexDirection:'row'}}>
+                    <TextInput
+                        placeholder="房屋地址"
+                        style = { [styles.TextInputStyle,{marginTop:20,width:width * 0.75}] }
+                        value={this.state.House_Location?this.state.House_Location:''}
+                        underlineColorAndroid = "transparent"
+                        onChangeText = { ( text ) => { this.setState({ House_Location: text })
+                        &&Toast.show('请继续添加门牌号信息');} }
+                    />
+                    <TouchableOpacity onPress={() => { this.AreaPicker.show() }} activeOpacity={0.7}
+                                      style={styles.selectloca} >
+                        <Image source={require('../res/images/ic_hloca.png')} style={{width:22,height:22}}/>
+                    </TouchableOpacity>
+                </View>
                 <TextInput
                     placeholder="小区名"
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ Area_Name: text })} }/>
                 <TextInput
-                    placeholder="楼栋（单元）"
+                    placeholder="单元 如：1栋1单元201"
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ Unit_Build: text })} }/>
@@ -129,25 +143,26 @@ class AddHousePage extends Component{
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ Total_Area: text })} }/>
                 <TextInput
-                    placeholder="户型"
-                    style = { styles.TextInputStyle }
-                    underlineColorAndroid = "transparent"
-                    onChangeText = { ( text ) => { this.setState({ Door_Model: text })} }/>
-                <TextInput
-                    placeholder="朝向"
-                    style = { styles.TextInputStyle }
-                    underlineColorAndroid = "transparent"
-                    onChangeText = { ( text ) => { this.setState({ Toward_Direct: text })} }/>
-                <TextInput
-                    placeholder="楼层"
+                    placeholder="楼层 如：3层/共7层"
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ House_Floor: text })} }/>
-                <TextInput
-                    placeholder="装修"
-                    style = { styles.TextInputStyle }
-                    underlineColorAndroid = "transparent"
-                    onChangeText = { ( text ) => { this.setState({ House_Decorate: text })} }/>
+
+                <TouchableOpacity onPress={() => { this.SimpleItemsDialog.show() }} activeOpacity={0.7} style={styles.button} >
+                    <Text style={styles.TextStyle}>{this.state.Lease_Type?this.state.Lease_Type:'出租类型' }</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => { this.DoorPicker.show() }} activeOpacity={0.7} style={styles.button} >
+                    <Text style={styles.TextStyle}>{this.state.Door_Model?this.state.Door_Model:'选择户型'}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => { this.SimpleItemsDialog1.show() }} activeOpacity={0.7} style={styles.button} >
+                    <Text style={styles.TextStyle}>{this.state.Toward_Direct?this.state.Toward_Direct:'选择朝向' }</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => { this.SimpleItemsDialog2.show() }} activeOpacity={0.7} style={styles.button} >
+                    <Text style={styles.TextStyle}>{this.state.House_Decorate?this.state.House_Decorate:'装修状况' }</Text>
+                </TouchableOpacity>
                 <TextInput
                     placeholder="租金"
                     style = { styles.TextInputStyle }
@@ -174,29 +189,86 @@ class AddHousePage extends Component{
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ Support_Set: text })} }/>
-                <TextInput
+                <TextareaItem
+                    style = { {width:width * 0.85,borderRadius: 10,margin:10,
+                        borderWidth: 1,borderColor: '#6495ED'} }
+                    rows={4}
+                    last={true}
                     placeholder="房屋描述"
-                    style = { styles.TextInputStyle }
-                    underlineColorAndroid = "transparent"
-                    onChangeText = { ( text ) => { this.setState({ House_Description: text })} }/>
+                    count={150}
+                    onChange = { ( text ) => { this.setState({ House_Description: text })} }
+                />
+
+            </View>
+            <View style={[styles.MainContainer,{justifyContent:'center'}]}>
                 <TextInput
-                    placeholder="房屋地址"
+                    placeholder="房主姓名"
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
-                    onChangeText = { ( text ) => { this.setState({ House_Location: text })} }/>
+                    onChangeText = { ( text ) => { this.setState({ House_Publisher: text })} }/>
                 <TextInput
                     placeholder="联系方式"
                     style = { styles.TextInputStyle }
                     underlineColorAndroid = "transparent"
                     onChangeText = { ( text ) => { this.setState({ Owner_Tel: text })} }/>
-                <TouchableOpacity onPress={this.add_House} activeOpacity={0.7} style={styles.button} >
+                <TouchableOpacity onPress={this.add_House} activeOpacity={0.7} style={[styles.button,{marginBottom: 40}]} >
                     <Text style={styles.TextStyle}> 提交出租信息 </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={this.GoToSecondActivity} activeOpacity={0.7} style={styles.button} >
-                    <Text style={styles.TextStyle}> 查看所有房屋信息 </Text>
-                </TouchableOpacity>
+                {/*<TouchableOpacity onPress={this.GoToSecondActivity} activeOpacity={0.7} style={styles.button} >
+                    <Text style={styles.TextStyle}> 查看所有房屋信息 </Text>onPress={this.GoToSecondActivity}
+                </TouchableOpacity>*/}
+                <View style={{height:Platform.OS === 'ios' ? 0:30,}}/>
             </View>
             </ScrollView>
+                {/*弹出选择出租类型*/}
+                <SimpleItemsDialog
+                    items={['整租' , '合租' , '不限']}
+                    ref={ref => this.SimpleItemsDialog = ref}
+                    onPress={(items) => {
+                        this.setState({Lease_Type:items===0?'整租':items===1?'合租':'不限'});
+                        //alert(this.state.Lease_Type);
+                    }} />
+                {/*弹出选择户型*/}
+                <DoorPicker
+                    onPickerCancel={() => { }}
+                    onPickerConfirm={(value) => {
+                        this.setState({Door_Model:value.join("")});
+                        //alert(value.join(""));
+                        alert(this.state.Door_Model)
+                    }}
+                    ref={ref => this.DoorPicker = ref} />
+                {/*弹出选择房屋朝向*/}
+                <SimpleItemsDialog
+                    items={['朝东','朝南','朝西','朝北','朝东南','朝东北','朝西南','朝西北','未知']}
+                    ref={ref => this.SimpleItemsDialog1 = ref}
+                    onPress={(items) => {
+                        this.setState(
+                            {Toward_Direct:items===0?'朝东':items===1?'朝南':items===2?'朝西'
+                                    :items===3?'朝北':items===4?'朝东南':items===5?'朝东北'
+                                        :items===6?'朝西南':items===7?'朝西北':'未知'});
+                        alert(this.state.Toward_Direct);
+                    }} />
+                {/*弹出选择房屋装修*/}
+                <SimpleItemsDialog
+                    items={['毛坯','简装','精装']}
+                    ref={ref => this.SimpleItemsDialog2 = ref}
+                    onPress={(items) => {
+                        this.setState(
+                            {House_Decorate:items===0?'毛坯':items===1?'简装':'精装'});
+                        alert(this.state.House_Decorate);
+                    }} />
+                {/*弹出选择房屋地址*/}
+                <AreaPicker
+                    areaJson={AreaJson}
+                    onPickerCancel={() => { }}
+                    onPickerConfirm={(value) => {
+
+                        this.setState({House_Location:value.join("")});
+                        console.log(JSON.stringify(value));
+                        console.log(value.join(""));
+                        {/*alert(value.join(""));*/}
+                    }}
+                    ref={ref => this.AreaPicker = ref} />
             </View>
 
         );
@@ -293,11 +365,11 @@ const styles = StyleSheet.create({
 
     TextInputStyle:
         {
+            borderRadius: 10,
             borderWidth: 1,
             borderColor: '#6495ED',
             width: '80%',
             height: 40,
-            borderRadius: 10,
             marginBottom: 10,
             textAlign: 'center',
         },
@@ -306,11 +378,18 @@ const styles = StyleSheet.create({
         width: '80%',
         height: 40,
         padding: 10,
-        backgroundColor: '#B0C4DE',
+        backgroundColor: '#B0C4DE',//#F0F8FF
         borderRadius:7,
-        marginTop: 12
+        margin: 10
     },
-
+    buttonselect: {
+        width: '80%',
+        height: 40,
+        padding: 10,
+        backgroundColor: '#ADD8E6',
+        borderRadius:7,
+        margin: 10
+    },
     TextStyle:{
         color:'#fff',
         textAlign:'center',
@@ -322,6 +401,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#000',
 
+    },
+    selectloca:{
+        backgroundColor: '#B0C4DE',
+        borderRadius:7,
+        justifyContent:'center',
+        width:22,
+        height:40,
+        marginTop: 20
     }
 
 });

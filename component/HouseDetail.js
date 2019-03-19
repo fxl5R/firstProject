@@ -2,15 +2,13 @@
 import React, {Component} from 'react';
 
 import {
-    Navigator,
     TouchableOpacity,
     Image,
     Text,
     View,
     StyleSheet,
-    ImageBackground,
     ScrollView,
-    Dimensions
+    Dimensions, Platform
 } from 'react-native';
 import BackHeader from "./BackHeader";
 import realm from "../util/realm";
@@ -27,17 +25,10 @@ export default class HouseDetail extends Component<Props> {
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
         return(
-            <View style={{height: 240,alignItems: 'center', justifyContent: 'center' }}>
-                {/*<ImageBackground source={require('../res/images/detailbg.jpg')} style={{width:width,height:240}}>
-                     <View style={{alignItems:'flex-end',marginRight:10,flexDirection:'row'}}>
-                         <Image source={require('../res/images/store/merchants/ic_merchants_location.png')}
-                                style={{width:16,height:20}}/>
-                         <Text style={{color:'white',fontSize:13,backgroundColor:'rgba(1,1,1,0)'}}>{house.house_location}</Text>
-                     </View>
-                    </ImageBackground>
-                */}
+            <View style={{height: 240,alignItems: 'center'}}>
                 <MyCarousel/>
-                <Text style={{color:'white',fontSize:13,backgroundColor:'rgba(1,1,1,0)'}}>{house.house_location}</Text>
+
+                <Text style={{color:'black',fontSize:13,backgroundColor:'rgba(1,1,1,0)'}}>{house.house_location}</Text>
             </View>
         );
     }
@@ -106,22 +97,7 @@ export default class HouseDetail extends Component<Props> {
                         {house.house_description}
                     </ExpandableText>
                 </View>
-                <Image style={{padding:10}} source={require('../res/images/ic_center_line.png')}/>
-                <View style={{height:35,justifyContent:'center'}}>
-                    <Text style={{color:'#777',marginLeft:8}}>房屋描述</Text>
-                </View>
-                <Image source={require('../res/images/ic_center_line.png')}/>
-                <View style={{backgroundColor:'white',height:35,marginEnd:20}}>
-                    <ExpandableText
-                        numberOfLines={5}
-                        style={styles.expandText}
-                        unexpandView={()=>null}
-                        expandView={()=>(
-                            <View style={styles.arrow}/>
-                        )}>
-                        {house.house_description}
-                    </ExpandableText>
-                </View>
+                <View style={{height:Platform.OS === 'ios' ? 0:30,}}/>
             </View>
                 </ScrollView>
             );
@@ -142,9 +118,9 @@ export default class HouseDetail extends Component<Props> {
                                 <Text style={{fontSize:17}}>姓名123</Text>
                                 <Text style={{fontSize:12,color:'#708090'}}>实名认证</Text>
                         </View>
-                        {/*<View style={{alignItems:'flex-end'}}>
+                        <View style={{justifyContent:'flex-end'}}>
                             <Image source={require('../res/images/ic_center_right_arrow.png')} style={styles.rightImage}/>
-                        </View>*/}
+                        </View>
                     </TouchableOpacity>
 
                 </View>
@@ -173,6 +149,7 @@ export default class HouseDetail extends Component<Props> {
                 {this.renderOwner()}
                 <Image style={{padding:10}}  source={require('../res/images/ic_center_line.png')}/>
                     {this.renderBaseInfo()}
+                    <View style={{height:Platform.OS === 'ios' ? 0:30,}}/>
                 </ScrollView>
             </View>
         );
