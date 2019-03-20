@@ -15,7 +15,7 @@ import {
 import BackHeader from "./BackHeader";
 import realm from "../util/realm";
 import ExpandableText from 'rn-expandable-text';
-import MyCarousel from "./MyCarousel";
+//import MyCarousel from "./MyCarousel";
 
 const winWidth=Dimensions.get('window').width;
 const winHeight=Dimensions.get('window').height;
@@ -30,7 +30,8 @@ export default class HouseDetail extends Component<Props> {
         return(
             <View style={{alignItems: 'center'}}>
                 {/*<View style={{width:winWidth,height:winHeight/3}}><MyCarousel /></View>*/}
-                <ImageBackground source={require('../res/images/detailbg.jpg')} style={{width:winWidth,height:winHeight/3}}>
+                <ImageBackground source={house.house_pic?{uri:house.house_pic}:require('../res/images/detailbg.jpg')}
+                                 style={{width:winWidth,height:winHeight/3}}>
                     <View style={{alignItems:'flex-end',marginRight:10,flexDirection:'row'}}>
                         <Image source={require('../res/images/store/merchants/ic_merchants_location.png')}
                                style={{width:16,height:20}}/>

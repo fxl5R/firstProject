@@ -18,7 +18,6 @@ import {Tag, TextareaItem, WhiteSpace} from '@ant-design/react-native';
 
 import { createStackNavigator } from 'react-navigation';
 import BackHeader from "../component/BackHeader";
-import ImagePickerExample from "../component/antComponent";
 
 import DoorPicker from '../component/DoorPicker';
 import {SimpleItemsDialog,AreaPicker } from 'react-native-pickers';
@@ -27,6 +26,7 @@ import {SimpleItemsDialog,AreaPicker } from 'react-native-pickers';
 import realm from '../util/realm.js';
 import AreaJson from "../res/data/Area";
 import Toast from "@ant-design/react-native/lib/toast";
+//import {ImagePicker} from '@ant-design/react-native';
 import ImagePicker from "react-native-image-crop-picker";
 
 const {height, width} = Dimensions.get('window');
@@ -54,6 +54,7 @@ class AddHousePage extends Component {
         super();
 
         this.state = {
+            files:'',
             House_Publisher: '',    //发布人
             Publish_Time: '',     //发布时间
             Lease_Type: '',         //出租类型：整租/合租
@@ -108,6 +109,7 @@ class AddHousePage extends Component {
     };
 
     render() {
+        const {files}=this.state;
         return (
             <View>
                 <BackHeader navigation={this.props.navigation} title={'填写房屋信息'}/>
@@ -206,23 +208,18 @@ class AddHousePage extends Component {
                             onChangeText={(text) => {
                                 this.setState({Pay_Type: text})
                             }}/>
-                        <TextInput
-                            placeholder="房屋图片"
-                            style={styles.TextInputStyle}
-                            underlineColorAndroid="transparent"
-                            onChangeText={(text) => {
-                                this.setState({House_Pic: text})
-                            }}/>
                         <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
-                            <Text>选择房屋图片</Text>
+                            <Text style={{alignItems: 'center'}}>选择房屋图片</Text>
                         </TouchableOpacity>
-                        <ImagePickerExample
-                            onImageClick={() => {
-                                this.onAddImageClick()
-                            }}
-                            onPress={this.pickMultiple.bind(this)}
-                            navigation={this.props.navigation}
-                        />
+                        <Image source={this.state.House_Pic?{uri:this.state.House_Pic}:require('../res/images/house.png')}
+                               style={{height:40,width:40}} />
+                        {/*<ImagePicker
+                            files={files}
+                            onChange={this.onChange1}
+                            onImageClick={(index, fs) => console.log('图片点击click'+index, fs)}
+                            selectable={files.length < 7}
+                            accept="image/gif,image/jpeg,image/jpg,image/png"
+                        />*/}
                         <View style={{flexDirection: 'row'}}>
                             <WhiteSpace/>
                             <Tag onChange={onChange} afterClose={() => {
@@ -337,7 +334,7 @@ class AddHousePage extends Component {
                     ref={ref => this.SimpleItemsDialog3 = ref}
                     onPress={(items) => {
                         this.setState(
-                            {ay_Type: items === 0 ? '一付一' : items === 1 ? '押一付三' : items === 2 ? '半年付' : '年付'});
+                            {Pay_Type: items === 0 ? '一付一' : items === 1 ? '押一付三' : items === 2 ? '半年付' : '年付'});
                         //alert(this.state.Pay_Type);
                     }}/>
             </View>
@@ -345,23 +342,6 @@ class AddHousePage extends Component {
         );
     }
 
-    onAddImageClick = () => {
-        console.log('点击选择图片');
-        ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            cropping: true,
-            multiple: true
-        }).then(image => {
-            this.setState({House_Pic: image.path});
-            console.log(' 图片路径：' + this.state.House_Pic);
-            alert(' 图片路径：' + this.state.House_Pic);
-            /*realm.write(() => {
-                realm.create('User', {id:userdata.id,portrait:this.state.portrait}, true);
-                ToastAndroid.show('用户头像更新为'+userdata.portrait,ToastAndroid.SHORT);
-            });*/
-        });
-    };
     pickMultiple() {
         ImagePicker.openPicker({
             multiple: true,
@@ -371,7 +351,7 @@ class AddHousePage extends Component {
         }).then(images => {
             this.setState({
                 image: null,
-                House_Pic:images.uri,
+                House_Pic:images[0].path,
                 images: images.map(i => {
                     console.log('received image', i,images);
                     alert('received image', i,JSON.stringify(images));
@@ -380,6 +360,7 @@ class AddHousePage extends Component {
             });
         }).catch(e => alert(e));
     }
+
 
 }
 

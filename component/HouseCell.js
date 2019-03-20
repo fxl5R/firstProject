@@ -136,7 +136,8 @@ export default class HouseCell extends Component {
                     <TouchableOpacity onPress={this.GoToHouseDetail.bind(this,rowData.house_id)}>
                         <View style={{backgroundColor: '#FFF'}}>
                             <View style={{padding: 10, flexDirection: 'row'}}>
-                                <Image style={styles.thumb} source={{uri:rowData.house_pic}}/>
+                                <Image style={styles.thumb} source={rowData.house_pic?
+                                    {uri:rowData.house_pic}:require('../res/images/detailbg.jpg')}/>
 
                                 <View style={{flex: 2, paddingLeft: 10}}>
                                     <Text style={{fontSize: 16}}>{rowData.area_name}</Text>

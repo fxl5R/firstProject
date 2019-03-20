@@ -129,7 +129,7 @@ const imagesdata = [/*{
         files: imagesdata,
     }
     onChange = (files, type, index) => {
-        console.log('图片选择onononChange'+files, type, index);
+        console.log('图片选择onononChange'+JSON.stringify(files), type, index);
         this.setState({
             files,
         });
