@@ -143,7 +143,7 @@ const imagesdata = [/*{
                     files={files}
                     onChange={this.onChange}
                     onImageClick={(index, fs) => console.log('图片点击click'+index, fs)}
-                    selectable={files.length < 5}
+                    selectable={files.length < 6}
                     accept="image/gif,image/jpeg,image/jpg,image/png"
                 />
             </View>
