@@ -85,9 +85,9 @@ export default class HouseDetail extends Component<Props> {
                         <Text style={{fontSize:17}}>{house.house_publisher}</Text>
                         <Text style={{fontSize:12,color:'#708090'}}>{house.certification===1?'已认证':''}</Text>
                     </View>
-                        <View style={{justifyContent:'flex-end'}}>
+                        {/*<View style={{justifyContent:'flex-end'}}>
                         <Image source={require('../res/images/ic_center_right_arrow.png')} style={styles.rightImage}/>
-                        </View>
+                        </View>*/}
                     </View>
                 </TouchableOpacity>
 
@@ -123,7 +123,7 @@ export default class HouseDetail extends Component<Props> {
                         <Text style={styles.itemForm3}>楼层</Text>
                         <Text style={styles.itemForm3}>装修</Text>
                     </View>
-                    <View style={{flex:1.5}}>
+                    <View style={{flex:2}}>
                         <Text style={styles.itemForm2}>{house.house_floor}</Text>
                         <Text style={styles.itemForm2}>{house.house_decorate}</Text>
                     </View>
@@ -146,15 +146,15 @@ export default class HouseDetail extends Component<Props> {
                     </View>
                     <View style={{flex:3}}>
                         <Text style={styles.itemForm2}>{house.rent_fee}</Text>
-                        {/*<Text style={[styles.itemForm2,{marginBottom:8}]}>{house.fee_period}</Text>*/}
+                        <Text style={[styles.itemForm2,{marginBottom:8}]}>{house.fee_period}</Text>
                     </View>
                     <View style={{flex:2}}>
                         <Text style={styles.itemForm3}>违约金</Text>
                         <Text style={[styles.itemForm3,{marginBottom:8}]}>最短租期</Text>
                     </View>
-                    <View style={{flex:1.5}}>
- {/*                       <Text style={styles.itemForm2}>{house.default_fine}</Text>
-                        <Text style={[styles.itemForm2,{marginBottom:8}]}>{house.rent_limit}</Text>*/}
+                    <View style={{flex:2}}>
+                        <Text style={styles.itemForm2}>{house.default_fine}</Text>
+                        <Text style={[styles.itemForm2,{marginBottom:8}]}>{house.rent_limit}</Text>
                     </View>
                 </View>
                 <Image style={{padding:4}} source={require('../res/images/ic_center_line.png')}/>
@@ -164,7 +164,7 @@ export default class HouseDetail extends Component<Props> {
                 <Image source={require('../res/images/ic_center_line.png')}/>
                 <View style={{backgroundColor:'white',height:65,marginEnd:20}}>
                     <ExpandableText
-                        numberOfLines={5}
+                        numberOfLines={10}
                         style={styles.expandText}
                         unexpandView={()=>null}
                         expandView={()=>(

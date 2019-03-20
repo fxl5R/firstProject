@@ -19,16 +19,16 @@ House_Info.schema = {
             house_floor:'string',                     //楼层
             house_decorate:{type:'string',default:'不限'},  //装修（毛坯/简单/中等/精装）
             rent_fee:'string',                        //租金
-            //fee_period:'string',                    //交租周期
-            //default_fine:'string'                   //违约金
-            //rent_limit:'string'                     //最短租期
+            fee_period:'string',                      //交租周期
+            default_fine:'string',                    //违约金
+            rent_limit:'string',                      //最短租期
             pay_type:'string',                        //付款类型（一付一/押一付三/半年付/年付）
-            house_pic:'string',                         //房屋封面图
-            //house_pic2:'string',                      //图片描述2
-            //house_pic3:'string',                      //图片描述3
-            //house_pic4:'string',                      //图片描述4
-            //house_pic5:'string',                      //图片描述5
-            //house_pic6:'string',                      //图片描述6
+            house_pic:'string',                       //房屋封面图(客厅图)
+            house_pic2:'string',                      //房间图片
+            house_pic3:'string',                      //厨房图片
+            house_pic4:'string',                      //卫生间图
+            house_pic5:'string',                      //图片补充1
+            house_pic6:'string',                      //图片补充2
             support_set:'string',                     //配套设施
             house_description:'string',               //房屋描述
             house_location:'string',                  //房产地址
@@ -46,7 +46,7 @@ User.schema = {
         userName: 'string',                     // 用户名称
         userPassword: 'string',                 // 用户密码
         userSex: 'string',                      // 用户性别
-        portrait: {type:'string',default:'../res/images/logo_peo.png'},// 头像
+        portrait: {type:'string',default:'https://b-ssl.duitang.com/uploads/item/201901/09/20190109121033_lxkdt.thumb.300_300_c.jpg'},// 头像
         nickName:'string',                      // 昵称
         online: {type: 'int', optional: true }, //判断用户在线1:在线 0:离线
         userLocation:{type:'string',optional:true},         // 用户所在地

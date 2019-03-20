@@ -15,6 +15,7 @@ import FormWithPairText from '../component/Form/FormWithPairText';
 import realm from '../util/realm.js';
 import {Modal, WhiteSpace, WingBlank,Button} from "@ant-design/react-native";
 import platform from "../util/platform";
+import {AlertDialog} from "react-native-pickers";
 
 export default class MinePage extends Component {
 
@@ -25,7 +26,8 @@ export default class MinePage extends Component {
         this.state = {
             thisUser:userdata
         }
-        this._loginOut=this._loginOut.bind(this);
+        //this._loginOut=this._loginOut.bind(this);
+        //this.logout=this.logout.bind(this);
     }
 
     render() {
@@ -87,9 +89,25 @@ export default class MinePage extends Component {
                     <WhiteSpace size="xl" />
                     <WingBlank >
                         <Button style={{ borderWidth: platform.borderH }}
-                                onPress={() => {this._loginOut}}>退出登录</Button>
+                                onPress={() => {
+                                    this.props.navigation.navigate('Login');
+                                    realm.write(() => {
+                                        realm.create('User', {id:this.state.thisUser.id,online: 0}, true);//更新离线状态
+                                        ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
+                                    });
+                                }}>退出登录</Button>
+                        {/*<Button style={{ borderWidth: platform.borderH }}
+                                onPress={() => { this.AlertDialog.show() }}>退出登录</Button>*/}
                     </WingBlank>
                 </ScrollView>
+                <AlertDialog
+                    messageText={'确定退出登录？'}
+                    showAnimationType='timing'
+                    onPress={(isOK) => {
+                        alert(isOK ? '退出' : '取消');
+                    }}
+                    ref={ref => this.AlertDialog = ref}
+                />
             </View>
         )
     }
@@ -146,19 +164,17 @@ export default class MinePage extends Component {
     /**
      * 跳转至 登录页面
      */
-/*    logout = () => {
-        ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
+    logout = () => {
+        //ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
         console.log('点击了退出登录');
-        const resetAction = NavigationActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate({ routeName: 'Login' })
-            ]
+        realm.write(() => {
+            realm.create('User', {id:this.state.thisUser.id,online: 0}, true);//更新离线状态
+            ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
         });
-        this.props.logout();
-        this.props.navigation.dispatch(resetAction);
-    }*/
-    _loginOut=() =>{
+        this.props.navigation.navigate('Login');
+    }
+
+/*    _loginOut=() =>{
         Modal.alert(
             '确定退出登录？',
             '',
@@ -175,7 +191,7 @@ export default class MinePage extends Component {
                 },
             ],
         );
-    }
+    }*/
 }
 
 

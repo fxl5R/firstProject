@@ -41,9 +41,9 @@ class RealConfirm extends Component {
         return (
             <View style={{backgroundColor:'#f5f5f5',flex:1}}>
                 <BackHeader navigation={this.props.navigation} title={'实名认证'} />
-                <View style={{marginTop:10,marginLeft:10,marginRight:10,backgroundColor:'white'}}>
+                <View style={{marginTop:20,backgroundColor:'white'}}>
                     <View style={{justifyContent:'center',alignItems:'center',height:100}}>
-                        <Image source={require('../../res/images/ic_account.png')} style={{width:40,height:40}}/>
+                        <Image source={require('../../res/images/ic_account.png')} style={{width:30,height:30}}/>
                         <TextInput
                             placeholder="真实姓名"
                             style = { styles.TextInputStyle }
@@ -55,19 +55,21 @@ class RealConfirm extends Component {
                             underlineColorAndroid = "transparent"
                             onChangeText = { ( text ) => { this.setState({ IDCardNO: text })} }/>
                     </View>
-                    <Image source={require('../../res/images/ic_center_line.png')} style={{height:1,width:'100%',marginTop:22}}/>
+                    {/*<Image source={require('../../res/images/ic_center_line.png')} style={{height:1,width:'100%',marginTop:22}}/>*/}
                     <View style={{marginTop:22,marginLeft:13,marginRight:13}}>
                         <View style={styles.ButtonContainer}>
                             <Text style={{marginTop:10,fontSize:13.5,color:'#999'}}>我同意《认证服务协议》</Text>
                             <TouchableOpacity
-                                onPress={realm.write(() => {
+                                onPress={() => {realm.write(() => {
                                     realm.create('User', {
                                         id:user.id,
                                         realName:this.state.realName,
                                         IDCardNO:this.state.IDCardNO,
                                         isRealPeople:1}, true);/*更新用户实名认证信息*/
                                     ToastAndroid.show('用户真实姓名'+this.state.realName+'身份证号'+this.state.IDCardNO,ToastAndroid.SHORT);
-                                })}
+                                    this.props.navigation.navigate('Login');
+                                    ToastAndroid.show('授权成功，返回个人主页'+this.state.IDCardNO,ToastAndroid.SHORT);
+                                })}}
                                 activeOpacity={0.7}
                                 style={styles.button1} >
                                 <Text style={{ textAlign:'center',color:'#B0C4DE',fontSize:15,}}> 立即授权 </Text>
@@ -114,6 +116,18 @@ const styles = StyleSheet.create({
         color:'#fff',
         textAlign:'center',
     },
+    TextInputStyle:
+        {
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: '#6495ED',
+            width: '80%',
+            height: 40,
+            marginBottom: 10,
+            marginTop:10,
+            textAlign: 'center',
+        },
+
 });
 
 export default RealConfirm;

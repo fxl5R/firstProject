@@ -28,22 +28,27 @@ import MDropDown from '../component/ActionMenu/MDropDown';
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
+    register:{
+        screen:register,
+        navigationOptions:{header:null}
+    },
     TabPage:{
         screen:TabPage,
         navigationOptions:{
             header:null
         }
     },
+    /*register:{
+        screen:register,
+        navigationOptions:{header:null}
+    },*/
     MDropDown:{
         screen:MDropDown,
         navigationOptions:{
             header:null
         }
     },
-    register:{
-        screen:register,
-        navigationOptions:{header:null}
-    },
+
     navigatorExpo:{
         screen:navigatorExpo
     },

@@ -37,8 +37,9 @@ function onChange(selected) {
 }
 
 
-class AddHousePage extends Component {
+export default class AddHousePage extends Component {
 
+/*
     static navigationOptions =
         {
             title: 'AddHouseActivity',
@@ -48,6 +49,7 @@ class AddHousePage extends Component {
         this.props.navigation.navigate('Second');
 
     };
+*/
 
     constructor() {
 
@@ -66,8 +68,16 @@ class AddHousePage extends Component {
             House_Floor: '',          //楼层
             House_Decorate: '',       //装修（毛坯/简单/中等/精装）
             Rent_Fee: '',             //租金
+            Fee_Period:'',            //交租周期
+            Default_Fine:'',          //违约金
+            Rent_Limit:'',            //最短租期
             Pay_Type: '',             //付款类型（一付一/押一付三/半年付/年付）
             House_Pic: '',            //图片描述
+            House_Pic2:'',            //房间图片
+            House_Pic3:'',            //厨房图片
+            House_Pic4:'',            //卫生间图
+            House_Pic5:'',            //图片补充1
+            House_Pic6:'',            //图片补充2
             Support_Set: '',          //配套设施
             House_Description: '',    //房屋描述
             House_Location: '',       //房产地址
@@ -95,8 +105,16 @@ class AddHousePage extends Component {
                     house_floor: this.state.House_Floor,
                     house_decorate: this.state.House_Decorate,
                     rent_fee: this.state.Rent_Fee,
+                    fee_period:this.state.Fee_Period,
+                    default_fine:this.state.Default_Fine,
+                    rent_limit:this.state.Rent_Limit,
                     pay_type: this.state.Pay_Type,
                     house_pic: this.state.House_Pic,
+                    house_pic2:this.state.House_Pic2,
+                    house_pic3:this.state.House_Pic3,
+                    house_pic4:this.state.House_Pic4,
+                    house_pic5:this.state.House_Pic5,
+                    house_pic6:this.state.House_Pic6,
                     support_set: this.state.Support_Set,
                     house_description: this.state.House_Description,
                     house_location: this.state.House_Location,
@@ -202,17 +220,74 @@ class AddHousePage extends Component {
                                 this.setState({Rent_Fee: text})
                             }}/>
                         <TextInput
-                            placeholder="付款类型"
+                            placeholder="交租周期"
                             style={styles.TextInputStyle}
                             underlineColorAndroid="transparent"
                             onChangeText={(text) => {
-                                this.setState({Pay_Type: text})
+                                this.setState({Fee_Period: text})
                             }}/>
-                        <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
-                            <Text style={{alignItems: 'center'}}>选择房屋图片</Text>
-                        </TouchableOpacity>
-                        <Image source={this.state.House_Pic?{uri:this.state.House_Pic}:require('../res/images/house.png')}
-                               style={{height:40,width:40}} />
+                        <TextInput
+                            placeholder="违约金 元"
+                            style={styles.TextInputStyle}
+                            underlineColorAndroid="transparent"
+                            onChangeText={(text) => {
+                                this.setState({Default_Fine: text})
+                            }}/>
+                        <TextInput
+                            placeholder="最短租期"
+                            style={styles.TextInputStyle}
+                            underlineColorAndroid="transparent"
+                            onChangeText={(text) => {
+                                this.setState({Rent_Limit: text})
+                            }}/>
+                        <View style={{flexDirection:'row',justifyContent: 'center',alignItems:'center',marginLeft:45}}>
+                            <View style={{flexDirection:'column',flex:1}} >
+                            <TouchableOpacity onPress={() => { this.onHP1Click() }}
+                                              style={[styles.button,{width:'40%',marginTop:20}]}>
+                                <Text style={{alignItems: 'center'}}>客厅</Text>
+                            </TouchableOpacity>
+                            <Image source={this.state.House_Pic?{uri:this.state.House_Pic}:require('../res/images/living.png')}
+                                   style={{height:100,width:100}} />
+
+                            <TouchableOpacity onPress={() => { this.onHP2Click() }}
+                                              style={[styles.button,{width:'40%',marginTop:20}]}>
+                                <Text style={{alignItems: 'center'}}>房间</Text>
+                            </TouchableOpacity>
+                            <Image source={this.state.House_Pic2?{uri:this.state.House_Pic2}:require('../res/images/room.png')}
+                                   style={{height:100,width:100}} />
+
+                            <TouchableOpacity onPress={() => { this.onHP5Click() }}
+                                              style={[styles.button,{width:'40%',marginTop:20}]}>
+                                <Text style={{alignItems: 'center'}}>补充1</Text>
+                            </TouchableOpacity>
+                            <Image source={this.state.House_Pic5?{uri:this.state.House_Pic5}:require('../res/images/house.png')}
+                                   style={{height:100,width:100}} />
+                            </View>
+
+                            <View style={{flexDirection:'column',flex:1}} >
+                                <TouchableOpacity onPress={() => { this.onHP3Click() }}
+                                                  style={[styles.button,{width:'40%',marginTop:20}]}>
+                                    <Text style={{alignItems: 'center'}}>厨房</Text>
+                                </TouchableOpacity>
+                                <Image source={this.state.House_Pic3?{uri:this.state.House_Pic3}:require('../res/images/kitchen.png')}
+                                       style={{height:100,width:100}} />
+
+                                <TouchableOpacity onPress={() => { this.onHP4Click() }}
+                                                  style={[styles.button,{width:'50%',marginTop:20}]}>
+                                    <Text style={{alignItems: 'center'}}>卫生间</Text>
+                                </TouchableOpacity>
+                                <Image source={this.state.House_Pic4?{uri:this.state.House_Pic4}:require('../res/images/bath.png')}
+                                       style={{height:100,width:100}} />
+
+                                <TouchableOpacity onPress={() => { this.onHP6Click() }}
+                                                  style={[styles.button,{width:'40%',marginTop:20}]}>
+                                    <Text style={{alignItems: 'center'}}>补充2</Text>
+                                </TouchableOpacity>
+                                <Image source={this.state.House_Pic6?{uri:this.state.House_Pic6}:require('../res/images/house.png')}
+                                       style={{height:100,width:100}} />
+
+                            </View>
+                        </View>
                         {/*<ImagePicker
                             files={files}
                             onChange={this.onChange1}
@@ -342,29 +417,72 @@ class AddHousePage extends Component {
         );
     }
 
-    pickMultiple() {
+    onHP1Click = () => {
+        console.log('上传客厅图');
         ImagePicker.openPicker({
-            multiple: true,
-            waitAnimationEnd: false,
-            includeExif: true,
-            forceJpg: true,
-        }).then(images => {
-            this.setState({
-                image: null,
-                House_Pic:images[0].path,
-                images: images.map(i => {
-                    console.log('received image', i,images);
-                    alert('received image', i,JSON.stringify(images));
-                    return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
-                })
-            });
-        }).catch(e => alert(e));
-    }
+            width: 300,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            this.setState({House_Pic:image.path});
+            console.log(' 图片路径：'+ this.state.House_Pic);});
+    };
 
+    onHP2Click = () => {
+        console.log('上传房间图');
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            this.setState({House_Pic2:image.path});
+            console.log(' 图片路径：'+ this.state.House_Pic2);});
+    };
+    onHP3Click = () => {
+        console.log('上传厨房图');
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            this.setState({House_Pic3:image.path});
+            console.log(' 图片路径：'+ this.state.House_Pic3);});
+    };
+    onHP4Click = () => {
+        console.log('上传卫生间图');
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            this.setState({House_Pic4:image.path});
+            console.log(' 图片路径：'+ this.state.House_Pic4);});
+    };
+    onHP5Click = () => {
+        console.log('上传补充图1');
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            this.setState({House_Pic5:image.path});
+            console.log(' 图片路径：'+ this.state.House_Pic5);});
+    };
+    onHP6Click = () => {
+        console.log('上传补充图2');
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true
+        }).then(image => {
+            this.setState({House_Pic6:image.path});
+            console.log(' 图片路径：'+ this.state.House_Pic6);});
+    };
 
 }
 
-class HDetail extends Component
+
+/*class HDetail extends Component
 {
     static navigationOptions =
         {
@@ -442,6 +560,7 @@ export default AddHousePage = createStackNavigator(
 
         Second: { screen: HDetail }
     });
+    */
 const styles = StyleSheet.create({
 
     MainContainer :{
@@ -454,6 +573,7 @@ const styles = StyleSheet.create({
 
     TextInputStyle:
         {
+
             borderRadius: 10,
             borderWidth: 1,
             borderColor: '#6495ED',

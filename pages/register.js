@@ -30,7 +30,7 @@ export default class register extends Component {
                 userName: [this.state.text].toString(),
                 userPassword: [this.state.password].toString(),
                 userSex: 'sex',
-                portrait:'https://b-ssl.duitang.com/uploads/item/201901/09/20190109121033_lxkdt.thumb.300_300_c.jpg',
+                portrait:'',
                 nickName:'安租用户'+Math.floor(Math.random() * 10000),
                 cTime:new Date().toLocaleTimeString()
             });

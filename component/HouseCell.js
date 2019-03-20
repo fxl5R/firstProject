@@ -65,7 +65,6 @@ export default class HouseCell extends Component {
             typee: nextProps.typee > this.props.typee,
             door: nextProps.door > this.props.door,
             decorate: nextProps.decorate > this.props.decorate,
-
             dataSource:ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
                 .filtered("lease_type CONTAINS[c] $0",this.props.typee)
                 .filtered("door_model CONTAINS[c] $0",this.props.door)
@@ -189,8 +188,8 @@ const styles = StyleSheet.create({
         color: '#656565'
     },
     thumb: {
-        width: 64,
-        height: 64,
+        width: 80,
+        height: 80,
     },
     separator: {
         height: 1,
