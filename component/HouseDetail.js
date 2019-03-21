@@ -19,6 +19,7 @@ import ExpandableText from 'rn-expandable-text';
 
 const winWidth=Dimensions.get('window').width;
 const winHeight=Dimensions.get('window').height;
+
 export default class HouseDetail extends Component<Props> {
     GoToGallery(house_id) {
         this.props.navigation.navigate('ImageBrowers',{
@@ -78,24 +79,27 @@ export default class HouseDetail extends Component<Props> {
         console.log('itemId'+itemId);
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
+        let publisherID=house.publisher_id;
+        let user_publisher=realm.objects('User').filtered('id==$0',publisherID)[0];//使用发布人ID关联User表取出发布房屋的用户的信息
+        let userPortrait=user_publisher.portrait;
+        let isRealPeople=user_publisher.isRealPeople;
         return(
-            <View style={{margin: 20}}>
+            <View style={{margin: 28}}>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => {
-                    this.props.navigation.navigate('LandLordPage')
+                    this.props.navigation.navigate('LandLordPage',{
+                        itemId: publisherID});
                 }}>
                     <View>
                     <View style={styles.container}>
-                        <Image source={require('../res/images/logo_dog.png')} style={styles.MidImage}/>
+                        <Image source={{uri:userPortrait}} style={styles.MidImage}/>
                         <Text style={{fontSize:17}}>{house.house_publisher}</Text>
-                        <Text style={{fontSize:12,color:'#708090'}}>{house.certification===1?'已认证':''}</Text>
+                        <Text style={{fontSize:12,color:'#708090'}}>{isRealPeople===1?'已实名认证':''}</Text>
                     </View>
                         {/*<View style={{justifyContent:'flex-end'}}>
                         <Image source={require('../res/images/ic_center_right_arrow.png')} style={styles.rightImage}/>
                         </View>*/}
                     </View>
                 </TouchableOpacity>
-
-
             </View>
         );
     }
@@ -166,19 +170,19 @@ export default class HouseDetail extends Component<Props> {
                     <Text style={{color:'#777',marginLeft:8}}>房屋描述</Text>
                 </View>
                 <Image source={require('../res/images/ic_center_line.png')}/>
-                <View style={{backgroundColor:'white',height:65,marginEnd:20}}>
+                <View style={{backgroundColor:'white',height:100,marginEnd:20}}>
                     <ExpandableText
-                        numberOfLines={10}
+                        numberOfLines={8}
                         style={styles.expandText}
                         unexpandView={()=>null}
-                        expandView={()=>(<View style={styles.arrow}/>)}>
-                        {house.house_description}{house.house_description}{house.house_description}{house.house_description}
-                        {house.house_description}{house.house_description}{house.house_description}{house.house_description}
+                        expandView={()=>(<View style={styles.arrow}/>)}
+                    >
+                        {house.house_description}
                         ceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshi
                         ceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshi
                     </ExpandableText>
                 </View>
-                <View style={{height:Platform.OS === 'ios' ? 0:30,}}/>
+                {/*<View style={{height:Platform.OS === 'ios' ? 0:45}}/>*/}
             </View>
                 </ScrollView>
             );
@@ -204,7 +208,7 @@ export default class HouseDetail extends Component<Props> {
                 </View>
                 <Image source={require('../res/images/ic_center_line.png')}/>
                 {this.renderOwner()}
-                    <View style={{height:Platform.OS === 'ios' ? 0:30,}}/>
+                    <View style={{height:Platform.OS === 'ios' ? 0:40}}/>
                 </ScrollView>
             </View>
         );
@@ -220,8 +224,8 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         alignItems: 'center',
         justifyContent:'center',
-        borderBottomWidth: 0.5,
-        borderBottomColor: '#D3D3D3'
+        //borderBottomWidth: 0.5,
+        //borderBottomColor: '#D3D3D3'
     },
     MidImage: {
         height: 68,

@@ -9,7 +9,6 @@ import guidePage from '../pages/GuidePage';
 import AddHousePage from '../pages/AddHousePage';
 import PublishResult from '../pages/PublishResult';
 import LandLordPage from '../pages/LandLordPage';
-import CommentPage from '../pages/CommentPage';
 
 import HouseDetail from '../component/HouseDetail';
 import HouseCell from '../component/HouseCell';
@@ -26,22 +25,24 @@ import MDropDown from '../component/ActionMenu/MDropDown';
 import ImageBrowers from '../component/ImageBrowers';
 
 const AppStackNavigator = createStackNavigator({
-    //HomePage:HomePage,
-    //MsgBox:MsgBox
+
     Login:{
         screen:login,
         navigationOptions:{header: null}
     },
+
     TabPage:{
         screen:TabPage,
         navigationOptions:{
             header:null
         }
     },
+
     register:{
         screen:register,
         navigationOptions:{header:null}
     },
+
     MDropDown:{
         screen:MDropDown,
         navigationOptions:{
@@ -59,18 +60,21 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+
     ImageBrowers:{
         screen:ImageBrowers,
         navigationOptions:{
             header:null
         }
     },
+
     LandLordPage:{
        screen:LandLordPage,
         navigationOptions:{
            header:null
             }
     },
+
     PersonalProfile:{
       screen:PersonalProfile,
         navigationOptions:{
@@ -90,18 +94,14 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+
     CommentApp:{
         screen:CommentApp,
         navigationOptions:{
             header:null
         }
     },
-    CommentPage:{
-       screen:CommentPage,
-       navigationOptions:{
-            header:null
-        }
-    },
+
     RealConfirm:{
         screen:RealConfirm,
         navigationOptions:{
@@ -109,51 +109,34 @@ const AppStackNavigator = createStackNavigator({
         }
     },
 
-
-    /*firstRealm: {
-        screen: firstRealm,
-        navigationOptions: {
-            title:'Realm实战',
-        },
-    },*/
-/*    SearchResults:{
-        screen:SearchResults,
-        navigationOptions:{
-            title:'Result',
-            headerStyle: {
-                backgroundColor: '#ADD8E6',
-            },
-            headerTitleStyle:{
-                flex:1,
-                textAlign: 'center'
-            }
-        }
-    },*/
-
     HouseCell: {
         screen: HouseCell,
         navigationOptions:{
             header:null
         }
     },
+
     AddHousePage: {
         screen: AddHousePage,
         navigationOptions:{
             header:null
         }
     },
+
     PublishResult:{
         screen: PublishResult,
         navigationOptions:{
             header:null
         }
     },
+
     Guide:{
         screen:guidePage,
         navigationOptions:{
             header:null
         }
     },
+
     HomePage:{
         screen:HomePage,
         navigationOptions:{
@@ -167,6 +150,7 @@ const AppStackNavigator = createStackNavigator({
             }
         }
     },
+
     MapLocation:{
         screen:MapLocation,
         navigationOptions:{

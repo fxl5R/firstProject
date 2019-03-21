@@ -44,7 +44,7 @@ class PublishResult extends Component {
         return (
             <View style={{backgroundColor:'#f5f5f5',flex:1}}>
                 <BackHeader navigation={this.props.navigation} title={'发布成功'} />
-                <View style={{marginTop:10,marginLeft:10,marginRight:10,backgroundColor:'white'}}>
+                <View style={{marginTop:20,marginLeft:10,marginRight:10,backgroundColor:'white'}}>
                     <View style={{justifyContent:'center',alignItems:'center',height:100}}>
                         <Image source={require('../res/images/ic_putout.png')} style={{width:40,height:40}}/>
                         <Text style={{color:'black',fontSize:15,marginTop:25}}>发布完成，待实名认证</Text>

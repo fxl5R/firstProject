@@ -71,7 +71,7 @@ export class CommentHeader extends Component<Props> {
                         />
                     </TouchableOpacity>
                     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-                        <Text style={{fontSize:18,color:'white',alignSelf:'center'}}>评论</Text>
+                        <Text style={{fontSize:18,color:'white',alignSelf:'center'}}>添加评论</Text>
                     </View>
                     {/*<TouchableOpacity onPress={()=>this.props.onSubmitClick()}
                                       style={{width:45,height:45,justifyContent:'center',alignItems:'center'}}>

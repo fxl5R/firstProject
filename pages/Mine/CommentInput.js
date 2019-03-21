@@ -6,21 +6,25 @@ import {
     TextInput,
     Button
 } from 'react-native';
+import realm from "../../util/realm";
 
 class CommentInput extends Component {
     constructor(props){
         super(props);
         this.state={
+            from_uid:'',
             username: '',
             content: ''
         };
         this.handleSubmit=this.handleSubmit.bind(this);
     }
     render() {
+        let userdatas=realm.objects('User').filtered("online == $0", 1);
+        let userdata=userdatas[0];
         return (
             <View style={styles.comment_input}>
                 <View style={styles.comment_field}>
-                    <Text style={styles.comment_field_name}>用 户 名 ：{this.state.username}</Text>
+                    <Text style={styles.comment_field_name}>用  户  名 ：{userdata.nickName}</Text>
                 </View>
                 <View style={styles.comment_field}>
                     <Text style={styles.comment_field_name}>评论内容：</Text>
@@ -36,7 +40,8 @@ class CommentInput extends Component {
                 <View style={styles.comment_field_button}>
                     <Button
                         onPress={()=>{
-                            this.state.username='username';
+                            this.state.username=userdata.nickName;
+                            this.state.from_uid=userdata.id;
                             this.handleSubmit();
                         }}
                         title={'发布'}
@@ -48,8 +53,8 @@ class CommentInput extends Component {
 
     handleSubmit () {
         if (this.props.onSubmit) {
-            const { username, content } = this.state;
-            this.props.onSubmit({username, content})
+            const { username, content ,from_uid} = this.state;
+            this.props.onSubmit({username, content ,from_uid})
         }
         this.setState({ content: '' })
     }

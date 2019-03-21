@@ -90,14 +90,16 @@ export default class AddHousePage extends Component {
     add_House = () => {
 
         realm.write(() => {
-            let Publisher=realm.objects('User').filtered().filtered("online == $0", 1);
-            let thisPublisher=Publisher[0];
-            this.setState({Publisher_Id:thisPublisher.id});
+            let Publisher=realm.objects('User').filtered("online == $0", 1);
+            let thisPublisherID=Publisher[0].id;
+            console.log(thisPublisherID+'111111发布人ID'+this.state.Publisher_Id);
+            this.setState({Publisher_Id:thisPublisherID});
+            console.log(thisPublisherID+'222222发布人ID'+this.state.Publisher_Id);
             let ID = realm.objects('House_Info').length + 1;
             realm.create('House_Info',
                 {
                     house_id: ID,
-                    publisher_id:this.state.Publisher_Id,
+                    publisher_id:thisPublisherID,
                     house_publisher: this.state.House_Publisher,
                     publish_time: new Date().toLocaleDateString(),
                     lease_type: this.state.Lease_Type,

@@ -9,11 +9,11 @@ class CommentList extends Component {
         comments: []
     }
     render() {
-        const comments = [
+        /*const comments = [
             {username: 'Jerry', content: 'Hello'},
             {username: 'Tomy', content: 'World'},
-            {username: 'Lucy', content: 'Good'}
-        ]
+            {username: 'Lucy', content: 'Good'}//测试数据
+        ]*/
         return (
             /*<View>{comments.map((comment, i) => {
                 return (

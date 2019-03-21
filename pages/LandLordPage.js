@@ -28,8 +28,10 @@ import ShortLine from '../component/ShortLine';
 import {COMMENT_DATA} from '../res/data/VirtualData'
 import GridView from '../component/GridView';
 import BackHeader from '../component/BackHeader';
+import realm from "../util/realm";
 
 let {height, width} = Dimensions.get('window');
+
 
 class LandLordPage extends React.Component {
     constructor(props) {
@@ -51,7 +53,6 @@ class LandLordPage extends React.Component {
     }
 
     buttonItemAction(position){
-        const {navigator} = this.props.navigator;
         if(position === 1){
             //收藏
             toastShort('点击收藏...');
@@ -78,18 +79,23 @@ class LandLordPage extends React.Component {
     //渲染房东基本信息布局
     renderStoreBasic(){
         const {navigator,route} = this.props;
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
+        let commentNum=realm.objects('Comments').filtered('to_uid==$0',itemId).length;//查找用户收到的评论数目require('../res/images/logo_dog.png')
+        console.log('评论条数'+commentNum);
         return (
             <View style={{height: 160,alignItems: 'center', justifyContent: 'center' }}>
                 <ImageBackground source={require('../res/images/beed.jpeg')} style={{width:width,height:160}}>
                     <View style={{flexDirection:'row',marginLeft:24,height:68,alignItems:'center',marginTop:12}}>
-                        <Image source={require('../res/images/logo_dog.png')}
+                        <Image source={{uri:user_publisher.portrait}}
                                style={{width:68,height:68,borderRadius:34}}/>
                         <View style={{marginLeft:15}}>
-                            <Text style={{color:'#708090',fontSize:16,marginTop:8,backgroundColor:'rgba(1,1,1,0)'}}>姓名123</Text>
+                            <Text style={{color:'#708090',fontSize:16,marginTop:8,backgroundColor:'rgba(1,1,1,0)'}}>{user_publisher.nickName}</Text>
                             <View style={{flexDirection:'row',alignItems:'center',marginTop:10}}>
                                 <Image source={require('../res/images/fire-fill.png')}
                                        style={{width:14,height:14}}/>
-                                <Text style={{color:'#708090',fontSize:13,marginLeft:5,backgroundColor:'rgba(1,1,1,0)'}}>66条评论</Text>
+                                <Text style={{color:'#708090',fontSize:13,marginLeft:5,backgroundColor:'rgba(1,1,1,0)'}}>收到{commentNum}条评论</Text>
                             </View>
                             <View style={{flexDirection:'row',marginTop:5,alignItems:'center'}}>
                                 <Image source={require('../res/images/time-circle-fill.png')}
@@ -104,12 +110,16 @@ class LandLordPage extends React.Component {
     }
     //渲染中间部分功能界面布局
     renderCenterBar(){
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
         return (
             <View style={{backgroundColor:'white'}}>
                 <View style={{flexDirection:'row',height:45}}>
                     <View style={{flex:1}}>
                         <TouchableOpacity style={{justifyContent:'center',alignItems:'center',flex:1}}
-                                          onPress={()=>{this.props.navigation.navigate('CommentApp')}}>{/*onPress={()=>{this.buttonItemAction(0)}}*/}
+                                          onPress={()=>{this.props.navigation.navigate('CommentApp',{
+                                              itemId: user_publisher.id})}}>{/*onPress={()=>{this.buttonItemAction(0)}}*/}
                             <View style={{justifyContent:'center',alignItems:'center'}}>
                                 <Image source={require('../res/images/ic_hmsg2.png')}
                                        style={{width:20,height:20}}/>
@@ -145,7 +155,7 @@ class LandLordPage extends React.Component {
                     <View style={{flexDirection:'row',height:35,alignItems:'center',flex:1}}>
                         <Image source={require('../res/images/store/merchants/ic_merchants_location.png')}
                                style={{width:16,height:20,marginLeft:15}}/>
-                        <Text style={{color:'#000',fontSize:12,marginLeft:8}}>测试房主地址123号</Text>
+                        <Text style={{color:'#000',fontSize:12,marginLeft:8}}>{user_publisher.userLocation}</Text>
                         <View style={{flex:1,alignItems:'flex-end'}}>
                             <Image source={require('../res/images/ic_center_right_arrow.png')}
                                    style={{width:12,height:18,marginRight:15}}/>
@@ -157,7 +167,7 @@ class LandLordPage extends React.Component {
                     <View style={{flexDirection:'row',height:35,alignItems:'center',flex:1}}>
                         <Image source={require('../res/images/store/merchants/ic_merchants_phone.png')}
                                style={{width:16,height:18,marginLeft:15}}/>
-                        <Text style={{color:'#000',fontSize:12,marginLeft:8}}>+(86)13800138000</Text>
+                        <Text style={{color:'#000',fontSize:12,marginLeft:8}}>{user_publisher.userTel}</Text>
                         <View style={{flex:1,alignItems:'flex-end'}}>
                             <Image source={require('../res/images/ic_center_right_arrow.png')}
                                    style={{width:12,height:18,marginRight:15}}/>
@@ -250,9 +260,9 @@ class LandLordPage extends React.Component {
                         <TouchableOpacity onPress={()=>{this.buttonItemAction(6)}}>
                             <View style={{flexDirection:'row',height:32,alignItems:'center'}}>
                                 <Text style={{fontSize:12}}onPress={()=>{
-                                    this.props.navigation.navigate('CommentPage');
+                                    this.props.navigation.navigate('CommentManager');
                                     /*alert('test success');*/
-                                }}>添加评论</Text>
+                                }}>查看所有评论</Text>
                                 <Image source={require('../res/images/ic_center_right_arrow.png')}
                                        style={{width:12,height:18,marginRight:15}}/>
                             </View>
