@@ -28,6 +28,8 @@ import {MsgCard, SearchBarA} from '../component/antComponent';
 import MDropDown from '../component/ActionMenu/MDropDown';
 import {SearchBar} from "@ant-design/react-native";
 import MyCarousel from "../component/MyCarousel";
+import { requestWithToken } from '../util/request';
+import Button from "../component/Button";
 
 
 export default class TabPage extends Component<Props> {
@@ -90,7 +92,7 @@ export default class TabPage extends Component<Props> {
     };
 
     render() {
-
+        const { errorMsg, username } = this.state;
         return (
             <View style={styles.container}>
                 <TabNavigator>
@@ -153,10 +155,13 @@ export default class TabPage extends Component<Props> {
                         onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
                         <View styles={styles.page3}>
                             <NormalHeader navigation={this.props.navigation} title={'消息栏'}/>
-                            <View style={{alignItems:'center'}}>
-                                <View style={{backgroundColor:'grey',justifyContent:'center',height:120,width:'85%',alignItems:'center'}}>
-                                    <Text>testcard</Text>
-                                </View>
+                            <View style={styles.container}>
+                                <Text style={styles.text}>
+                                    {errorMsg ? errorMsg : username + ', Welcome home!'}
+                                </Text>
+                                <Button
+                                    onPress={this.getProfile}
+                                >刷新</Button>
                             </View>
                         </View>
                     </TabNavigator.Item>
@@ -176,6 +181,22 @@ export default class TabPage extends Component<Props> {
             </View>
         );
     }
+    componentDidMount() {
+        this.getProfile();
+    }
+
+    getProfile = () => {
+        requestWithToken({
+            method: 'GET',
+            url: '/TabPage'
+        })
+            .then(({ data }) => this.setState({ username: data.username }))
+            .catch(err => {
+                console.log(err);
+                this.setState({ errorMsg: '获取用户信息出错！' });
+            });
+    };
+
 }
 
 

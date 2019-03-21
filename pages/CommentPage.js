@@ -12,12 +12,10 @@ import {
     TouchableHighlight, TouchableOpacity
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
-import Icon from'react-native-vector-icons/FontAwesome';
 import MOCK from 'mockjs'
 import {TextareaItem} from '@ant-design/react-native';
 import ImagePickerExample from "../component/antComponent";
-import Comment from "../component/Comment";
+import {CommentHeader} from "../component/BackHeader";
 
 // pp2={
 //     avatar:'http://dummyimage.com/600x300/f7d8d3)'
@@ -26,6 +24,7 @@ import Comment from "../component/Comment";
 let i=3;
 let ArrayHuiFu = [];
 // var liuyan = {};
+const {height, width} = Dimensions.get('window');
 export default class CommentPage extends Component {
     constructor(props){
         super(props);
@@ -160,7 +159,7 @@ export default class CommentPage extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Comment
+                <CommentHeader
                     navigaiton={this.props.navigation}
                     onSubmitClick={()=>this._submit.bind(this)}
                 />
@@ -202,9 +201,12 @@ export default class CommentPage extends Component {
                         >
                         </TextInput>*/}
                         <TextareaItem
+                            style={{width:width}}
                             value={this.state.commentContent}
                             onChange={this.onChange}
-                            rows={4} placeholder="写下你的评论" count={150}
+                            rows={4}
+                            placeholder="写下你的评论"
+                            count={150}
                         />
                     </View>
                     <ImagePickerExample navigation={this.props.navigation}/>

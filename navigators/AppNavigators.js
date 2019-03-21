@@ -14,23 +14,23 @@ import CommentPage from '../pages/CommentPage';
 import HouseDetail from '../component/HouseDetail';
 import HouseCell from '../component/HouseCell';
 import navigatorExpo from '../navigators/navigatorExpo';
-//import SearchResults from '../component/SearchResults';
 import MapLocation from '../util/MapLocation';
 
 
 import PersonalProfile from '../pages/Mine/PersonalProfile';
-//import UserInfo from '../pages/Mine/UserInfo';
 import CommentManager from '../pages/Mine/CommentManager';
+import CommentApp from '../pages/Mine/CommentApp';
 import RealConfirm from '../pages/Mine/RealConfirm';
 
 import MDropDown from '../component/ActionMenu/MDropDown';
+import ImageBrowers from '../component/ImageBrowers';
 
 const AppStackNavigator = createStackNavigator({
     //HomePage:HomePage,
     //MsgBox:MsgBox
-    register:{
-        screen:register,
-        navigationOptions:{header:null}
+    Login:{
+        screen:login,
+        navigationOptions:{header: null}
     },
     TabPage:{
         screen:TabPage,
@@ -38,10 +38,10 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
-    /*register:{
+    register:{
         screen:register,
         navigationOptions:{header:null}
-    },*/
+    },
     MDropDown:{
         screen:MDropDown,
         navigationOptions:{
@@ -55,6 +55,12 @@ const AppStackNavigator = createStackNavigator({
 
     HouseDetail:{
         screen:HouseDetail,
+        navigationOptions:{
+            header:null
+        }
+    },
+    ImageBrowers:{
+        screen:ImageBrowers,
         navigationOptions:{
             header:null
         }
@@ -84,6 +90,12 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+    CommentApp:{
+        screen:CommentApp,
+        navigationOptions:{
+            header:null
+        }
+    },
     CommentPage:{
        screen:CommentPage,
        navigationOptions:{
@@ -96,10 +108,7 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
-    Login:{
-        screen:login,
-        navigationOptions:{header: null}
-    },
+
 
     /*firstRealm: {
         screen: firstRealm,

@@ -8,6 +8,7 @@ House_Info.schema = {
     properties:
         {
             house_id:'int',
+            publisher_id:'int',                       //发布人ID（用户表外键，提交时自动记录）
             house_publisher: 'string',                //发布人
             publish_time: 'string',                   //发布时间 toLocaleDateString()
             lease_type:{type:'string',default:'不限'} ,    //出租类型：整租/合租/不限
@@ -46,7 +47,9 @@ User.schema = {
         userName: 'string',                     // 用户名称
         userPassword: 'string',                 // 用户密码
         userSex: 'string',                      // 用户性别
-        portrait: {type:'string',default:'https://b-ssl.duitang.com/uploads/item/201901/09/20190109121033_lxkdt.thumb.300_300_c.jpg'},// 头像
+        portrait:{type:'string',
+            default:'http://pic.616pic.com/ys_b_img/00/04/02/77OEok9x1s.jpg',
+            optional: true},// 头像 {type:'string',default:'../res/images/logo_peo.png'}
         nickName:'string',                      // 昵称
         online: {type: 'int', optional: true }, //判断用户在线1:在线 0:离线
         userLocation:{type:'string',optional:true},         // 用户所在地

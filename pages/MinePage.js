@@ -90,11 +90,13 @@ export default class MinePage extends Component {
                     <WingBlank >
                         <Button style={{ borderWidth: platform.borderH }}
                                 onPress={() => {
+
                                     this.props.navigation.navigate('Login');
                                     realm.write(() => {
                                         realm.create('User', {id:this.state.thisUser.id,online: 0}, true);//更新离线状态
                                         ToastAndroid.show('在线状态为'+this.state.thisUser.online,ToastAndroid.SHORT);
                                     });
+
                                 }}>退出登录</Button>
                         {/*<Button style={{ borderWidth: platform.borderH }}
                                 onPress={() => { this.AlertDialog.show() }}>退出登录</Button>*/}

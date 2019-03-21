@@ -20,6 +20,10 @@ import ExpandableText from 'rn-expandable-text';
 const winWidth=Dimensions.get('window').width;
 const winHeight=Dimensions.get('window').height;
 export default class HouseDetail extends Component<Props> {
+    GoToGallery(house_id) {
+        this.props.navigation.navigate('ImageBrowers',{
+            itemId: house_id});
+    };
     //渲染房屋图片和简介
     renderHousePic(){
         const { navigation } = this.props;
@@ -54,7 +58,7 @@ export default class HouseDetail extends Component<Props> {
                         <Text style={styles.feeText}>{house.rent_fee}</Text>
                     </View>
                     <View style={styles.rightContainer}>
-                        <TouchableOpacity onPress={this.onPress}>
+                        <TouchableOpacity onPress={this.GoToGallery.bind(this,house.house_id)}>
                             <Image style={styles.enterImage} source={require('../res/images/still_default1.png')} />
                             <View style={{justifyContent:'flex-end'}}>
                                 <Text style={{color: '#5CACEE',fontSize: 12}}>更多图片</Text>
@@ -167,9 +171,7 @@ export default class HouseDetail extends Component<Props> {
                         numberOfLines={10}
                         style={styles.expandText}
                         unexpandView={()=>null}
-                        expandView={()=>(
-                            <View style={styles.arrow}/>
-                            )}>
+                        expandView={()=>(<View style={styles.arrow}/>)}>
                         {house.house_description}{house.house_description}{house.house_description}{house.house_description}
                         {house.house_description}{house.house_description}{house.house_description}{house.house_description}
                         ceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshi

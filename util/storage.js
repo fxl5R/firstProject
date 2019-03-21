@@ -1,88 +1,48 @@
 
 import { AsyncStorage } from 'react-native';
+import Storage from 'react-native-storage';
+import { refreshToken } from './request';
 
-class DB {
-    // 保存
-    save(key, value) {
-        let result = value;
-        if (value && typeof value === 'object') {
-            result = JSON.stringify(value);
-        }
-        return AsyncStorage.setItem(key, result);
-    }
-    //获取值
-    async get(key) {
-        const value = await AsyncStorage.getItem(key);
-        let result;
-        try {
-            result = JSON.parse(value);
-        } catch (e) {
-            result = value;
-        } finally {
-            return result;
+export const storage = new Storage({
+    size: 1000,
+    storageBackend: AsyncStorage,
+    defaultExpires: null,
+    sync: {
+        accessToken(params) {
+            let { resolve, reject } = params;
+            refreshToken()
+                .then(data => resolve && resolve(data.access_token))
+                .catch(err => reject && reject(err));
         }
     }
+});
 
-    //异步获取
-    asyncGet(key, success, error) {
-
-        AsyncStorage.getItem(key, (err, res) => {
-
-            if (err) {
-                error()
-            } else {
-                let result;
-                try {
-                    result = JSON.parse(res);
-                } catch (e) {
-                    result = res;
-                } finally {
-                    if (result) {
-                        success(result)
-                    } else {
-                        error()
-                    }
-                }
-            }
-        })
-    }
-    /**
-     * [multiGet description]
-     * multiGet(['k1', 'k2'], cb) -> cb([['k1', 'val1'], ['k2', 'val2']])
-     * @param {[type]} keys [description]
-     * @return {[type]} [description]
-     */
-    async multiGet(keys) {
-        const values = await AsyncStorage.multiGet(keys);
-        const result = {};
-        values.forEach((value) => {
-            let newValue;
-            try {
-                newValue = JSON.parse(value[1]);
-            } catch (e) {
-                newValue = value[1];
-            }
-            result[value[0]] = newValue;
-        });
-        return result;
-    }
-
-    mergeItem(key, value) {
-        let result = value;
-        if (typeof value === 'object') {
-            result = JSON.stringify(value);
-        }
-        return AsyncStorage.mergeItem(result);
-    }
-
-    remove(key) {
-        return AsyncStorage.removeItem(key);
-    }
-
-    clear() {
-        return AsyncStorage.clear();
-    }
+/**
+ * 客户端缓存保存 token 数据
+ * @param {object} data - 登录成功后服务器返回的数据
+ * @param {string} data.access_token
+ * @param {string} data.refresh_token
+ * @param {number} data.expires_in
+ */
+export function saveToken({ access_token, refresh_token, expires_in }) {
+    storage.save({
+        key: 'accessToken',
+        data: access_token,
+        expires: 1000 * 10 // 10s 后过期，测试自动刷新 token
+        // expires: 1000 * (expires_in - 120) // access_token 有效期 2 小时，保险起见客户端减少 2 分钟
+    });
+    storage.save({
+        key: 'refreshToken',
+        data: refresh_token,
+        expires: 1000 * 3600 * 24 * 30 // refresh_token 保存 30 天
+    });
 }
 
-const storage = new DB();
-export default storage;
+export function removeTokens() {
+    storage.remove({
+        key: 'accessToken'
+    });
+    storage.remove({
+        key: 'refreshToken'
+    });
+}

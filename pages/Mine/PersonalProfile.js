@@ -99,6 +99,7 @@ class PersonalProfile extends React.Component<Props> {
                       if(this.state.uLocation){
                       realm.create('User', {id:userdata.id,userLocation: this.state.uLocation}, true);}
                   });
+
               }}
           >
               <Text style={styles.TextStyle}>确认提交</Text>

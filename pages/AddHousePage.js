@@ -57,12 +57,13 @@ export default class AddHousePage extends Component {
 
         this.state = {
             files:'',
-            House_Publisher: '',    //发布人
-            Publish_Time: '',     //发布时间
-            Lease_Type: '',         //出租类型：整租/合租
-            Area_Name: '',          //出租类型：整租/合租
-            Unit_Build: '',          //楼栋（单元）
-            Total_Area: '',          //总面积
+            Publisher_Id:'',          //发布人Id
+            House_Publisher: '',      //发布人
+            Publish_Time: '',         //发布时间
+            Lease_Type: '',           //出租类型：整租/合租
+            Area_Name: '',            //出租类型：整租/合租
+            Unit_Build: '',           //楼栋（单元）
+            Total_Area: '',           //总面积
             Door_Model: '',           //户型（室房厅厕）
             Toward_Direct: '',        //朝向
             House_Floor: '',          //楼层
@@ -89,11 +90,14 @@ export default class AddHousePage extends Component {
     add_House = () => {
 
         realm.write(() => {
+            let Publisher=realm.objects('User').filtered().filtered("online == $0", 1);
+            let thisPublisher=Publisher[0];
+            this.setState({Publisher_Id:thisPublisher.id});
             let ID = realm.objects('House_Info').length + 1;
-
             realm.create('House_Info',
                 {
                     house_id: ID,
+                    publisher_id:this.state.Publisher_Id,
                     house_publisher: this.state.House_Publisher,
                     publish_time: new Date().toLocaleDateString(),
                     lease_type: this.state.Lease_Type,
@@ -273,7 +277,7 @@ export default class AddHousePage extends Component {
                                        style={{height:100,width:100}} />
 
                                 <TouchableOpacity onPress={() => { this.onHP4Click() }}
-                                                  style={[styles.button,{width:'50%',marginTop:20}]}>
+                                                  style={[styles.button,{width:'45%',marginTop:20}]}>
                                     <Text style={{alignItems: 'center'}}>卫生间</Text>
                                 </TouchableOpacity>
                                 <Image source={this.state.House_Pic4?{uri:this.state.House_Pic4}:require('../res/images/bath.png')}

@@ -42,20 +42,20 @@ export default class login extends Component {
         }
     }
     handle_loginClick(){
-            let users=realm.objects('User').filtered('userName==$0',this.state.text.toString());
-            let user=users[0];                                     //从realm中查询到的是results数组类型，需要指定某一个数来进行判断
-            let password1=user.userPassword;                       //从realm中取出username为textinput中的密码
-            if(this.state.password===password1){                   //判断密码
-                ToastAndroid.show('登录成功',ToastAndroid.SHORT);
-                realm.write(() => {
-                    realm.create('User', {id:user.id,online: 1}, true);//更新在线状态
-                });
-                /*user.online=1;//更新在线状态*/
-                this.props.navigation.navigate('TabPage');
-                //realm.js.close();
-            }else{
-                ToastAndroid.show('登录失败，请检查用户名或者密码',ToastAndroid.SHORT)
-            }
+        let users=realm.objects('User').filtered('userName==$0',this.state.text.toString());
+        let user=users[0];                                     //从realm中查询到的是results数组类型，需要指定某一个数来进行判断
+        let password1=user.userPassword;                       //从realm中取出username为textinput中的密码
+        if(this.state.password===password1){                   //判断密码
+            ToastAndroid.show('登录成功',ToastAndroid.SHORT);
+            realm.write(() => {
+                realm.create('User', {id:user.id,online: 1}, true);//更新在线状态
+            });
+            /*user.online=1;//更新在线状态*/
+            this.props.navigation.navigate('TabPage');
+            //realm.js.close();
+        }else{
+            ToastAndroid.show('登录失败，请检查用户名或者密码',ToastAndroid.SHORT)
+        }
         console.log('name'+this.state.text+'password1'+this.state.password);
 
     }
@@ -66,29 +66,29 @@ export default class login extends Component {
                     style={styles.style_image}
                     source={require('../res/images/house.png')}/>
                 <KeyboardAwareScrollView>
-                <View style={styles.username}>
-                <TextInput
-                    style={styles.edit}
-                    placeholder='手机号/邮箱'
-                    numberOfLines={1}
-                    autoFocus={true}
-                    underlineColorAndroid={'transparent'}
-                    textAlign='center'
-                    onChangeText={(text)=>this.setState({text})}
-                /></View>
-                <View
-                    style={{height:1,backgroundColor:'#f4f4f4'}}
-                />
-                <View style={styles.password}>
-                <TextInput
-                    style={styles.edit}
-                    placeholder='密码'
-                    numberOfLines={1}
-                    underlineColorAndroid={'transparent'}
-                    secureTextEntry={true}
-                    textAlign='center'
-                    onChangeText={(password)=>this.setState({password})}
-                /></View>
+                    <View style={styles.username}>
+                        <TextInput
+                            style={styles.edit}
+                            placeholder='手机号/邮箱'
+                            numberOfLines={1}
+                            autoFocus={true}
+                            underlineColorAndroid={'transparent'}
+                            textAlign='center'
+                            onChangeText={(text)=>this.setState({text})}
+                        /></View>
+                    <View
+                        style={{height:1,backgroundColor:'#f4f4f4'}}
+                    />
+                    <View style={styles.password}>
+                        <TextInput
+                            style={styles.edit}
+                            placeholder='密码'
+                            numberOfLines={1}
+                            underlineColorAndroid={'transparent'}
+                            secureTextEntry={true}
+                            textAlign='center'
+                            onChangeText={(password)=>this.setState({password})}
+                        /></View>
                 </KeyboardAwareScrollView>
                 <View style={{marginTop: 10}}>
                     <Button text={'登录'} onPress={this.handle_loginClick.bind(this)}/>

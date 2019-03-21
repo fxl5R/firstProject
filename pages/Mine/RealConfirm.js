@@ -67,7 +67,7 @@ class RealConfirm extends Component {
                                         IDCardNO:this.state.IDCardNO,
                                         isRealPeople:1}, true);/*更新用户实名认证信息*/
                                     ToastAndroid.show('用户真实姓名'+this.state.realName+'身份证号'+this.state.IDCardNO,ToastAndroid.SHORT);
-                                    this.props.navigation.navigate('Login');
+                                    this.props.navigation.navigate('TabPage');
                                     ToastAndroid.show('授权成功，返回个人主页'+this.state.IDCardNO,ToastAndroid.SHORT);
                                 })}}
                                 activeOpacity={0.7}
