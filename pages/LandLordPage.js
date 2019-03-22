@@ -32,25 +32,28 @@ import realm from "../util/realm";
 
 let {height, width} = Dimensions.get('window');
 
-
 class LandLordPage extends React.Component {
+
     constructor(props) {
         super(props);
         this.buttonItemAction=this.buttonItemAction.bind(this);
         this.renderItem = this.renderItem.bind(this);
         this.renderHeaderContent = this.renderHeaderContent.bind(this);
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
         this.state={
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
-            commentList:eval(COMMENT_DATA).data,
+            commentList:[comments],
         }
     }
     static statusBar:{
         color:'#B0C4DE',
         barStyle: 'light-content',
         hidden:false
-    }
+    };
 
     buttonItemAction(position){
         if(position === 1){
@@ -81,8 +84,9 @@ class LandLordPage extends React.Component {
         const {navigator,route} = this.props;
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
         let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
-        let commentNum=realm.objects('Comments').filtered('to_uid==$0',itemId).length;//查找用户收到的评论数目require('../res/images/logo_dog.png')
+        let commentNum=comments.length;//查找用户收到的评论数目require('../res/images/logo_dog.png')
         console.log('评论条数'+commentNum);
         return (
             <View style={{height: 160,alignItems: 'center', justifyContent: 'center' }}>
@@ -174,21 +178,19 @@ class LandLordPage extends React.Component {
                         </View>
                     </View>
                 </TouchableOpacity>
-                {/*<Image source={require('../res/images/ic_center_line.png')}/>
-                <View style={{height:45,flex:1,justifyContent:'center',alignItems:'center'}}>
-                    <TouchableOpacity onPress={()=>{this.buttonItemAction(5)}} style={styles.share_img}>
-                        <Text style={styles.share_btn_tv}>开始点餐</Text>
-                    </TouchableOpacity>
-                </View>*/}
             </View>
         );
     }
     //渲染底部评论信息模块
     renderBottomComment(){
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
+        console.log('renderBottomComment!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments))
         return (
             <View style={{flex:1}}>
                 {this.renderContent(this.state.dataSource.cloneWithRows(
-                    this.state.commentList === undefined ? [] : this.state.commentList))}
+                    comments === undefined ? [] : comments))}
             </View>
         );
     }
@@ -198,7 +200,19 @@ class LandLordPage extends React.Component {
             <ListView
                 initialListSize={1}
                 dataSource={dataSource}
-                renderRow={this.renderItem}
+                //renderRow={this.renderItem}
+                renderRow={(rowData) =>
+                    <View>
+                    <View style={{flexDirection:'row',margin:10}} >
+                        {/*<Image source={{uri:rowData.portrait}} style={{width:35,height:35}}/>*/}
+                        <View style={{flex:1,marginLeft:8}}>
+                            <Text style={{color:'black',fontSize:15}}>{rowData.from_uid}</Text>
+                            <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
+                        </View>
+                        <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
+                    </View>
+                    {/*{this.renderCommentImage(comment.imges)}*/}
+                </View>}
                 style={{backgroundColor:'white',flex:1}}
                 onEndReachedThreshold={10}
                 enableEmptySections={true}
@@ -216,18 +230,20 @@ class LandLordPage extends React.Component {
         );
     }
     //渲染评论
-    renderItem(comment) {
+    renderItem(comments) {
+        comments=this.state.commentList;
+        console.log('renderItem22'+JSON.stringify(comments));
         return (
             <View>
-                <View style={{flexDirection:'row',margin:10}}>
-                    <Image source={require('../res/images/logo_house.png')} style={{width:35,height:35}}/>
+                <View style={{flexDirection:'row',margin:10}} key={index}>
+                    {/*<Image source={{uri:comments.}} style={{width:35,height:35}}/>*/}
                     <View style={{flex:1,marginLeft:8}}>
-                        <Text style={{color:'black',fontSize:15}}>{comment.nickname}</Text>
-                        <Text style={{color:'#777',fontSize:12,marginTop:5}}>{comment.content}</Text>
+                        <Text style={{color:'black',fontSize:15}}>{comments.from_uid}</Text>
+                        <Text style={{color:'#777',fontSize:12,marginTop:5}}>{comments.content}</Text>
                     </View>
-                    <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{comment.createTime}</Text></View>
+                    <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{comments.createTime}</Text></View>
                 </View>
-                {this.renderCommentImage(comment.imges)}
+                {/*{this.renderCommentImage(comment.imges)}*/}
             </View>
         );
     }
@@ -273,6 +289,7 @@ class LandLordPage extends React.Component {
         );
     }
     render() {
+
         return (
             <View style={{backgroundColor:'#f5f5f5',flex:1}}>
                 <BackHeader navigation={this.props.navigation} title={'房主信息'}/>

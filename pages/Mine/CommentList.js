@@ -6,8 +6,8 @@ import {Text, View} from 'react-native';
 import Comment from './Comment'
 class CommentList extends Component {
     static defaultProps = {
-        comments: []
-    }
+        comments: [],
+    };
     render() {
         /*const comments = [
             {username: 'Jerry', content: 'Hello'},
@@ -27,6 +27,9 @@ class CommentList extends Component {
                 {comments.map((comment, i) => <Comment comment={comment} key={i} />)}
             </View>*/
             <View>
+                {/*{this.props.commentdatas.map((commentdatas, i) =>
+                    <Comment commentdatas={commentdatas} key={i} />)}*/}
+
                 {this.props.comments.map((comment, i) =>
                     <Comment comment={comment} key={i} />)}
             </View>

@@ -18,7 +18,7 @@ const renderContent = (tab, index) => {
     };
     const content = [1, 2, 3, 4, 5, 6, 7, 8].map(i => {
         return (
-            <TouchableOpacity onPress={()=>this.TabContentClick} key={`${index}_${i}`}>
+            <TouchableOpacity onPress={this.TabContentClick} key={`${index}_${i}`}>
             <View key={`${index}_${i}`} style={style}>
                 <Text>
                     {tab.title} - {i}

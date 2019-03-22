@@ -13,8 +13,10 @@ class CommentInput extends Component {
         super(props);
         this.state={
             from_uid:'',
+            from_portrait:'',
             username: '',
-            content: ''
+            content: '',
+            commentTime:''
         };
         this.handleSubmit=this.handleSubmit.bind(this);
     }
@@ -24,7 +26,7 @@ class CommentInput extends Component {
         return (
             <View style={styles.comment_input}>
                 <View style={styles.comment_field}>
-                    <Text style={styles.comment_field_name}>用  户  名 ：{userdata.nickName}</Text>
+                    <Text style={styles.comment_field_name}>用  户  名：{userdata.nickName}</Text>
                 </View>
                 <View style={styles.comment_field}>
                     <Text style={styles.comment_field_name}>评论内容：</Text>
@@ -42,6 +44,8 @@ class CommentInput extends Component {
                         onPress={()=>{
                             this.state.username=userdata.nickName;
                             this.state.from_uid=userdata.id;
+                            this.state.from_portrait=userdata.portrait;
+                            this.state.commentTime=new Date().toLocaleTimeString();
                             this.handleSubmit();
                         }}
                         title={'发布'}
@@ -53,8 +57,8 @@ class CommentInput extends Component {
 
     handleSubmit () {
         if (this.props.onSubmit) {
-            const { username, content ,from_uid} = this.state;
-            this.props.onSubmit({username, content ,from_uid})
+            const { username, content ,from_uid,from_portrait,commentTime} = this.state;
+            this.props.onSubmit({username, content ,from_uid,from_portrait,commentTime})
         }
         this.setState({ content: '' })
     }
