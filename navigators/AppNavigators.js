@@ -18,6 +18,7 @@ import MapLocation from '../util/MapLocation';
 
 import PersonalProfile from '../pages/Mine/PersonalProfile';
 import CommentManager from '../pages/Mine/CommentManager';
+import CommentDisplay from '../pages/Mine/CommentDisplay';
 import CommentApp from '../pages/Mine/CommentApp';
 import RealConfirm from '../pages/Mine/RealConfirm';
 
@@ -90,6 +91,12 @@ const AppStackNavigator = createStackNavigator({
     },*/
     CommentManager:{
        screen:CommentManager,
+        navigationOptions:{
+            header:null
+        }
+    },
+    CommentDisplay:{
+        screen:CommentDisplay,
         navigationOptions:{
             header:null
         }

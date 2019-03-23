@@ -37,11 +37,12 @@ class LandLordPage extends React.Component {
     constructor(props) {
         super(props);
         this.buttonItemAction=this.buttonItemAction.bind(this);
-        this.renderItem = this.renderItem.bind(this);
+        //this.renderItem = this.renderItem.bind(this);
         this.renderHeaderContent = this.renderHeaderContent.bind(this);
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
-        let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
+        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];//用发布人ID关联User表查询该用户的相关信息
+        let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);//查询该用户的收到的所有评论
         this.state={
             dataSource: new ListView.DataSource({
                 rowHasChanged: (row1, row2) => row1 !== row2,
@@ -85,7 +86,7 @@ class LandLordPage extends React.Component {
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
-        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
+        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];//用发布人ID关联User表查询该用户的相关信息
         let commentNum=comments.length;//查找用户收到的评论数目require('../res/images/logo_dog.png')
         console.log('评论条数'+commentNum);
         return (
@@ -186,7 +187,7 @@ class LandLordPage extends React.Component {
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
-        console.log('renderBottomComment!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments))
+        console.log('renderBottomComment!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
         return (
             <View style={{flex:1}}>
                 {this.renderContent(this.state.dataSource.cloneWithRows(
@@ -204,9 +205,9 @@ class LandLordPage extends React.Component {
                 renderRow={(rowData) =>
                     <View>
                     <View style={{flexDirection:'row',margin:10}} >
-                        {/*<Image source={{uri:rowData.portrait}} style={{width:35,height:35}}/>*/}
+                        <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
                         <View style={{flex:1,marginLeft:8}}>
-                            <Text style={{color:'black',fontSize:15}}>{rowData.from_uid}</Text>
+                            <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
                             <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
                         </View>
                         <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
@@ -230,25 +231,25 @@ class LandLordPage extends React.Component {
         );
     }
     //渲染评论
-    renderItem(comments) {
+/*    renderItem(comments) {
         comments=this.state.commentList;
         console.log('renderItem22'+JSON.stringify(comments));
         return (
             <View>
                 <View style={{flexDirection:'row',margin:10}} key={index}>
-                    {/*<Image source={{uri:comments.}} style={{width:35,height:35}}/>*/}
+                    {/!*<Image source={{uri:comments.}} style={{width:35,height:35}}/>*!/}
                     <View style={{flex:1,marginLeft:8}}>
                         <Text style={{color:'black',fontSize:15}}>{comments.from_uid}</Text>
                         <Text style={{color:'#777',fontSize:12,marginTop:5}}>{comments.content}</Text>
                     </View>
                     <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{comments.createTime}</Text></View>
                 </View>
-                {/*{this.renderCommentImage(comment.imges)}*/}
+                {/!*{this.renderCommentImage(comment.imges)}*!/}
             </View>
         );
-    }
+    }*/
     //渲染图片布局
-    renderCommentImage(imges){
+/*    renderCommentImage(imges){
         return (
             <View style={{marginLeft:50,marginBottom:5}}>
                 <GridView
@@ -263,9 +264,12 @@ class LandLordPage extends React.Component {
         return (
             <Image  key={rowData.imgUrl} source={{uri:rowData.imgUrl}} style={{width:70,height:70,margin:5}}/>
         );
-    }
+    }*/
     //渲染ListView的Header布局
     renderHeaderContent(){
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];//用发布人ID关联User表查询该用户的相关信息
         return (
             <View>
                 {this.renderStoreBasic()}
@@ -275,8 +279,10 @@ class LandLordPage extends React.Component {
                     <View style={{flex:1,alignItems:'flex-end'}}>
                         <TouchableOpacity onPress={()=>{this.buttonItemAction(6)}}>
                             <View style={{flexDirection:'row',height:32,alignItems:'center'}}>
-                                <Text style={{fontSize:12}}onPress={()=>{
-                                    this.props.navigation.navigate('CommentManager');
+                                <Text style={{fontSize:12}} onPress={()=>{
+                                    this.props.navigation.navigate('CommentDisplay',{
+                                        itemId: user_publisher.id
+                                    });
                                     /*alert('test success');*/
                                 }}>查看所有评论</Text>
                                 <Image source={require('../res/images/ic_center_right_arrow.png')}
@@ -313,6 +319,10 @@ let styles = StyleSheet.create({
     separator: {
         height: 1,
         backgroundColor: '#eee'
-    }
+    },
+    comment_username:{
+        color:'#00a3cf',
+        fontStyle:'italic'
+    },
 });
 export default LandLordPage;

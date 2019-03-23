@@ -1,36 +1,11 @@
+
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View, ListView, Image, StyleSheet} from 'react-native';
 import { Tabs,Modal, } from '@ant-design/react-native';
 import BackHeader from '../../component/BackHeader';
 import realm from '../../util/realm';
-/*const renderContent = (tab, index) => {
-    const style = {
-        paddingVertical: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 10,
-        backgroundColor: '#ddd',
-    };
-/!*    this.TabContentClick = () => {
-        Modal.operation([
-            { text: '标为已读', onPress: () => console.log('标为已读被点击了') },
-            { text: '删除聊天', onPress: () => console.log('删除聊天被点击了') },
-        ]);
-    };*!/
-    const content = [1, 2, 3, 4, 5, 6, 7, 8].map(i => {
-        return (
-            <TouchableOpacity onPress={()=>this.TabContentClick} key={`${index}_${i}`}>
-                <View key={`${index}_${i}`} style={style}>
-                    <Text>
-                        {tab.title} - {i}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        );
-    });
-    return <ScrollView style={{ backgroundColor: '#fff' }}>{content}</ScrollView>;
-};*/
-export default class CommentManager extends React.Component {
+
+export default class CommentDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -103,13 +78,13 @@ export default class CommentManager extends React.Component {
 
     render() {
         const tabs = [
-            { title: '我发出的' },
-            { title: '我收到的' },
+            { title: '发出的评论' },
+            { title: '收到的评论' },
         ];
         return (
 
             <View style={{ flex: 1 }}>
-                <BackHeader navigation={this.props.navigation} title={'评论管理'}/>
+                <BackHeader navigation={this.props.navigation} title={'评论查看'}/>
                 <View style={{ flex: 2 }}>
                     <Tabs tabs={tabs} initialPage={1} tabBarPosition="top">
                         <ScrollView>{this.renderExistCommentTo()}</ScrollView>

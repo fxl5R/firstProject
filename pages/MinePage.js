@@ -17,6 +17,8 @@ import {Modal, WhiteSpace, WingBlank,Button} from "@ant-design/react-native";
 import platform from "../util/platform";
 import {AlertDialog} from "react-native-pickers";
 
+let userdatas=realm.objects('User').filtered("online == $0", 1);
+let userdata=userdatas[0];
 export default class MinePage extends Component {
 
     constructor(props) {
@@ -144,8 +146,9 @@ export default class MinePage extends Component {
      */
     myComments = () => {
         console.log('点击了评论管理');
-        this.props.navigation.navigate('CommentManager');
-    }
+        this.props.navigation.navigate('CommentManager',{
+            itemId: userdata.id});
+    };
 
     /**
      * 跳转至 我的收藏

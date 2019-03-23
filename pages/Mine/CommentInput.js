@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderWidth: 1,
         borderColor:'#f1f1f1',
-        padding:30,
+        padding:20,
         marginBottom: 10,
     },
     comment_field:{

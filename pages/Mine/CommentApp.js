@@ -17,11 +17,11 @@ class CommentApp extends Component {
         let commentdatas=realm.objects('Comments').filtered('to_uid==$0',itemId);*/
         this.state = {
             comments: [],
-            //commentdatas:[commentdatas],
             dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
             content:'',
             from_uid:'',
             from_portrait:'',
+            from_nickName:'',
             to_uid:'',
             commentTime:''
         }
@@ -39,9 +39,9 @@ class CommentApp extends Component {
                 renderRow={(rowData) =>
                     <View>
                         <View style={{flexDirection:'row',margin:10}} >
-                            {/*<Image source={{uri:rowData.portrait}} style={{width:35,height:35}}/>*/}
+                            <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
                             <View style={{flex:1,marginLeft:8}}>
-                                <Text style={styles.comment_username}>{rowData.from_uid}</Text>
+                                <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
                                 <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
                             </View>
                             <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
@@ -69,22 +69,22 @@ class CommentApp extends Component {
         );
     }
     render() {
-        const { navigation } = this.props;
-        const to_uid = navigation.getParam('itemId', 'NO-ID');//从屋主详情获取发布房屋的用户的ID/用作评论目标人的ID
-        let commentdatas=realm.objects('Comments').filtered("from_uid == $0", to_uid);
+
         return (
             <View style={{ flex: 1 }}>
                 <CommentHeader navigation={this.props.navigation}/>
+                <View>
                 <ScrollView style={{flex:1}}>
                     <View>
                         {this.renderExistComment()}
                     </View>
-                    <CommentList comments={this.state.comments}/>
+                    {/*<CommentList comments={this.state.comments}/>*/}
                 </ScrollView>
                 <View style={styles.container}>
                     <CommentInput
                         {...this.props}
                         onSubmit={this.handleSubmitComment.bind(this)} />
+                </View>
                 </View>
 
             </View>
@@ -116,6 +116,8 @@ class CommentApp extends Component {
                 id:realm.objects('Comments').length,
                 content: comment.content,
                 from_uid:comment.from_uid,
+                from_portrait:comment.from_portrait,
+                from_nickName:comment.username,
                 to_uid:  to_uid,
                 commentTime:comment.commentTime
             });
