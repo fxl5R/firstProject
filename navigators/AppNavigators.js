@@ -2,11 +2,14 @@
 import {createAppContainer,createStackNavigator} from 'react-navigation';
 
 import login from '../pages/login';
+import ValidRegister from '../pages/ValidRegister';
+
 import register from '../pages/register';
 import HomePage from '../pages/HomePage';
 import TabPage from '../pages/TabPage';
 import guidePage from '../pages/GuidePage';
 import AddHousePage from '../pages/AddHousePage';
+import EditHouse from '../pages/EditHouse';
 import PublishResult from '../pages/PublishResult';
 import LandLordPage from '../pages/LandLordPage';
 
@@ -14,10 +17,11 @@ import HouseDetail from '../component/HouseDetail';
 import HouseCell from '../component/HouseCell';
 import navigatorExpo from '../navigators/navigatorExpo';
 import MapLocation from '../util/MapLocation';
-
+import ActionSheetExample from '../util/ActionSheetExample';
 
 import PersonalProfile from '../pages/Mine/PersonalProfile';
 import CommentManager from '../pages/Mine/CommentManager';
+import HouseManager from "../pages/Mine/HouseManager";
 import CommentDisplay from '../pages/Mine/CommentDisplay';
 import CommentApp from '../pages/Mine/CommentApp';
 import RealConfirm from '../pages/Mine/RealConfirm';
@@ -25,12 +29,10 @@ import RealConfirm from '../pages/Mine/RealConfirm';
 import MDropDown from '../component/ActionMenu/MDropDown';
 import ImageBrowers from '../component/ImageBrowers';
 
+
 const AppStackNavigator = createStackNavigator({
 
-    Login:{
-        screen:login,
-        navigationOptions:{header: null}
-    },
+
 
     TabPage:{
         screen:TabPage,
@@ -39,7 +41,24 @@ const AppStackNavigator = createStackNavigator({
         }
     },
 
-    register:{
+    ActionSheetExample:{
+        screen:ActionSheetExample,
+        navigationOptions:{
+            header:null
+        }
+    },
+
+    Login:{
+        screen:login,
+        navigationOptions:{header: null}
+    },
+
+    ValidRegister:{
+        screen:ValidRegister,
+        navigationOptions:{header: null}
+    },
+
+   register:{
         screen:register,
         navigationOptions:{header:null}
     },
@@ -95,6 +114,12 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+    HouseManager:{
+        screen:HouseManager,
+        navigationOptions:{
+            header:null
+        }
+    },
     CommentDisplay:{
         screen:CommentDisplay,
         navigationOptions:{
@@ -125,6 +150,13 @@ const AppStackNavigator = createStackNavigator({
 
     AddHousePage: {
         screen: AddHousePage,
+        navigationOptions:{
+            header:null
+        }
+    },
+
+    EditHouse:{
+        screen:EditHouse,
         navigationOptions:{
             header:null
         }

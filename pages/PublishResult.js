@@ -5,22 +5,20 @@
 import React, { Component } from 'react';
 import {
     Image,
-    ImageBackground,
     View,
     Text,
     StyleSheet,
     TouchableOpacity,
     Dimensions,
-    ListView,
-    ScrollView,
 } from 'react-native';
 import { NaviGoBack } from '../util/CommonUtils';
 import BackHeader from '../component/BackHeader';
+import realm from '../util/realm';
 
 let {height, width} = Dimensions.get('window');
 console.log('pingmugao:'+height+'pingmukuan:'+width);
 
-
+let user_publisher=realm.objects('User').filtered("online == $0", 1)[0];
 class PublishResult extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +32,9 @@ class PublishResult extends Component {
     }
     itemButtonAction(position){
         if(position === 0){
-
+            this.props.navigation.navigate('HouseManager',{
+                itemId:user_publisher.id
+            });
         }else if(position === 1){
 
         }
@@ -53,7 +53,7 @@ class PublishResult extends Component {
                     <View style={{marginTop:22,marginLeft:13,marginRight:13}}>
                         <View style={styles.ButtonContainer}>
                         <Text style={{marginTop:10,fontSize:13.5,color:'#999'}}>为保护双方权益，实名认证后，房源可在平台展示</Text>
-                        <TouchableOpacity onPress={this.itemButtonAction(0)} activeOpacity={0.7} style={styles.button0} >
+                        <TouchableOpacity onPress={()=>{this.itemButtonAction(0)}} activeOpacity={0.7} style={styles.button0} >
                             <Text style={styles.TextStyle}> 管理房屋 </Text>
                         </TouchableOpacity>
 

@@ -4,32 +4,14 @@ import {
     StyleSheet,
     Image,
     View,
-    TouchableHighlight,
     Text,
     ListView,
     TouchableOpacity,
     Platform,
-    Button,
-    Alert,
-    RefreshControl
+    RefreshControl, ScrollView
 } from 'react-native';
 import HouseDetail from "./HouseDetail";
 import realm from '../util/realm.js';
-
-/*function contentQuery(searchStrings) {
-    const contents = realm.objects('House_Info');
-    if(searchStrings===null){
-            isHouseData:mydata.filtered("certification == $0", null)
-                .sorted("publish_time", true)}else{
-                isHouseData:this.contentQuery(searchStrings)
-            }
-    const resultContents = contents.filtered(`text CONTAINS "${searchStrings}"`);
-    const result = [];
-    resultContents.forEach((element) => {
-        result.push(element.linkingObjects('Person', 'cats')[0]); //1
-    });
-    return resultMessages;
-}*/
 
 let mydata=realm.objects('House_Info').filtered("certification == $0", null)
     .sorted("publish_time", true);
@@ -40,7 +22,7 @@ export default class HouseCell extends Component {
     constructor(props) {
         super(props);
 
-        console.log('testSearch!!!11111'+mydata);
+        console.log('testSearch!111'+mydata);
         this.state = {
             dataSource: ds.cloneWithRows(mydata),
             isRefreshing: false,
@@ -55,7 +37,7 @@ export default class HouseCell extends Component {
 
 
   /**  将父组件传来的props转为子(本)组件的state
-  *    进行关键字查询
+  *    进行查询筛选，更新dataSource
   **/
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
@@ -79,7 +61,6 @@ export default class HouseCell extends Component {
             this.setState(
                 {dataSource:this.state.dataSource}
             )
-
         }
     }
 
@@ -116,6 +97,7 @@ export default class HouseCell extends Component {
         //if(this.props.typee){Alert.alert(this.props.typee)}else{Alert.alert('without typee value')};<Text>{this.props.typee}</Text>
         return (
             <View style = {styles.MainContainer }>
+                <ScrollView style={{flex:1}}>
             <ListView
                 refreshControl={
                     <RefreshControl
@@ -160,6 +142,8 @@ export default class HouseCell extends Component {
                 </View>
                 }
             />
+
+                </ScrollView>
             </View>
 
         );
@@ -206,7 +190,8 @@ const styles = StyleSheet.create({
         paddingRight: 5,
         borderWidth: 0.5,
         borderRadius: 10,
-        borderColor: '#E8E8E8'
+        borderColor: '#B0C4DE',
+        //backgroundColor:'#B0C4DE'
     },
 });
 

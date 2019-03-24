@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import {Text, View, Alert} from 'react-native';
+import { View, Alert} from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 
 
@@ -45,7 +45,7 @@ export default class MDropDown extends Component {
         }, {
             value: '二室',
         }, {
-            value: '三室或以上',
+            value: '三室',
         }, {
             value: '不限',
         }];

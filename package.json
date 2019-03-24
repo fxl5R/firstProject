@@ -10,12 +10,14 @@
     "@ant-design/react-native": "^3.1.3",
     "babel-preset-react-native": "^4.0.1",
     "mockjs": "^1.0.1-beta3",
+    "moment": "^2.24.0",
     "prop-types": "^15.6.2",
     "qs": "^6.6.0",
     "react": "^16.6.3",
     "react-native": "^0.58.5",
     "react-native-dimension": "^1.0.6",
     "react-native-gesture-handler": "^1.0.15",
+    "react-native-gifted-form": "^0.1.1",
     "react-native-image-crop-picker": "^0.23.0",
     "react-native-image-gallery": "^2.1.5",
     "react-native-image-picker": "^0.28.0",
@@ -36,6 +38,7 @@
     "react-navigation-stack": "^1.0.10",
     "realm": "^2.24.0",
     "rn-expandable-text": "^1.0.4",
+    "teaset": "^0.6.3",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

@@ -3,17 +3,14 @@ import {
     View,
     StyleSheet,
     ScrollView,
-    Platform,
-    TouchableOpacity,
-    Image,
-    Text, ToastAndroid, DeviceEventEmitter
+    Text, ToastAndroid,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import FormArrowToDetail from '../component/Form/FormArrowToDetail';
 import FormWithPicture from '../component/Form/FormWithPicture';
 import FormWithPairText from '../component/Form/FormWithPairText';
 import realm from '../util/realm.js';
-import {Modal, WhiteSpace, WingBlank,Button} from "@ant-design/react-native";
+import { WhiteSpace, WingBlank,Button} from "@ant-design/react-native";
 import platform from "../util/platform";
 import {AlertDialog} from "react-native-pickers";
 
@@ -58,7 +55,7 @@ export default class MinePage extends Component {
                     <View style={styles.partContainer}>
                         <FormArrowToDetail
                             leftText={'房屋管理'}
-                            onFormClick={() => this.mySupportTeam()}
+                            onFormClick={() => this.myPublishHouse()}
                             cutOffLine={false}
                         />
                     </View>
@@ -135,10 +132,11 @@ export default class MinePage extends Component {
     };
 
     /**
-     * 跳转至 我的收藏
+     * 跳转至 房屋管理
      */
-    mySupportTeam = () => {
-        this.props.navigation.navigate('MineStarTeam');
+    myPublishHouse = () => {
+        this.props.navigation.navigate('HouseManager',{
+            itemId: userdata.id});
     };
 
     /**
@@ -156,7 +154,7 @@ export default class MinePage extends Component {
     evaluateApp = () => {
         console.log('点击了我的收藏页面');
         this.props.navigation.navigate('EvaluateApp');
-    }
+    };
 
     /**
      * 跳转至 安全中心
@@ -164,7 +162,7 @@ export default class MinePage extends Component {
     aboutTheApp = () => {
         console.log('点击了安全中心');
         this.props.navigation.navigate('AboutApp');
-    }
+    };
 
     /**
      * 跳转至 登录页面

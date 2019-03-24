@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -169,7 +169,7 @@ class PersonalProfile extends React.Component<Props> {
   onNickNameClick = () => {
     console.log('点击了昵称');
     this.props.navigation.navigate('ChangeNickName')
-  }
+  };
 
 
   /**

@@ -10,13 +10,12 @@ import {
     TouchableOpacity,
     Alert,
     YellowBox,
-    ListView,
     ScrollView,
     Dimensions
 } from 'react-native';
-import {Tag, TextareaItem, WhiteSpace} from '@ant-design/react-native';
+import { TextareaItem} from '@ant-design/react-native';
 
-import { createStackNavigator } from 'react-navigation';
+//import { createStackNavigator } from 'react-navigation';
 import BackHeader from "../component/BackHeader";
 
 import DoorPicker from '../component/DoorPicker';
@@ -32,9 +31,9 @@ import ImagePicker from "react-native-image-crop-picker";
 const {height, width} = Dimensions.get('window');
 
 //标签被选中时回调
-function onChange(selected) {
+/*function onChange(selected) {
     console.log(`tag selected: ${selected}`);
-}
+}*/
 
 
 export default class AddHousePage extends Component {
@@ -246,6 +245,7 @@ export default class AddHousePage extends Component {
                             onChangeText={(text) => {
                                 this.setState({Rent_Limit: text})
                             }}/>
+                            <Text style={{fontSize: 16,color:'#B0C4DE'}}>上传房屋图片</Text>
                         <View style={{flexDirection:'row',justifyContent: 'center',alignItems:'center',marginLeft:45}}>
                             <View style={{flexDirection:'column',flex:1}} >
                             <TouchableOpacity onPress={() => { this.onHP1Click() }}
@@ -301,13 +301,13 @@ export default class AddHousePage extends Component {
                             selectable={files.length < 7}
                             accept="image/gif,image/jpeg,image/jpg,image/png"
                         />*/}
-                        <View style={{flexDirection: 'row'}}>
+                        {/*<View style={{flexDirection: 'row'}}>
                             <WhiteSpace/>
                             <Tag onChange={onChange} afterClose={() => {
                                 console.log('afterClose');
                             }}>设施齐全</Tag>
                             <WhiteSpace/>
-                        </View>
+                        </View>*/}
                         <TextInput
                             placeholder="配套设施"
                             style={styles.TextInputStyle}

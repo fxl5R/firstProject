@@ -15,12 +15,21 @@ import {
 import BackHeader from "./BackHeader";
 import realm from "../util/realm";
 import ExpandableText from 'rn-expandable-text';
-//import MyCarousel from "./MyCarousel";
-
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {Menu} from 'teaset';
+import {toastShort} from "../util/ToastUtil";
 const winWidth=Dimensions.get('window').width;
 const winHeight=Dimensions.get('window').height;
 
 export default class HouseDetail extends Component<Props> {
+
+    constructor(props){
+        super(props);
+        this.state={
+
+        }
+    }
+
     GoToGallery(house_id) {
         this.props.navigation.navigate('ImageBrowers',{
             itemId: house_id});
@@ -178,8 +187,7 @@ export default class HouseDetail extends Component<Props> {
                         expandView={()=>(<View style={styles.arrow}/>)}
                     >
                         {house.house_description}
-                        ceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshi
-                        ceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshi
+                        ceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshices
                     </ExpandableText>
                 </View>
                 {/*<View style={{height:Platform.OS === 'ios' ? 0:45}}/>*/}
@@ -188,17 +196,73 @@ export default class HouseDetail extends Component<Props> {
             );
     }
 
-    //配套设施
+    //标题栏
+    renderHeader(){
+        const { navigation } = this.props;
+        const isEdit = navigation.getParam('isEdit', 'NO-Edit');
+        if(isEdit===1){
+            return(
+                <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
+                    <TouchableOpacity onPress={() => {this.props.navigation.goBack();}}
+                                      style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
+                        <Image
+                            style={{width:13,height:20}}
+                            source={require('../res/images/ic_center_back.png')}
+                        />
+                    </TouchableOpacity>
+                    <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+                        <Text style={{fontSize:18,color:'white',alignSelf:'center'}}>管理房屋</Text>
+                    </View>
+                    {/*<View style={{height:48,width:48}}/>*/}
+                    <TouchableOpacity ref='edit' onPress={() => this.show(this.refs['edit'],'end')}
+                                      style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
+                        <Icon name="edit" size={20} color="#E6E6FA" light/>
+                    </TouchableOpacity>
+                </View>
+            )
+        }else {
+            return(
+                <BackHeader navigation={this.props.navigation} title={'房屋详情'}/>
+            )
+        }
+    }
+    show(view,align) {
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        view.measure((x, y, width, height, pageX, pageY) => {
+            let items = [
+                /*{title: '查看', icon: require('../res/images/ic_search.png'), onPress: () => alert('Search')},*/
+                {title: '修改', icon: require('../res/images/ic_edit.png'), onPress: () => {
+                    this.props.navigation.navigate('EditHouse',{
+                    itemId:itemId});}},
+                {title: '删除', icon: require('../res/images/ic_del.png'), onPress: () =>{this.delete_House()}},
+            ];
+            Menu.show({x: pageX, y: pageY, width, height}, items,{align});
+        });
+    }
+
+    delete_House ()  {
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        realm.write(() => {
+
+            let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
+            realm.delete(thehouse);
+            toastShort('删除成功');
+
+        });
+    }
 
     render() {
-        const { navigation } = this.props;
+/*        const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');
         console.log('itemId'+itemId);
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
-        let house=houses[0];
+        let house=houses[0];*/
         return (
             <View>
-                <BackHeader navigation={this.props.navigation} title={'房屋详情'}/>
+                {/*<BackHeader navigation={this.props.navigation} title={'房屋详情'}/>*/}
+                {this.renderHeader()}
                 <ScrollView>
                 {this.renderHousePic()}
                 {this.renderBaseInfo()}

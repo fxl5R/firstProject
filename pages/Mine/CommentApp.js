@@ -5,6 +5,7 @@ import CommentList from './CommentList'
 import {Dimensions, ListView, ScrollView, StyleSheet, Text, View,Image} from 'react-native';
 import {CommentHeader} from "../../component/BackHeader";
 import realm from "../../util/realm";
+import {toastShort} from "../../util/ToastUtil";
 
 let {height, width} = Dimensions.get('window');
 
@@ -60,7 +61,7 @@ class CommentApp extends Component {
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
-        console.log('renderBottomComment!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments))
+        console.log('renderBottomComment!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
         return (
             <View style={{flex:1}}>
                 {this.renderContent(this.state.dataSource.cloneWithRows(
@@ -78,7 +79,7 @@ class CommentApp extends Component {
                     <View>
                         {this.renderExistComment()}
                     </View>
-                    {/*<CommentList comments={this.state.comments}/>*/}
+                    <CommentList comments={this.state.comments}/>
                 </ScrollView>
                 <View style={styles.container}>
                     <CommentInput
@@ -109,7 +110,8 @@ class CommentApp extends Component {
         console.log(comment);
         console.log('评论内容：'+comment.content+'评论来自：'+comment.from_uid+'评论对象：'+to_uid+
             '评论时间：'+comment.commentTime+'评论者头像：'+comment.from_portrait);
-        alert('111from_uid is '+comment.from_uid);
+        toastShort('评论发表成功');
+        //alert('111from_uid is '+comment.from_uid);
         //写评论入数据库
         realm.write(()=> {
             realm.create('Comments', {

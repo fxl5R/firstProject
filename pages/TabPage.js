@@ -12,10 +12,9 @@ import {
     View,
     Text,
     Image,
-    FlatList,
     TouchableHighlight,
     ScrollView,
-    Alert, Platform
+    Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 //import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -24,12 +23,11 @@ import HouseCell from '../component/HouseCell';
 import MinePage from './MinePage';
 import {NormalHeader} from "../component/BackHeader";
 
-import {MsgCard, SearchBarA} from '../component/antComponent';
+import {MsgCard } from '../component/antComponent';
 import MDropDown from '../component/ActionMenu/MDropDown';
 import {SearchBar} from "@ant-design/react-native";
-import MyCarousel from "../component/MyCarousel";
+//import MyCarousel from "../component/MyCarousel";
 import { requestWithToken } from '../util/request';
-import Button from "../component/Button";
 
 
 export default class TabPage extends Component<Props> {
@@ -47,7 +45,7 @@ export default class TabPage extends Component<Props> {
             door:'',
             decorate:'',
             sort:''
-        },
+        };
         this.onChange = value1 => { this.setState({ value1 });};
         this.clear = () => { this.setState({ value1: '' }); };
         this._renderHeader = this._renderHeader.bind(this);
@@ -114,12 +112,12 @@ export default class TabPage extends Component<Props> {
                             />
                             {this._renderHeader()}
                             <MDropDown setValue1={this.setValue1} setValue2={this.setValue2} setValue3={this.setValue3} setValue4={this.setValue4}/>
-                            <ScrollView>
+                            <ScrollView >
                             <HouseCell
                                 navigation={this.props.navigation}
                                 value1={this.state.value1}
                                 typee={this.state.typee} door={this.state.door} decorate={this.state.decorate} sort={this.state.sort} />
-                                <View style={{height:Platform.OS === 'ios' ? 0:50,}}/>
+                                <View style={{height:Platform.OS === 'ios' ? 0:200}}/>
                             </ScrollView>
                         </View>
                     </TabNavigator.Item>
@@ -131,18 +129,7 @@ export default class TabPage extends Component<Props> {
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hstar.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_star' })}>
                         <View styles={styles.page2}>
-                            <MsgCard
-                                msgtitle={'用户123'}
-                                msgbrief={'消息梗概消息梗概'}
-                                imgUri={'http://sowcar.com/t6/681/1552475145x986907160.png'}
-                                extra={'一条消息'}
-                                footerextracontent={'2019-2-22 16:40:34'}/>
-                            <MsgCard
-                                msgtitle={'用户123'}
-                                msgbrief={'消息梗概消息梗概'}
-                                imgUri={'http://sowcar.com/t6/681/1552475175x2890174339.png'}
-                                extra={'一条消息'}
-                                footerextracontent={'2019-2-22 16:40:34'}/>
+
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
@@ -155,14 +142,26 @@ export default class TabPage extends Component<Props> {
                         onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
                         <View styles={styles.page3}>
                             <NormalHeader navigation={this.props.navigation} title={'消息栏'}/>
-                            <View style={styles.container}>
+{/*                            <View style={styles.container}> key token
                                 <Text style={styles.text}>
                                     {errorMsg ? errorMsg : username + ', Welcome home!'}
                                 </Text>
                                 <Button
                                     onPress={this.getProfile}
                                 >刷新</Button>
-                            </View>
+                            </View>*/}
+                            <MsgCard
+                                msgtitle={'用户123'}
+                                msgbrief={'消息梗概消息梗概'}
+                                imgUri={'http://sowcar.com/t6/681/1552475145x986907160.png'}
+                                extra={'一条消息'}
+                                footerextracontent={'2019-2-22 16:40:34'}/>
+                            <MsgCard
+                                msgtitle={'用户123'}
+                                msgbrief={'消息梗概消息梗概'}
+                                imgUri={'http://sowcar.com/t6/681/1552475175x2890174339.png'}
+                                extra={'一条消息'}
+                                footerextracontent={'2019-2-22 16:40:34'}/>
                         </View>
                     </TabNavigator.Item>
                     <TabNavigator.Item
