@@ -241,7 +241,7 @@ export default class HouseDetail extends Component<Props> {
         });
     }
 
-    delete_House ()  {
+    delete_House(){
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');
         realm.write(() => {
