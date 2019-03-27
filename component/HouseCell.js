@@ -47,10 +47,28 @@ export default class HouseCell extends Component {
             typee: nextProps.typee > this.props.typee,
             door: nextProps.door > this.props.door,
             decorate: nextProps.decorate > this.props.decorate,
-            dataSource:ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
+            sort:nextProps.sort > this.props.sort,
+            dataSource:this.props.sort==='面积由大到小'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
                 .filtered("lease_type CONTAINS[c] $0",this.props.typee)
                 .filtered("door_model CONTAINS[c] $0",this.props.door)
-                .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
+                .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", true)):
+                this.props.sort==='面积由小到大'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
+                    .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                    .filtered("door_model CONTAINS[c] $0",this.props.door)
+                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", false)):
+                this.props.sort==='租金由高到低'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
+                    .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                    .filtered("door_model CONTAINS[c] $0",this.props.door)
+                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("rent_fee", true)):
+                this.props.sort==='租金由低到高'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
+                    .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                    .filtered("door_model CONTAINS[c] $0",this.props.door)
+                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("rent_fee", false)):
+                    ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
+                        .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                        .filtered("door_model CONTAINS[c] $0",this.props.door)
+                        .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
+
         });
 
         console.log('testSearch!!!2222'+this.state.dataSource);

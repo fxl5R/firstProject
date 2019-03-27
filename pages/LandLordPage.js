@@ -30,6 +30,9 @@ import GridView from '../component/GridView';
 import BackHeader from '../component/BackHeader';
 import realm from "../util/realm";
 
+import * as WeiboAPI from 'rn-weibo';
+
+
 let {height, width} = Dimensions.get('window');
 
 class LandLordPage extends React.Component {
@@ -63,6 +66,24 @@ class LandLordPage extends React.Component {
         }else if(position === 2){
             //分享
             toastShort('点击分享...');
+            let data={
+                type: 'text',
+                text: '文字内容',
+            };
+            WeiboAPI.share(data).then(res=>{
+                console.log('share success:',res)
+                //登陆成功后打印出的数据如下：
+                // {
+                //     refreshToken: '2.00Gc2PbDcecpWC127d0bc690FE7TzD',
+                //     type: 'WBAuthorizeResponse',
+                //     expirationDate: 1686362993740.243,
+                //     userID: '3298780934',
+                //     errCode: 0,
+                //     accessToken: '2.00Gc2PbDcecpWCa981899f410o5hEX'
+                // }
+            }).catch(err=>{
+                console.log('share fail:',err)
+            });
         }else if(position === 3){
             //地点
             toastShort('点击地点...');

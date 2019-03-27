@@ -18,6 +18,7 @@ import HouseCell from '../component/HouseCell';
 import navigatorExpo from '../navigators/navigatorExpo';
 import MapLocation from '../util/MapLocation';
 import ActionSheetExample from '../util/ActionSheetExample';
+import WeiboUtil from '../util/WeiBoUtil';
 
 import PersonalProfile from '../pages/Mine/PersonalProfile';
 import CommentManager from '../pages/Mine/CommentManager';
@@ -33,6 +34,15 @@ import ImageBrowers from '../component/ImageBrowers';
 const AppStackNavigator = createStackNavigator({
 
 
+    Login:{
+        screen:login,
+        navigationOptions:{header: null}
+    },
+
+    WeiboUtil:{
+        screen:WeiboUtil,
+        navigationOptions:{header: null}
+    },
 
     TabPage:{
         screen:TabPage,
@@ -46,11 +56,6 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions:{
             header:null
         }
-    },
-
-    Login:{
-        screen:login,
-        navigationOptions:{header: null}
     },
 
     ValidRegister:{

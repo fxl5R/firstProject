@@ -1,4 +1,6 @@
 rootProject.name = 'firstProject'
+include ':rn-weibo'
+project(':rn-weibo').projectDir = new File(rootProject.projectDir, '../node_modules/rn-weibo/android')
 
 include ':react-native-image-crop-picker'
 project(':react-native-image-crop-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-crop-picker/android')

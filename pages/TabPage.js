@@ -116,7 +116,11 @@ export default class TabPage extends Component<Props> {
                             <HouseCell
                                 navigation={this.props.navigation}
                                 value1={this.state.value1}
-                                typee={this.state.typee} door={this.state.door} decorate={this.state.decorate} sort={this.state.sort} />
+                                typee={this.state.typee==='不限'?'':this.state.typee}
+                                door={this.state.door==='不限'?'':this.state.door}
+                                decorate={this.state.decorate==='不限'?'':this.state.decorate}
+                                sort={this.state.sort} />
+
                                 <View style={{height:Platform.OS === 'ios' ? 0:200}}/>
                             </ScrollView>
                         </View>
@@ -132,7 +136,7 @@ export default class TabPage extends Component<Props> {
 
                         </View>
                     </TabNavigator.Item>
-                    <TabNavigator.Item
+{/*                    <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_msg'}
                         selectedTitleStyle={{color:'#B0C4DE'}}
                         title="消息"
@@ -142,14 +146,14 @@ export default class TabPage extends Component<Props> {
                         onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
                         <View styles={styles.page3}>
                             <NormalHeader navigation={this.props.navigation} title={'消息栏'}/>
-{/*                            <View style={styles.container}> key token
+                            <View style={styles.container}> key token
                                 <Text style={styles.text}>
                                     {errorMsg ? errorMsg : username + ', Welcome home!'}
                                 </Text>
                                 <Button
                                     onPress={this.getProfile}
                                 >刷新</Button>
-                            </View>*/}
+                            </View>
                             <MsgCard
                                 msgtitle={'用户123'}
                                 msgbrief={'消息梗概消息梗概'}
@@ -163,7 +167,7 @@ export default class TabPage extends Component<Props> {
                                 extra={'一条消息'}
                                 footerextracontent={'2019-2-22 16:40:34'}/>
                         </View>
-                    </TabNavigator.Item>
+                    </TabNavigator.Item>*/}
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_profile'}
                         selectedTitleStyle={{color:'#B0C4DE'}}

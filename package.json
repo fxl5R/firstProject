@@ -38,6 +38,7 @@
     "react-navigation-stack": "^1.0.10",
     "realm": "^2.24.0",
     "rn-expandable-text": "^1.0.4",
+    "rn-weibo": "^3.0.5",
     "teaset": "^0.6.3",
     "uuid": "^3.3.2"
   },

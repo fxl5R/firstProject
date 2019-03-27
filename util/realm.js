@@ -46,14 +46,13 @@ User.schema = {
         id: { type:'int', indexed: true },      // 用户ID
         userName: 'string',                     // 用户名称
         userPassword: 'string',                 // 用户密码
-        userSex: 'string',                      // 用户性别
-        portrait:{type:'string',
-            default:'http://pic.616pic.com/ys_b_img/00/04/02/77OEok9x1s.jpg',
-            optional: true},// 头像 {type:'string',default:'../res/images/logo_peo.png'}
+        userSex: {type:'string',optional: true},// 用户性别
+        portrait:{type:'string',optional: true,default:'https://dwz.cn/WchJqy0C'},// 头像 {type:'string',default:'../res/images/logo_peo.png'}
         nickName:'string',                      // 昵称
         online: {type: 'int', optional: true }, //判断用户在线1:在线 0:离线
         userLocation:{type:'string',optional:true},         // 用户所在地
         userTel:{type:'string',optional:true},              // 用户联系电话
+        sinaID:{type:'string',optional:true},               //认证新浪微博后保存新浪账号ID
         isRealPeople:{type:'int',default: 0,optional:true}, // 是否实名认证1：实名0：未实名
         IDCardNO:{type:'string',optional:true},             // 身份证号
         realName:{type:'string',optional:true},             // 真实姓名

@@ -5,7 +5,7 @@ import {Dimensions, StyleSheet, View, Text, Image} from 'react-native';
 class Comment extends Component {
     render () {
         return (
-            <View style={{flex:1}}>
+            <View>
 
                 <View style={{flexDirection:'row',margin:10}}>
                     <Image source={{uri:this.props.comment.from_portrait}} style={{width:35,height:35}}/>
@@ -22,7 +22,7 @@ class Comment extends Component {
 }
 const styles = StyleSheet.create({
     comment: {
-        display: 'flex',
+        //display: 'flex',
         borderBottomWidth: 1,
         borderBottomColor:'#f1f1f1',
         marginBottom: 10,

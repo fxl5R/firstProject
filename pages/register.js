@@ -26,7 +26,7 @@ export default class register extends Component {
     handle_registerClick(){
         realm.write(()=> {
             realm.create('User', {
-                id:realm.objects('User').length,
+                id:realm.objects('User').length+1,
                 userName: [this.state.text].toString(),
                 userPassword: [this.state.password].toString(),
                 userSex: '性别',

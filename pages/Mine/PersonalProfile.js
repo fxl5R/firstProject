@@ -84,6 +84,7 @@ class PersonalProfile extends React.Component<Props> {
                       {/*更新用户头像*/}
                       if(this.state.portrait){
                       realm.create('User',{id:userdata.id,portrait:this.state.portrait},true);}
+                      alert(JSON.stringify(userdata));
                       ToastAndroid.show('用户头像更新为'+userdata.portrait,ToastAndroid.SHORT);
                       {/*更新用户昵称*/}
                       if(this.state.uNickName){

@@ -67,6 +67,7 @@
 		A7480033A3D5426CB7EA89EB /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A77F533819AE4C75B477A687 /* libRNSVG-tvOS.a */; };
 		5F60BE2869334AD1B0A62B01 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BB6E7BB43E64AA1B610BD60 /* libimageCropPicker.a */; };
 		7E5B35143E364849B54C7A3D /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5493E2C99A0F48BAA3AEFCE6 /* libReactNativePermissions.a */; };
+		0B4E1932598A4A1BBD38697E /* libRCTWeiboAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FB4F5D716E24E4D83D29972 /* libRCTWeiboAPI.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -411,6 +412,8 @@
 		9BB6E7BB43E64AA1B610BD60 /* libimageCropPicker.a */ = {isa = PBXFileReference; name = "libimageCropPicker.a"; path = "libimageCropPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		50858DB1A8B849B0B4E6AD7C /* ReactNativePermissions.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativePermissions.xcodeproj"; path = "../node_modules/react-native-permissions/ios/ReactNativePermissions.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		5493E2C99A0F48BAA3AEFCE6 /* libReactNativePermissions.a */ = {isa = PBXFileReference; name = "libReactNativePermissions.a"; path = "libReactNativePermissions.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		9F6C034FEDAC4C81820D78AF /* RCTWeiboAPI.xcodeproj */ = {isa = PBXFileReference; name = "RCTWeiboAPI.xcodeproj"; path = "../node_modules/rn-weibo/ios/RCTWeiboAPI.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		6FB4F5D716E24E4D83D29972 /* libRCTWeiboAPI.a */ = {isa = PBXFileReference; name = "libRCTWeiboAPI.a"; path = "libRCTWeiboAPI.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -449,6 +452,7 @@
 				7459B4C3B5F04DE78825D42B /* libRNSVG.a in Frameworks */,
 				5F60BE2869334AD1B0A62B01 /* libimageCropPicker.a in Frameworks */,
 				7E5B35143E364849B54C7A3D /* libReactNativePermissions.a in Frameworks */,
+				0B4E1932598A4A1BBD38697E /* libRCTWeiboAPI.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -649,6 +653,7 @@
 				586EFD22EEF9407991C04C45 /* RNSVG.xcodeproj */,
 				F4558CDBEE5A403CBA966A83 /* imageCropPicker.xcodeproj */,
 				50858DB1A8B849B0B4E6AD7C /* ReactNativePermissions.xcodeproj */,
+				9F6C034FEDAC4C81820D78AF /* RCTWeiboAPI.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1319,6 +1324,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/firstProject.app/firstProject";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1331,6 +1337,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
+					"$(SRCROOT)\..\node_modules\rn-weibo\ios/**",
 				);
 			};
 			name = Debug;
@@ -1352,6 +1359,7 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/firstProject.app/firstProject";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1364,6 +1372,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
+					"$(SRCROOT)\..\node_modules\rn-weibo\ios/**",
 				);
 			};
 			name = Release;
@@ -1395,6 +1404,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
+					"$(SRCROOT)\..\node_modules\rn-weibo\ios/**",
 				);
 			};
 			name = Debug;
@@ -1425,6 +1435,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
+					"$(SRCROOT)\..\node_modules\rn-weibo\ios/**",
 				);
 			};
 			name = Release;
@@ -1454,6 +1465,7 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1466,6 +1478,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
+					"$(SRCROOT)\..\node_modules\rn-weibo\ios/**",
 				);
 			};
 			name = Debug;
@@ -1495,6 +1508,7 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1507,6 +1521,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
+					"$(SRCROOT)\..\node_modules\rn-weibo\ios/**",
 				);
 			};
 			name = Release;
@@ -1535,6 +1550,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1547,6 +1563,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
+					"$(SRCROOT)\..\node_modules\rn-weibo\ios/**",
 				);
 			};
 			name = Debug;
@@ -1575,6 +1592,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1587,6 +1605,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
+					"$(SRCROOT)\..\node_modules\rn-weibo\ios/**",
 				);
 			};
 			name = Release;

@@ -75,9 +75,9 @@ export default class HouseManager extends Component {
 
                             enableEmptySections = {true}
                             dataSource={ds.cloneWithRows(ismyHouseData)}
-                            renderSeparator={this.ListViewItemSeparator}
+                            /*renderSeparator={this.ListViewItemSeparator}*/
                             renderRow={(rowData) =>
-                                <View style={{flex:1, flexDirection: 'column'}}>
+                                <View style={{flex:1, flexDirection: 'column',borderWidth: 1 ,borderColor:'#f1f1f1',}}>
                                     <TouchableOpacity onPress={
                                         this.GoToHouseDetail.bind(this,rowData.house_id)}>
                                         <View style={{backgroundColor: '#FFF'}}>

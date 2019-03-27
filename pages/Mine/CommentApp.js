@@ -74,18 +74,18 @@ class CommentApp extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <CommentHeader navigation={this.props.navigation}/>
-                <View>
-                <ScrollView style={{flex:1}}>
+                <ScrollView style={{flex:1,height:height}}>
                     <View>
                         {this.renderExistComment()}
                     </View>
+{/*
                     <CommentList comments={this.state.comments}/>
+*/}
                 </ScrollView>
                 <View style={styles.container}>
                     <CommentInput
                         {...this.props}
                         onSubmit={this.handleSubmitComment.bind(this)} />
-                </View>
                 </View>
 
             </View>

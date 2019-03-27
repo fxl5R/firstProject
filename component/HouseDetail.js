@@ -18,6 +18,7 @@ import ExpandableText from 'rn-expandable-text';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Menu} from 'teaset';
 import {toastShort} from "../util/ToastUtil";
+import * as WeiboAPI from "rn-weibo";
 const winWidth=Dimensions.get('window').width;
 const winHeight=Dimensions.get('window').height;
 
@@ -102,6 +103,7 @@ export default class HouseDetail extends Component<Props> {
                     <View style={styles.container}>
                         <Image source={{uri:userPortrait}} style={styles.MidImage}/>
                         <Text style={{fontSize:17}}>{house.house_publisher}</Text>
+                        <Text style={{fontSize:13,color:'#708090'}}>联系电话：{house.owner_tel?house.owner_tel:'暂未填写'}</Text>
                         <Text style={{fontSize:12,color:'#708090'}}>{isRealPeople===1?'已实名认证':''}</Text>
                     </View>
                         {/*<View style={{justifyContent:'flex-end'}}>
@@ -200,6 +202,16 @@ export default class HouseDetail extends Component<Props> {
     renderHeader(){
         const { navigation } = this.props;
         const isEdit = navigation.getParam('isEdit', 'NO-Edit');
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        console.log('itemId'+itemId);
+        let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
+        let house=houses[0];
+        //分享图文信息到新浪
+        let data={
+                type: 'image',
+                text: '发现了一家房屋在出租',
+                imageUrl:'https://b-ssl.duitang.com/uploads/item/201903/12/20190312113640_aPUfG.thumb.700_0.jpeg',
+            };
         if(isEdit===1){
             return(
                 <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
@@ -222,7 +234,29 @@ export default class HouseDetail extends Component<Props> {
             )
         }else {
             return(
-                <BackHeader navigation={this.props.navigation} title={'房屋详情'}/>
+                <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
+                    <TouchableOpacity onPress={() => {this.props.navigation.goBack();}}
+                                      style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
+                        <Image
+                            style={{width:13,height:20}}
+                            source={require('../res/images/ic_center_back.png')}
+                        />
+                    </TouchableOpacity>
+                    <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+                        <Text style={{fontSize:18,color:'white',alignSelf:'center'}}>房屋详情</Text>
+                    </View>
+                    {/*<View style={{height:48,width:48}}/>*/}
+                    <TouchableOpacity ref='edit' onPress={()=>{
+                        WeiboAPI.share(data).then(res=>{
+                            console.log('share success:',res);
+                            toastShort('分享成功');
+                        }).catch(err=>{
+                            console.log('share fail:',err)
+                        });
+                    }} style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
+                        <Icon name="external-link-alt" size={20} color="#E6E6FA" light/>
+                    </TouchableOpacity>
+                </View>
             )
         }
     }

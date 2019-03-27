@@ -3,6 +3,7 @@ package com.firstProject;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.reactnative.modules.weibo.WeiboPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.horcrux.svg.SvgPackage;
 import io.realm.react.RealmReactPackage;
@@ -37,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new WeiboPackage(),
             new PickerPackage(),
             new SvgPackage(),
             new VectorIconsPackage(),

@@ -13,6 +13,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button from '../component/Button';
 import realm from '../util/realm.js';
+import {toastShort} from "../util/ToastUtil";
 
 //关掉启动白屏
 //SplashScreen.hide();
@@ -44,20 +45,22 @@ export default class login extends Component {
     handle_loginClick(){
         let users=realm.objects('User').filtered('userName==$0',this.state.text.toString());
         let user=users[0];                                     //从realm中查询到的是results数组类型，需要指定某一个数来进行判断
-        let password1=user.userPassword;                       //从realm中取出username为textinput中的密码
-        if(this.state.password===password1){                   //判断密码
-            ToastAndroid.show('登录成功',ToastAndroid.SHORT);
-            realm.write(() => {
-                realm.create('User', {id:user.id,online: 1}, true);//更新在线状态
-            });
-            /*user.online=1;//更新在线状态*/
-            this.props.navigation.navigate('TabPage');
-            //realm.js.close();
-        }else{
-            ToastAndroid.show('登录失败，请检查用户名或者密码',ToastAndroid.SHORT)
-        }
-        console.log('name'+this.state.text+'password1'+this.state.password);
-
+        if(!user){toastShort('请检查用户名或密码')}
+        else{
+            let password1=user.userPassword;                   //从realm中取出username为textinput中的密码
+            if(this.state.password===password1){                   //判断密码
+                toastShort('用户'+user.userName+'登录成功');
+                realm.write(() => {
+                    realm.create('User', {id:user.id,online: 1}, true);//更新在线状态
+                });
+                /*user.online=1;//更新在线状态*/
+                this.props.navigation.navigate('TabPage');
+                //realm.js.close();
+                }else{
+                toastShort('登录失败，请检查用户名或者密码');
+                }
+            console.log('name'+this.state.text+'password1'+this.state.password);
+            }
     }
     render() {
         return (
@@ -95,7 +98,11 @@ export default class login extends Component {
                 </View>
 
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
-                    <Text style={styles.style_view_unlogin}>
+                    <Text style={styles.style_view_unlogin}
+                          onPress={()=>{
+                              this.props.navigation.navigate('register');
+                              /*alert('test success');*/
+                          }}>
                         忘记密码?
                     </Text>
                     <Text style={styles.style_view_register}

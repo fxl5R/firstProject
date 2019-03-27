@@ -14,25 +14,38 @@ import {
     Dimensions,
     TextInput,
     ToastAndroid,
-    Alert
+    Alert, TouchableHighlight, Linking
 } from 'react-native';
 import BackHeader from '../../component/BackHeader';
 import realm from '../../util/realm.js';
 import {toastShort} from "../../util/ToastUtil";
 import {Checkbox} from "teaset";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import * as WeiboAPI from "rn-weibo";
 
 let {height, width} = Dimensions.get('window');
-console.log('pingmugao:'+height+'pingmukuan:'+width);
 
 class RealConfirm extends Component {
     constructor(props) {
         super(props);
         this.state={
             checkedEmpty:false,
+            sinaID:'',
             realName:'',
             IDCardNO:'',
         }
     }
+
+    open=()=>{
+        let profilelink1='\'https://weibo.com/\'';
+        let profilelink2='https://weibo.com/';
+        let userIDD=2219202892;
+        console.log( '个人主页链接'+profilelink1);
+        console.log(profilelink2.toString());
+        let url = profilelink2.toString()+userIDD;
+        Linking.openURL(url)
+    };
+
 
     //onPress function
     ClickConfirm(){
@@ -41,12 +54,42 @@ class RealConfirm extends Component {
     render() {
         let users=realm.objects('User').filtered("online == $0", 1);
         let user=users[0];
+        let config = {
+            appKey:"925581119",
+            scope: 'all',
+            redirectURI: 'https://api.weibo.com/oauth2/default.html',
+        };
+
         return (
             <View style={{backgroundColor:'#f5f5f5',flex:1}}>
                 <BackHeader navigation={this.props.navigation} title={'实名认证'} />
-                <View style={{marginTop:20,backgroundColor:'white',height:'45%'}}>
-                    <View style={{justifyContent:'center',alignItems:'center',height:120}}>
+                <View style={{marginTop:20,backgroundColor:'white',height:'55%'}}>
+                    <View style={{justifyContent:'center',alignItems:'center'}}>
+                        <TouchableHighlight onPress={()=>{
+                            WeiboAPI.login(config)
+                                .then(res=>{
+                                    console.log('login success:',res);
+                                    console.log('取出userID'+res.userID);
+                                    realm.write(() => {
+                                        realm.create('User', {
+                                            id:user.id,sinaID:res.userID}, true);/*更新用户微博认证信息*/
+                                        toastShort('成功认证新浪账号，'+res.userID+'跳转至实名认证页面');
+                                        this.props.navigation.navigate('RealConfirm');
+                                    })
+                                }).catch(err=>{
+                                console.log('login fail:',err)
+                            });
+                        }}>
+                            <View style={{alignItems:'center',justifyContent:'center'}}>
+                                <Icon name={"sina-weibo"} color="#FF0000" size={40} light/>
+                                <Text>微博认证</Text>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
+                    <Image source={require('../../res/images/ic_center_line.png')} style={{height:1,width:'100%',marginTop:22}}/>
+                    <View style={{justifyContent:'center',alignItems:'center',height:120,marginTop:10}}>
                         <Image source={require('../../res/images/ic_account.png')} style={{width:30,height:30,marginTop:40}}/>
+                        <Text>实名信息</Text>
                         <TextInput
                             placeholder="真实姓名"
                             style = { styles.TextInputStyle }
@@ -58,7 +101,7 @@ class RealConfirm extends Component {
                             underlineColorAndroid = "transparent"
                             onChangeText = { ( text ) => { this.setState({ IDCardNO: text })} }/>
                     </View>
-                    {/*<Image source={require('../../res/images/ic_center_line.png')} style={{height:1,width:'100%',marginTop:22}}/>*/}
+
                     <View style={{marginTop:22,marginLeft:13,marginRight:13}}>
                         <View style={styles.ButtonContainer}>
                             <View style={{flexDirection: 'row',justifyContent:'center',marginTop:20}}>
@@ -78,10 +121,9 @@ class RealConfirm extends Component {
                                             realName:this.state.realName,
                                             IDCardNO:this.state.IDCardNO,
                                             isRealPeople:1}, true);/*更新用户实名认证信息*/
-                                        ToastAndroid.show('用户真实姓名'+this.state.realName+'身份证号'+this.state.IDCardNO,ToastAndroid.SHORT);
+                                        toastShort('用户真实姓名'+this.state.realName+'身份证号'+this.state.IDCardNO);
                                         this.props.navigation.navigate('TabPage');
                                         toastShort('授权成功，返回个人主页');
-                                        //ToastAndroid.show('授权成功，返回个人主页'+this.state.IDCardNO,ToastAndroid.SHORT);
                                     })
                                 }else{
                                     Alert.alert('请同意认证服务协议');
