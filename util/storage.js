@@ -1,7 +1,7 @@
 
 import { AsyncStorage } from 'react-native';
 import Storage from 'react-native-storage';
-import { refreshToken } from './request';
+//import { refreshToken } from './request';
 
 export const storage = new Storage({
     size: 1000,

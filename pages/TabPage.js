@@ -71,7 +71,7 @@ export default class TabPage extends Component<Props> {
             <View>
                 <View style={[styles.headerBody,{flexDirection:'row'}]}>
                     <TouchableHighlight style={styles.headerClick}
-                                        onPress={()=>{this.props.navigation.navigate('AddHousePage')}} >
+                                        onPress={()=>{this.props.navigation.navigate('ProtocolPage')}} >
                         <View>
                             <Icon name="city" size={40} color="#E6E6FA" light />
                             <Text style={styles.fontClick}>添加房屋</Text>

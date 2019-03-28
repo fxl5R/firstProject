@@ -92,7 +92,7 @@ export default class MDropDown extends Component {
                 </View>
                 <View style={{ flex: 1 }}>
                     <Dropdown
-                        label='装修'
+                        label='装修情况'
                         data={dataDecorate}
                         value={decorate}
                         onChangeText={this.handleChange3}

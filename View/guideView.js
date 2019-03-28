@@ -11,13 +11,14 @@ import {
     ScrollView,
     Image,
     StyleSheet,
+    Dimensions
 } from 'react-native';
 
 let image1=require('../res/images/bg_guide1.png');
 let image2=require('../res/images/bg_guide33.png');
 let image3=require('../res/images/bg_guide5.png');
 
-import Util from './Utils';
+const {width,height}=Dimensions.get('window');
 
 type Props = {};
 export default class Guide extends Component<Props> {
@@ -41,12 +42,12 @@ export default class Guide extends Component<Props> {
 
 const styles = StyleSheet.create({
     contentContainer:{
-        width:Util.size.width*3,//引导页的宽度，即三张图片的总长
-        height:Util.size.height,
+        width:width*3,//引导页的宽度，即三张图片的总长
+        height:height,
         backgroundColor:'#BAE4F5',
     },
     backgroundImage:{
-        width: Util.size.width,
-        height: Util.size.height
+        width: width,
+        height: height
     },
 });

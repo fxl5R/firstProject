@@ -100,7 +100,7 @@ export default class login extends Component {
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
                     <Text style={styles.style_view_unlogin}
                           onPress={()=>{
-                              this.props.navigation.navigate('register');
+                              this.props.navigation.navigate('ValidRegister');
                               /*alert('test success');*/
                           }}>
                         忘记密码?

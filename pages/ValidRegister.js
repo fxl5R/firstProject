@@ -57,7 +57,7 @@ class ValidRegister extends Component {
             <GiftedForm
                 formName='register' // GiftedForm instances that use the same name will also share the same states
                 openModal={(Second) => {
-                    this.props.navigation.navigate(Second); // The ModalWidget will be opened using this method. Tested with ExNavigator
+                    this.props.navigation.navigate('Second'); // The ModalWidget will be opened using this method. Tested with ExNavigator
                 }}
                 clearOnClose={false} // delete the values of the form when unmounted
 

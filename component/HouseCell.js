@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import HouseDetail from "./HouseDetail";
 import realm from '../util/realm.js';
+import DataMissing from "../pages/DataMissing";
 
 let mydata=realm.objects('House_Info').filtered("certification == $0", null)
     .sorted("publish_time", true);
@@ -36,9 +37,9 @@ export default class HouseCell extends Component {
     }
 
 
-  /**  将父组件传来的props转为子(本)组件的state
-  *    进行查询筛选，更新dataSource
-  **/
+    /**  将父组件传来的props转为子(本)组件的state
+     *    进行查询筛选，更新dataSource
+     **/
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
 
@@ -49,29 +50,29 @@ export default class HouseCell extends Component {
             decorate: nextProps.decorate > this.props.decorate,
             sort:nextProps.sort > this.props.sort,
             dataSource:this.props.sort==='面积由大到小'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
-                .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                .filtered("door_model CONTAINS[c] $0",this.props.door)
-                .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", true)):
+                    .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                    .filtered("door_model CONTAINS[c] $0",this.props.door)
+                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", true)):
                 this.props.sort==='面积由小到大'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
-                    .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                    .filtered("door_model CONTAINS[c] $0",this.props.door)
-                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", false)):
-                this.props.sort==='租金由高到低'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
-                    .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                    .filtered("door_model CONTAINS[c] $0",this.props.door)
-                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("rent_fee", true)):
-                this.props.sort==='租金由低到高'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
-                    .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                    .filtered("door_model CONTAINS[c] $0",this.props.door)
-                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("rent_fee", false)):
-                    ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
                         .filtered("lease_type CONTAINS[c] $0",this.props.typee)
                         .filtered("door_model CONTAINS[c] $0",this.props.door)
-                        .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
+                        .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", false)):
+                    this.props.sort==='租金由高到低'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
+                            .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                            .filtered("door_model CONTAINS[c] $0",this.props.door)
+                            .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("rent_fee", true)):
+                        this.props.sort==='租金由低到高'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
+                                .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                                .filtered("door_model CONTAINS[c] $0",this.props.door)
+                                .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("rent_fee", false)):
+                            ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
+                                .filtered("lease_type CONTAINS[c] $0",this.props.typee)
+                                .filtered("door_model CONTAINS[c] $0",this.props.door)
+                                .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
 
         });
 
-        console.log('testSearch!!!2222'+this.state.dataSource);
+        console.log('testSearch!!!2222'+JSON.stringify(this.state.dataSource));
     }
     _onRefresh() {
         if(!this.props){ alert('没有更多数据啦！')}
@@ -113,59 +114,65 @@ export default class HouseCell extends Component {
      **/
     render() {
         //if(this.props.typee){Alert.alert(this.props.typee)}else{Alert.alert('without typee value')};<Text>{this.props.typee}</Text>
-        return (
-            <View style = {styles.MainContainer }>
-                <ScrollView style={{flex:1}}>
-            <ListView
-                refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.isRefreshing}
-                        onRefresh={this._onRefresh.bind(this)}
-                        tintColor="#ff0000"
-                        title="加载中..."
-                        titleColor="#00ff00"
-                        colors={['#ff0000', '#00ff00', '#0000ff']}
-                        progressBackgroundColor="#ffffff"
-                    />}
-                enableEmptySections = {true}
-                dataSource={this.state.dataSource}
-                renderSeparator={this.ListViewItemSeparator}
-                renderRow={(rowData) =>
-                    <View style={{flex:1, flexDirection: 'column'}}>
-                    <TouchableOpacity onPress={this.GoToHouseDetail.bind(this,rowData.house_id)}>
-                        <View style={{backgroundColor: '#FFF'}}>
-                            <View style={{padding: 10, flexDirection: 'row'}}>
-                                <Image style={styles.thumb} source={rowData.house_pic?
-                                    {uri:rowData.house_pic}:require('../res/images/detailbg.jpg')}/>
+        if(this.state.dataSource._cachedRowCount===0){
+            console.log('行数'+ListView._cachedRowCount);
+            return(<DataMissing />);
+        }else {
+            return (
+                <View style = {styles.MainContainer }>
+                    <ScrollView style={{flex:1}}>
+                        <ListView
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.isRefreshing}
+                                    onRefresh={this._onRefresh.bind(this)}
+                                    tintColor="#ff0000"
+                                    title="加载中..."
+                                    titleColor="#00ff00"
+                                    colors={['#ff0000', '#00ff00', '#0000ff']}
+                                    progressBackgroundColor="#ffffff"
+                                />}
+                            enableEmptySections = {true}
+                            dataSource={this.state.dataSource}
+                            renderSeparator={this.ListViewItemSeparator}
+                            renderRow={(rowData) =>
+                                <View style={{flex:1, flexDirection: 'column'}}>
+                                    <TouchableOpacity onPress={this.GoToHouseDetail.bind(this,rowData.house_id)}>
+                                        <View style={{backgroundColor: '#FFF'}}>
+                                            <View style={{padding: 10, flexDirection: 'row'}}>
+                                                <Image style={styles.thumb} source={rowData.house_pic?
+                                                    {uri:rowData.house_pic}:require('../res/images/detailbg.jpg')}/>
 
-                                <View style={{flex: 2, paddingLeft: 10}}>
-                                    <Text style={{fontSize: 16}}>{rowData.area_name}</Text>
-                                    <Text style={{marginTop: 8, marginBottom: 8}}>{rowData.lease_type}</Text>
-                                    <Text style={{color: '#999'}}>{rowData.house_floor}</Text>
+                                                <View style={{flex: 2, paddingLeft: 10}}>
+                                                    <Text style={{fontSize: 16}}>{rowData.area_name}</Text>
+                                                    <Text style={{marginTop: 8, marginBottom: 8}}>{rowData.lease_type}</Text>
+                                                    <Text style={{color: '#999'}}>{rowData.house_floor}</Text>
+                                                </View>
+
+                                                <View style={{flex: 1, paddingLeft: 10}}>
+                                                    <Text style={{color: '#999', textAlign: 'right'}}>{rowData.publish_time}</Text>
+                                                    <Text style={{marginTop: 8, color: 'red', textAlign: 'right'}}>{rowData.rent_fee}</Text>
+                                                </View>
+                                            </View>
+
+                                            <View style={{padding: 10, flexDirection: 'row'}}>
+                                                <Text style={styles.houseTag}>{rowData.house_decorate}</Text>
+                                                <Text style={styles.houseTag}>{rowData.total_area}</Text>
+                                                <Text style={styles.houseTag}>{rowData.toward_direct}</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
                                 </View>
+                            }
+                        />
 
-                                <View style={{flex: 1, paddingLeft: 10}}>
-                                    <Text style={{color: '#999', textAlign: 'right'}}>{rowData.publish_time}</Text>
-                                    <Text style={{marginTop: 8, color: 'red', textAlign: 'right'}}>{rowData.rent_fee}</Text>
-                                </View>
-                            </View>
-
-                            <View style={{padding: 10, flexDirection: 'row'}}>
-                                <Text style={styles.houseTag}>{rowData.house_decorate}</Text>
-                                <Text style={styles.houseTag}>{rowData.total_area}</Text>
-                                <Text style={styles.houseTag}>{rowData.toward_direct}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                    </ScrollView>
                 </View>
-                }
-            />
 
-                </ScrollView>
-            </View>
-
-        );
+            );
+        }
     }
+
 }
 
 

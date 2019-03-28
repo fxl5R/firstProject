@@ -8,6 +8,7 @@ import register from '../pages/register';
 import HomePage from '../pages/HomePage';
 import TabPage from '../pages/TabPage';
 import guidePage from '../pages/GuidePage';
+import ProtocolPage from '../pages/ProtocolPage';
 import AddHousePage from '../pages/AddHousePage';
 import EditHouse from '../pages/EditHouse';
 import PublishResult from '../pages/PublishResult';
@@ -63,7 +64,7 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions:{header: null}
     },
 
-   register:{
+    register:{
         screen:register,
         navigationOptions:{header:null}
     },
@@ -94,27 +95,27 @@ const AppStackNavigator = createStackNavigator({
     },
 
     LandLordPage:{
-       screen:LandLordPage,
+        screen:LandLordPage,
         navigationOptions:{
-           header:null
-            }
+            header:null
+        }
     },
 
     PersonalProfile:{
-      screen:PersonalProfile,
+        screen:PersonalProfile,
         navigationOptions:{
             header:null
         }
     },
-/*    UserInfo:{
-        screen:UserInfo,
-        navigationOptions:{
-            header:null
-        }
+    /*    UserInfo:{
+            screen:UserInfo,
+            navigationOptions:{
+                header:null
+            }
 
-    },*/
+        },*/
     CommentManager:{
-       screen:CommentManager,
+        screen:CommentManager,
         navigationOptions:{
             header:null
         }
@@ -148,6 +149,13 @@ const AppStackNavigator = createStackNavigator({
 
     HouseCell: {
         screen: HouseCell,
+        navigationOptions:{
+            header:null
+        }
+    },
+
+    ProtocolPage:{
+        screen:ProtocolPage,
         navigationOptions:{
             header:null
         }
