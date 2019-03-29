@@ -47,7 +47,7 @@ export default class TabPage extends Component<Props> {
             sort:''
         };
         this.onChange = value1 => { this.setState({ value1 });};
-        this.clear = () => { this.setState({ value1: '' }); };
+        //this.clear = () => { this.setState({ value1: '' }); };
         this._renderHeader = this._renderHeader.bind(this);
     }
 
@@ -107,7 +107,7 @@ export default class TabPage extends Component<Props> {
                                 placeholder="输入小区名或地址"
                                 //onSubmit={value1 => Alert.alert(value1)}
                                 cancelText={'进入'}
-                                onCancel={this.clear}
+                                onCancel={this.onChange}
                                 onChange={this.onChange}
                             />
                             {this._renderHeader()}

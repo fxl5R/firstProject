@@ -46,9 +46,8 @@ export class NormalHeader extends Component<Props> {
         return(
             <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
                 <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-                    <Text style={{fontSize:18,color:'white',justifyContent:'center'}}>{title}</Text>
+                    <Text style={{fontSize:18,color:'white',justifyContent:'center',alignItems:'center'}}>{title}</Text>
                 </View>
-                <View style={{height:48,width:48}}/>
             </View>
         )
     };

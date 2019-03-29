@@ -2,12 +2,14 @@
 
 import moment from 'moment';
 import React,{Component} from 'react';
-import {ToastAndroid, View} from 'react-native';
+import {Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import {GiftedForm, GiftedFormManager, GiftedFormModal} from 'react-native-gifted-form';
 import Button from "../component/Button";
 import realm from "../util/realm";
 import {toastShort} from "../util/ToastUtil";
+import {NormalHeader} from "../component/BackHeader";
+import SimpleItemsDialog from "react-native-pickers/view/SimpleItemsDialog";
 
 class ValidRegister extends Component {
     constructor(props, context) {
@@ -18,8 +20,10 @@ class ValidRegister extends Component {
                 userName:'',
                 userPassword:'',
                 emailAddress:'',
+                userTel:'',
                 tos: false,
-            }
+            },
+            uSex:'',
         }
     }
     handleValueChange(values) {
@@ -40,22 +44,28 @@ class ValidRegister extends Component {
             });
         });*/
         //realm.js.close();
-        if(GiftedFormManager.validate(this.props.GiftedForm.formName))
-        {console.log('昵称'+JSON.stringify(this.state.form.fullName)+'用户名'
-            +this.state.form.username+'密码'+this.state.form.password+JSON.stringify(GiftedFormManager.validate(this.props.formName)))
+        console.log('昵称'+JSON.stringify(this.state.form.nickName)+'用户名'
+            +this.state.form.username+'密码'+this.state.form.password+'邮箱地址'+this.state.form.emailAddress
+            +'联系电话'+this.state.form.userTel
+            +JSON.stringify(GiftedFormManager.validate('signupForm')));
+        if(GiftedFormManager.validate('signupForm').isValid){
+            console.log('昵称'+JSON.stringify(this.state.form.nickName)+'用户名'
+            +this.state.form.username+'密码'+this.state.form.password+this.state.form.emailAddress
+            +'联系电话'+this.state.form.userTel
+            +JSON.stringify(GiftedFormManager.validate('signupForm')));
+            toastShort('用户'+this.state.form.username+'注册成功，'+'跳转至登录页面');
+            //this.props.navigation.navigate('Login');
         }else {
             toastShort('请检查输入')
         }
-        //this.props.navigation.navigate('Login');
-
     }
     render() {
-        const { nickName, tos, userName , userPassword ,emailAddress} = this.state.form;
+        const { nickName, tos, userName , userPassword ,emailAddress,userTel} = this.state.form;
         //console.log('render', this.state.form);
         return (
 
             <GiftedForm
-                formName='register' // GiftedForm instances that use the same name will also share the same states
+                formName='signupForm'// GiftedForm instances that use the same name will also share the same states
                 openModal={(Second) => {
                     this.props.navigation.navigate('Second'); // The ModalWidget will be opened using this method. Tested with ExNavigator
                 }}
@@ -63,15 +73,13 @@ class ValidRegister extends Component {
 
                 defaults={{
                     username: '',
-                    'gender{M}': true,
                     password: '',
-                    country: '所在地',
-                    birthday: new Date(((new Date()).getFullYear() - 18) + ''),
+                    country: '123'
                 }}
                 onValueChange={this.handleValueChange.bind(this)}
 
                 validators={{
-                    fullName: {
+                    nickName: {
                         title: '昵称',
                         validate: [{
                             validator: 'isLength',
@@ -108,6 +116,18 @@ class ValidRegister extends Component {
                             validator: 'isEmail',
                         }]
                     },
+                    userTel:{
+                        title:'联系电话',
+                        validate: [{
+                            validator: 'isLength',
+                            arguments: [11,11],
+                            message: '{TITLE} 号码长度应为 11 位'
+                        }, {
+                            validator: 'matches',
+                            arguments: /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/,
+                            message: '{TITLE} 非法'
+                        }]
+                    },
                     gender: {
                         title: 'Gender',
                         validate: [{
@@ -133,7 +153,7 @@ class ValidRegister extends Component {
                 <GiftedForm.SeparatorWidget />
 
                 <GiftedForm.TextInputWidget
-                    name='fullName' // mandatory
+                    name='nickName' // mandatory
                     title='昵称'
                     image={require('../res/icons/color/user.png')}
                     placeholder='用户123'
@@ -150,9 +170,9 @@ class ValidRegister extends Component {
                     value={userName}
                     onTextInputFocus={(currentText = '') => {
                         if (!currentText) {
-                            let fullName = GiftedFormManager.getValue('signupForm', 'fullName');
-                            if (fullName) {
-                                return fullName.replace(/[^a-zA-Z0-9-_]/g, '');
+                            let nickName = GiftedFormManager.getValue('signupForm', 'nickName');
+                            if (nickName) {
+                                return nickName.replace(/[^a-zA-Z0-9-_]/g, '');
                             }
                         }
                         return currentText;
@@ -172,46 +192,42 @@ class ValidRegister extends Component {
                 <GiftedForm.TextInputWidget
                     name='emailAddress' // mandatory
                     title='邮件地址'
-                    placeholder='example@nomads.ly'
+                    placeholder='example@email.com'
                     keyboardType='email-address'
                     clearButtonMode='while-editing'
                     value={emailAddress}
                     image={require('../res/icons/color/email.png')}
                 />
+                <GiftedForm.TextInputWidget
+                    name='userTel' // mandatory
+                    title='联系电话'
+                    placeholder='134******12'
+                    clearButtonMode='while-editing'
+                    value={userTel}
+                    image={require('../res/icons/color/telephone.png')}
+                />
 
                 <GiftedForm.SeparatorWidget />
-
+               <TouchableOpacity
+                    onPress={() => { this.SimpleItemsDialog.show() }} >
                 <GiftedForm.ModalWidget
                     title='性别'
                     displayValue='gender'
                     image={require('../res/icons/color/gender.png')}
+                    openModal={this.onPress}
                 >
-                    <GiftedForm.SeparatorWidget />
+                <GiftedForm.SeparatorWidget />
 
-                    <GiftedForm.SelectWidget name='gender' title='Gender' multiple={false}>
-                        <GiftedForm.OptionWidget image={require('../res/icons/color/female.png')} title='Woman' value='W'/>
-                        <GiftedForm.OptionWidget image={require('../res/icons/color/male.png')} title='Man' value='M'/>
-                        <GiftedForm.OptionWidget image={require('../res/icons/color/other.png')} title='Other' value='O'/>
-                    </GiftedForm.SelectWidget>
                 </GiftedForm.ModalWidget>
-
-                {/*<GiftedForm.ModalWidget
-                    title='Birthday'
-                    displayValue='birthday'
-                    image={require('../res/icons/color/birthday.png')}
-
-                    scrollEnabled={false}
-                >
-                    <GiftedForm.SeparatorWidget/>
-                    <GiftedForm.DatePickerIOSWidget
-                        name='birthday'
-                        mode='date'
-
-                        getDefaultDate={() => {
-                            return new Date(((new Date()).getFullYear() - 18) + '');
-                        }}
-                    />
-                </GiftedForm.ModalWidget>*/}
+                </TouchableOpacity>
+                {/*弹出选择用户性别窗口*/}
+                <SimpleItemsDialog
+                    items={['男' , '女' ]}
+                    ref={ref => this.SimpleItemsDialog = ref}
+                    onPress={(items) => {
+                        this.setState({uSex:items===1?'女':'男'});
+                        console.log('items:'+items+'state:'+this.state.uSex);
+                    }} />
 
                 <GiftedForm.ModalWidget
                     title='所在地'
@@ -228,30 +244,13 @@ class ValidRegister extends Component {
                     />*/}
                 </GiftedForm.ModalWidget>
 
-                {/*<GiftedForm.ModalWidget
-                    title='Biography'
-                    displayValue='bio'
-
-                    image={require('../res/icons/color/book.png')}
-
-                    scrollEnabled={true} // true by default
-                >
-                    <GiftedForm.SeparatorWidget/>
-                    <GiftedForm.TextAreaWidget
-                        name='bio'
-
-                        autoFocus={true}
-
-                        placeholder='Something interesting about yourself'
-                    />
-                </GiftedForm.ModalWidget>*/}
 
                 <GiftedForm.ErrorsWidget/>
                 <GiftedForm.SubmitWidget
                     title='Sign up'
                     widgetStyles={{
                         submitButton: {
-                            backgroundColor:'#4682B4',
+                         backgroundColor:'#4682B4',
                         }
                     }}
                     onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {
@@ -268,7 +267,9 @@ class ValidRegister extends Component {
                             ** GiftedFormManager.reset('signupForm'); // clear the states of the form manually. 'signupForm' is the formName used
                             */
                         }
+
                     }}
+
                 />
                 <Button
                     style={{
@@ -277,11 +278,39 @@ class ValidRegister extends Component {
                         borderWidth: 0,
                         borderRadius: 0,
                         height: 40,}}
-                    text={'注册'} onPress={this.handle_registerClick.bind(this)}/>
-                <GiftedForm.NoticeWidget
-                    title=''
+                    text={'注册'}
+                    onPress={this.handle_registerClick.bind(this)}
+/*                    onPress={()=>
+                        {
+                        /!*realm.write(()=> {
+                            realm.create('User', {
+                                id:realm.objects('User').length,
+                                userName: [this.state.text].toString(),
+                                userPassword: [this.state.password].toString(),
+                                userSex: '性别',
+                                portrait:'',
+                                nickName:'安租用户'+Math.floor(Math.random() * 10000),
+                                userLocation:'所在地',
+                                cTime:new Date().toLocaleTimeString()
+                            });
+                        });*!/
+                        //realm.close();
+
+                        if(GiftedFormManager.validate('signupForm').isValid){
+                            console.log('昵称'+JSON.stringify(this.state.form.nickName)+'用户名'
+                        +this.state.form.username+'密码'+this.state.form.password+this.state.form.emailAddress
+                        +JSON.stringify(GiftedFormManager.validate('signupForm')))
+                    }else {
+                        toastShort('请检查输入')
+                    }
+                        toastShort('用户'+this.state.form.username+'注册成功，'+'跳转至登录页面');
+                        this.props.navigation.navigate('Login');
+                    }
+                    }*/
                 />
+                <GiftedForm.NoticeWidget title='' />
                 <GiftedForm.HiddenWidget name='tos' value={true} />
+
 
             </GiftedForm>
         );
@@ -290,8 +319,18 @@ class ValidRegister extends Component {
 }
 export default ValidRegister = createStackNavigator(
     {
-        First: { screen: ValidRegister },
+        First: {
+            screen: ValidRegister,
+            navigationOptions:{header:<NormalHeader  title={'欢迎注册租房平台'} />
+                    /*<View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
+                    <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>navigation={this.props.navigation}
+                        <Text style={{fontSize:18,color:'white',justifyContent:'center'}}>{'欢迎注册租房平台'}</Text>
+                    </View>
+                    <View style={{height:48,width:48}}/>
+                </View>*/
 
+            }
+        },
         Second: { screen: GiftedFormModal }
     });
 //export default ValidRegister;
