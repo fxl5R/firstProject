@@ -17,26 +17,27 @@ const renderPagination = (index, total, context) => {
             </Text>
         </View>
     )
-}
+};
 
-export default class extends Component {
+export default  class extends Component {
     render () {
         return (
-            <View>
+            <View style={styles.wrapper}>
             <Swiper
                 style={styles.wrapper}
                 renderPagination={renderPagination}
                 loop={false}>
-                <View style={styles.slide} title={<Text numberOfLines={1}>Aussie tourist dies at Bali hotel</Text>}>
+                {/*<View style={styles.slide} title={<Text numberOfLines={1}>Aussie tourist dies at Bali hotel</Text>}>*/}
+                <View style={styles.slide}>
                     <Image style={styles.image} source={require('../res/images/bathroom.jpeg')} />
                 </View>
-                <View style={styles.slide} title={<Text numberOfLines={1}>Big lie behind Nine’s new show</Text>}>
+                <View style={styles.slide}>
                     <Image style={styles.image} source={require('../res/images/dining.jpg')} />
                 </View>
-                <View style={styles.slide} title={<Text numberOfLines={1}>Why Stone split from Garfield</Text>}>
+                <View style={styles.slide}>
                     <Image style={styles.image} source={require('../res/images/room2.jpeg')} />
                 </View>
-                <View style={styles.slide} title={<Text numberOfLines={1}>Learn from Kim K to land that job</Text>}>
+                <View style={styles.slide}>
                     <Image style={styles.image} source={require('../res/images/room.jpeg')} />
                 </View>
             </Swiper>
@@ -48,7 +49,8 @@ export default class extends Component {
 const styles = {
     wrapper: {
         width:winWidth,
-        height:winHeight/3
+        height:winHeight/4,
+        elevation: 1
     },
     slide: {
         flex: 1,

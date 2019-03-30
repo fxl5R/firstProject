@@ -31,19 +31,8 @@ import RealConfirm from '../pages/Mine/RealConfirm';
 import MDropDown from '../component/ActionMenu/MDropDown';
 import ImageBrowers from '../component/ImageBrowers';
 
-
+import AddHouseButton from '../component/Collecthouse';
 const AppStackNavigator = createStackNavigator({
-
-
-    Login:{
-        screen:login,
-        navigationOptions:{header: null}
-    },
-
-    WeiboUtil:{
-        screen:WeiboUtil,
-        navigationOptions:{header: null}
-    },
 
     TabPage:{
         screen:TabPage,
@@ -51,6 +40,25 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+    Login:{
+        screen:login,
+        navigationOptions:{header: null}
+    },
+    AddHouseButton:{
+        screen:AddHouseButton,
+
+    },
+    WeiboUtil:{
+        screen:WeiboUtil,
+        navigationOptions:{header: null}
+    },
+/*
+    TabPage:{
+        screen:TabPage,
+        navigationOptions:{
+            header:null
+        }
+    },*/
 
     ActionSheetExample:{
         screen:ActionSheetExample,

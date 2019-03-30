@@ -2,10 +2,9 @@
 
 import moment from 'moment';
 import React,{Component} from 'react';
-import {Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {Button} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import {GiftedForm, GiftedFormManager, GiftedFormModal} from 'react-native-gifted-form';
-import Button from "../component/Button";
 import realm from "../util/realm";
 import {toastShort} from "../util/ToastUtil";
 import {NormalHeader} from "../component/BackHeader";
@@ -23,7 +22,7 @@ class ValidRegister extends Component {
                 userTel:'',
                 tos: false,
             },
-            uSex:'',
+            //uSex:'',
         }
     }
     handleValueChange(values) {
@@ -31,31 +30,29 @@ class ValidRegister extends Component {
         this.setState({ form: values })
     }
     handle_registerClick(){
-        /*realm.write(()=> {
-            realm.create('User', {
-                id:realm.objects('User').length,
-                userName: [this.state.text].toString(),
-                userPassword: [this.state.password].toString(),
-                userSex: '性别',
-                portrait:'',
-                nickName:'安租用户'+Math.floor(Math.random() * 10000),
-                userLocation:'所在地',
-                cTime:new Date().toLocaleTimeString()
-            });
-        });*/
         //realm.js.close();
         console.log('昵称'+JSON.stringify(this.state.form.nickName)+'用户名'
             +this.state.form.username+'密码'+this.state.form.password+'邮箱地址'+this.state.form.emailAddress
             +'联系电话'+this.state.form.userTel
             +JSON.stringify(GiftedFormManager.validate('signupForm')));
+
         if(GiftedFormManager.validate('signupForm').isValid){
-            console.log('昵称'+JSON.stringify(this.state.form.nickName)+'用户名'
-            +this.state.form.username+'密码'+this.state.form.password+this.state.form.emailAddress
-            +'联系电话'+this.state.form.userTel
-            +JSON.stringify(GiftedFormManager.validate('signupForm')));
+            realm.write(()=> {
+                realm.create('User', {
+                    id:realm.objects('User').length+1,
+                    userName: [this.state.form.username].toString(),
+                    userPassword: [this.state.form.password].toString(),
+                    nickName:[this.state.form.nickName].toString(),
+                    //userEmail:[this.state.form.password].toString(),
+                    userLocation:'所在地',
+                    userSex: '性别',
+                    cTime:new Date().toLocaleTimeString()
+                });
+            });
             toastShort('用户'+this.state.form.username+'注册成功，'+'跳转至登录页面');
-            //this.props.navigation.navigate('Login');
+            this.props.navigation.navigate('Login');
         }else {
+
             toastShort('请检查输入')
         }
     }
@@ -74,7 +71,7 @@ class ValidRegister extends Component {
                 defaults={{
                     username: '',
                     password: '',
-                    country: '123'
+                    //country: '123'
                 }}
                 onValueChange={this.handleValueChange.bind(this)}
 
@@ -128,7 +125,7 @@ class ValidRegister extends Component {
                             message: '{TITLE} 非法'
                         }]
                     },
-                    gender: {
+/*                    gender: {
                         title: 'Gender',
                         validate: [{
                             validator: (...args) => {
@@ -147,7 +144,7 @@ class ValidRegister extends Component {
                             arguments: [2],
                             message: '{TITLE} is required'
                         }]
-                    }
+                    }*/
                 }}
             >
                 <GiftedForm.SeparatorWidget />
@@ -208,7 +205,7 @@ class ValidRegister extends Component {
                 />
 
                 <GiftedForm.SeparatorWidget />
-               <TouchableOpacity
+{/*               <TouchableOpacity
                     onPress={() => { this.SimpleItemsDialog.show() }} >
                 <GiftedForm.ModalWidget
                     title='性别'
@@ -220,33 +217,33 @@ class ValidRegister extends Component {
 
                 </GiftedForm.ModalWidget>
                 </TouchableOpacity>
-                {/*弹出选择用户性别窗口*/}
+
                 <SimpleItemsDialog
                     items={['男' , '女' ]}
                     ref={ref => this.SimpleItemsDialog = ref}
                     onPress={(items) => {
                         this.setState({uSex:items===1?'女':'男'});
                         console.log('items:'+items+'state:'+this.state.uSex);
-                    }} />
+                    }} />*/}
 
-                <GiftedForm.ModalWidget
+  {/*              <GiftedForm.ModalWidget
                     title='所在地'
                     displayValue='country'
                     image={require('../res/icons/color/passport.png')}
                     scrollEnabled={false}
 
                 >
-                {/*    <GiftedForm.SelectCountryWidget
+                    <GiftedForm.SelectCountryWidget
                         code='alpha2'
                         name='country'
                         title='Country'
                         autoFocus={true}
-                    />*/}
+                    />
                 </GiftedForm.ModalWidget>
-
+*/}
 
                 <GiftedForm.ErrorsWidget/>
-                <GiftedForm.SubmitWidget
+{/*                <GiftedForm.SubmitWidget
                     title='Sign up'
                     widgetStyles={{
                         submitButton: {
@@ -255,7 +252,6 @@ class ValidRegister extends Component {
                     }}
                     onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {
                         if (isValid === true) {
-                            // prepare object
                             values.gender = values.gender[0];
                             values.birthday = moment(values.birthday).format('YYYY-MM-DD');
 
@@ -266,47 +262,24 @@ class ValidRegister extends Component {
                             ** postSubmit(['Username already taken', 'Email already taken']); // disable the loader and display an error message
                             ** GiftedFormManager.reset('signupForm'); // clear the states of the form manually. 'signupForm' is the formName used
                             */
-                        }
+         /*               }
 
                     }}
 
                 />
+*/}
                 <Button
                     style={{
                         margin: 10,
                         backgroundColor: '#3498db',
                         borderWidth: 0,
                         borderRadius: 0,
-                        height: 40,}}
-                    text={'注册'}
+                        height: 50,
+                        width:210
+                    }}
+                    title={'注    册'}
                     onPress={this.handle_registerClick.bind(this)}
-/*                    onPress={()=>
-                        {
-                        /!*realm.write(()=> {
-                            realm.create('User', {
-                                id:realm.objects('User').length,
-                                userName: [this.state.text].toString(),
-                                userPassword: [this.state.password].toString(),
-                                userSex: '性别',
-                                portrait:'',
-                                nickName:'安租用户'+Math.floor(Math.random() * 10000),
-                                userLocation:'所在地',
-                                cTime:new Date().toLocaleTimeString()
-                            });
-                        });*!/
-                        //realm.close();
 
-                        if(GiftedFormManager.validate('signupForm').isValid){
-                            console.log('昵称'+JSON.stringify(this.state.form.nickName)+'用户名'
-                        +this.state.form.username+'密码'+this.state.form.password+this.state.form.emailAddress
-                        +JSON.stringify(GiftedFormManager.validate('signupForm')))
-                    }else {
-                        toastShort('请检查输入')
-                    }
-                        toastShort('用户'+this.state.form.username+'注册成功，'+'跳转至登录页面');
-                        this.props.navigation.navigate('Login');
-                    }
-                    }*/
                 />
                 <GiftedForm.NoticeWidget title='' />
                 <GiftedForm.HiddenWidget name='tos' value={true} />
@@ -322,13 +295,6 @@ export default ValidRegister = createStackNavigator(
         First: {
             screen: ValidRegister,
             navigationOptions:{header:<NormalHeader  title={'欢迎注册租房平台'} />
-                    /*<View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
-                    <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>navigation={this.props.navigation}
-                        <Text style={{fontSize:18,color:'white',justifyContent:'center'}}>{'欢迎注册租房平台'}</Text>
-                    </View>
-                    <View style={{height:48,width:48}}/>
-                </View>*/
-
             }
         },
         Second: { screen: GiftedFormModal }

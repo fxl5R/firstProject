@@ -48,9 +48,10 @@ const styles = StyleSheet.create({
     },
     content:{
         height:45,
-        backgroundColor:'#4682B4',
+        backgroundColor:'#B0C4DE',
         alignItems:'center',
         justifyContent:'center',
-        borderRadius:3
+        borderRadius:0,
+        elevation: 1
     }
 });

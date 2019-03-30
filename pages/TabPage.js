@@ -13,22 +13,27 @@ import {
     Text,
     Image,
     TouchableHighlight,
+    Dimensions,
     ScrollView,
-    Platform
+    Platform,
+    Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import TabNavigator from 'react-native-tab-navigator';
 import HouseCell from '../component/HouseCell';
 import MinePage from './MinePage';
-import {NormalHeader} from "../component/BackHeader";
 
 import {MsgCard } from '../component/antComponent';
 import MDropDown from '../component/ActionMenu/MDropDown';
 import {SearchBar} from "@ant-design/react-native";
-//import MyCarousel from "../component/MyCarousel";
 import { requestWithToken } from '../util/request';
+import ActionButton from "react-native-action-button";
+import {NormalHeader} from "../component/BackHeader";
+import MyCarousel from "../component/MyCarousel";
+import {Carousel} from 'teaset';
 
+const {width,height}=Dimensions.get("window");
 
 export default class TabPage extends Component<Props> {
     //构造函数
@@ -51,7 +56,8 @@ export default class TabPage extends Component<Props> {
         this._renderHeader = this._renderHeader.bind(this);
     }
 
-    //父组件接收子(MDropDown)组件的参数，并改变state
+    //TabPage父组件接收MDropDown子组件的参数，并改变state，
+    // 用作传递给HouseCell中更新dataSource
     setValue1 = typee => {
         this.setState({typee});
     };
@@ -65,7 +71,7 @@ export default class TabPage extends Component<Props> {
         this.setState({sort});
     };
 
-    //设置第一栏
+    //设置第一栏（暂不用）
     _renderHeader = () => {
         return (
             <View>
@@ -88,8 +94,39 @@ export default class TabPage extends Component<Props> {
             </View>
             )
     };
+    //渲染添加房屋按钮
+    _renderActionBtn=()=>{
+        return(
+            <View style={{flex:1}}>
+                <ActionButton buttonColor='#B0C4DE'>
+                    <ActionButton.Item buttonColor='#6495ED' title="添加房屋" onPress={()=>{this.props.navigation.navigate('ProtocolPage')}}>
+                        <Icon name="paint-roller" style={styles.actionButtonIcon} />
+                    </ActionButton.Item>
+                </ActionButton>
+            </View>
+        )
+    };
+    //渲染走马灯
+    _renderCarousel=()=> {
+        return(
+            <Carousel
+                style={{height: 200}}
+                control={
+                    <Carousel.Control
+                    style={{alignItems: 'flex-end'}}
+                    dot={<Text style={{backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgb(248,248,255)', padding: 4}}>◇</Text>}
+                    activeDot={<Text style={{backgroundColor: 'rgba(0, 0, 0, 0)', color: 'rgb(248,248,255)', padding: 4}}>◆</Text>}
+                />}>
+                <Image style={{width:width, height: 200}} resizeMode='cover' source={require('../res/images/dining.jpg')}/>
+                <Image style={{width:width, height: 200}} resizeMode='cover' source={require('../res/images/room2.jpeg')} />
+                <Image style={{width:width, height: 200}} resizeMode='cover' source={require('../res/images/room.jpeg')} />
+            </Carousel>
+
+        )
+    };
 
     render() {
+
         const { errorMsg, username } = this.state;
         return (
             <View style={styles.container}>
@@ -101,7 +138,8 @@ export default class TabPage extends Component<Props> {
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hindex.png')} />}
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hindex.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
-                        <View styles={styles.page1}>
+                        <View style={{flex:1}}>
+                        <View style={{flex:1}}>
                             <SearchBar
                                 value={this.state.value1}
                                 placeholder="输入小区名或地址"
@@ -110,7 +148,7 @@ export default class TabPage extends Component<Props> {
                                 onCancel={this.onChange}
                                 onChange={this.onChange}
                             />
-                            {this._renderHeader()}
+                            {this._renderCarousel()}
                             <MDropDown setValue1={this.setValue1} setValue2={this.setValue2} setValue3={this.setValue3} setValue4={this.setValue4}/>
                             <ScrollView >
                             <HouseCell
@@ -119,11 +157,18 @@ export default class TabPage extends Component<Props> {
                                 typee={this.state.typee==='不限'?'':this.state.typee}
                                 door={this.state.door==='不限'?'':this.state.door}
                                 decorate={this.state.decorate==='不限'?'':this.state.decorate}
-                                sort={this.state.sort} />
-
+                                sort={this.state.sort}
+                            />
                                 <View style={{height:Platform.OS === 'ios' ? 0:200}}/>
                             </ScrollView>
                         </View>
+                            <ActionButton buttonColor='#B0C4DE'>
+                                <ActionButton.Item buttonColor='#6495ED' title="添加房屋" onPress={()=>{this.props.navigation.navigate('ProtocolPage')}}>
+                                    <Icon name="paint-roller" style={styles.actionButtonIcon} />
+                                </ActionButton.Item>
+                            </ActionButton>
+                        </View>
+
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_star'}
@@ -132,9 +177,9 @@ export default class TabPage extends Component<Props> {
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hstar.png')} />}
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hstar.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_star' })}>
-                        <View styles={styles.page2}>
-
-                        </View>
+                        {/*<View styles={styles.page2}>
+                        </View>*/}
+                        {this._renderActionBtn()}
                     </TabNavigator.Item>
 {/*                    <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_msg'}
@@ -283,8 +328,35 @@ const styles = StyleSheet.create({
         backgroundColor: '#6495ED',
         flex:1
     },
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
+    },
     separator: {
         height: 1,
         backgroundColor: '#E8E8E8',
+    },
+    MainContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5F5F5',
+    },
+    TouchableOpacityStyle: {
+        position: 'absolute',
+        width: 50,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 30,
+        bottom: 30,
+    },
+
+    FloatingButtonStyle: {
+        resizeMode: 'contain',
+        width: 50,
+        height: 50,
+        //backgroundColor:'black'
     },
 });

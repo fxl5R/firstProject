@@ -71,10 +71,13 @@ export default class register extends Component {
                     textAlign='center'
                     onChangeText={(password)=>this.setState({password})}
                 /></View>
-                </KeyboardAwareScrollView>
                 <View style={{marginTop: 10}}>
                     <Button text={'注册'} onPress={this.handle_registerClick.bind(this)}/>
                 </View>
+                </KeyboardAwareScrollView>
+{/*                <View style={{marginTop: 10}}>
+                    <Button text={'注册'} onPress={this.handle_registerClick.bind(this)}/>
+                </View>*/}
 
                 <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
                     {/*<Text style={styles.style_view_unlogin}>

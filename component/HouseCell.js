@@ -13,6 +13,9 @@ import {
 import HouseDetail from "./HouseDetail";
 import realm from '../util/realm.js';
 import DataMissing from "../pages/DataMissing";
+import {AddHouseButton} from "./Collecthouse";
+import ActionButton from "react-native-action-button";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 let mydata=realm.objects('House_Info').filtered("certification == $0", null)
     .sorted("publish_time", true);
@@ -165,8 +168,15 @@ export default class HouseCell extends Component {
                                 </View>
                             }
                         />
-
+                        <View style={{flex:1}}>
+                            <ActionButton buttonColor='#B0C4DE'>
+                                <ActionButton.Item buttonColor='#6495ED' title="添加房屋" onPress={()=>{this.props.navigation.navigate('ProtocolPage')}}>
+                                    <Icon name="md-create" style={styles.actionButtonIcon} />
+                                </ActionButton.Item>
+                            </ActionButton>
+                        </View>
                     </ScrollView>
+
                 </View>
 
             );

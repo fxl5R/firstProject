@@ -8,7 +8,7 @@ import {
     Text,
     Image,
     View,
-    TextInput, ToastAndroid,
+    TextInput, ToastAndroid, ImageBackground, Dimensions,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button from '../component/Button';
@@ -32,6 +32,7 @@ const UserSchema = {
     },
 };
 */
+let {height, width} = Dimensions.get('window');
 
 export default class login extends Component {
     constructor(props) {
@@ -64,56 +65,70 @@ export default class login extends Component {
     }
     render() {
         return (
-            <View style={{backgroundColor:'#DCDCDC',flex:1}}>
-                <Image
+            <ImageBackground source={require('../res/images/bg_jiaju.png')} style={{width:width,height:height}}>
+            <View style={{backgroundColor:'rgba(248,248,255,0.8)',flex:1,flexDirection:'column'}}>
+                {/*<Image
                     style={styles.style_image}
-                    source={require('../res/images/house.png')}/>
-                <KeyboardAwareScrollView>
-                    <View style={styles.username}>
-                        <TextInput
-                            style={styles.edit}
-                            placeholder='手机号/邮箱'
-                            numberOfLines={1}
-                            autoFocus={true}
-                            underlineColorAndroid={'transparent'}
-                            textAlign='center'
-                            onChangeText={(text)=>this.setState({text})}
-                        /></View>
-                    <View
-                        style={{height:1,backgroundColor:'#f4f4f4'}}
-                    />
-                    <View style={styles.password}>
-                        <TextInput
-                            style={styles.edit}
-                            placeholder='密码'
-                            numberOfLines={1}
-                            underlineColorAndroid={'transparent'}
-                            secureTextEntry={true}
-                            textAlign='center'
-                            onChangeText={(password)=>this.setState({password})}
-                        /></View>
-                </KeyboardAwareScrollView>
-                <View style={{marginTop: 10}}>
-                    <Button text={'登录'} onPress={this.handle_loginClick.bind(this)}/>
-                </View>
+                    source={require('../res/images/house.png')}/>*/}
+                    <View style={{flex:1}}/>
+                    <View  style={{flex:2}}>
+                    <KeyboardAwareScrollView contentContainerStyle = {{flex:1}}>
 
-                <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
+
+                        <View style={styles.username}>
+                            <TextInput
+                                style={styles.edit}
+                                placeholder='账号'
+                                numberOfLines={1}
+                                autoFocus={true}
+                                underlineColorAndroid={'transparent'}
+                                textAlign='center'
+                                onChangeText={(text)=>this.setState({text})}
+                            /></View>
+                        <View
+                            style={{height:1,backgroundColor:'#f4f4f4'}}
+                        />
+                        <View style={styles.password}>
+                            <TextInput
+                                style={styles.edit}
+                                placeholder='密码'
+                                numberOfLines={1}
+                                underlineColorAndroid={'transparent'}
+                                secureTextEntry={true}
+                                textAlign='center'
+                                onChangeText={(password)=>this.setState({password})}
+                            /></View>
+                        <View style={{marginTop: 10}}>
+                            <Button text={'登  录'} onPress={this.handle_loginClick.bind(this)}/>
+                        </View>
+                    </KeyboardAwareScrollView>
+                    </View>
+
+                    <View style={{flex:1}}>
+                        <Text style={styles.style_view_register}
+                              onPress={()=>{
+                                  this.props.navigation.navigate('ValidRegister');
+                                  /*alert('test success');*/
+                              }}>
+                            新用户
+                        </Text>
+                        {/*<View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
                     <Text style={styles.style_view_unlogin}
-                          onPress={()=>{
-                              this.props.navigation.navigate('ValidRegister');
-                              /*alert('test success');*/
-                          }}>
-                        忘记密码?
-                    </Text>
-                    <Text style={styles.style_view_register}
-                          onPress={()=>{
-                              this.props.navigation.navigate('register');
-                              /*alert('test success');*/
-                          }}>
-                        新用户
-                    </Text>
-                </View>
+                              onPress={()=>{
+                                  this.props.navigation.navigate('register');
+                              }}>
+                            忘记密码?
+                        </Text>
+                        <Text style={styles.style_view_register}
+                              onPress={()=>{
+                                  this.props.navigation.navigate('ValidRegister');
+                              }}>
+                            新用户
+                        </Text>
+                    </View>*/}
+                    </View>
             </View>
+            </ImageBackground>
         );
     }
 }
@@ -132,7 +147,7 @@ const styles = StyleSheet.create({
         marginLeft:10,
     },
     style_view_register:{
-        fontSize:12,
+        fontSize:13,
         color:'#63B8FF',
         marginRight:10,
         alignItems:'flex-end',
