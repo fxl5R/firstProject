@@ -40,6 +40,7 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+
     Login:{
         screen:login,
         navigationOptions:{header: null}

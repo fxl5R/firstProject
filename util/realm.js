@@ -94,7 +94,8 @@ Collections.schema = {
     properties: {                               // 属性
         id: { type:'int', indexed: true },      // 收藏ID，主键
         collect_id:'int',                       // 收藏内容的id
-        collect_type:'int',                     // 收藏类别1:房源0：用户
+        collector_id:'int',                     // 收藏者id
+        collect_time:{ type: 'string'}          //收藏时间
     }
 };
 export default new Realm({ schema: [House_Info,User,Comments,Collections] });

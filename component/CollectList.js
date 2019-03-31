@@ -17,11 +17,13 @@ import {AddHouseButton} from "./Collecthouse";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-let mydata=realm.objects('House_Info').filtered("certification == $0", null)
+let user=realm.objects('User').filtered('online==$0',1)[0];//获取当前用户
+let collector=realm.objects('Collections').filtered('collector_id==$0',user.id);//根据用户id关联collector_id获取收藏信息
+let mydata=realm.objects('House_Info').filtered("house_id == $0", collector.collect_id)
     .sorted("publish_time", true);
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-export default class HouseCell extends Component {
+export default class CollectList extends Component {
 
     constructor(props) {
         super(props);
@@ -30,53 +32,11 @@ export default class HouseCell extends Component {
         this.state = {
             dataSource: ds.cloneWithRows(mydata),
             isRefreshing: false,
-            searchString:props.value1,
-            typee:'',
-            door:'',
-            decorate:'',
-            sort:'',
         };
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
     }
 
 
-    /**  将父组件传来的props转为子(本)组件的state
-     *    进行查询筛选，更新dataSource
-     **/
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-
-        this.setState({
-            searchString: nextProps.value1,
-            typee: nextProps.typee > this.props.typee,
-            door: nextProps.door > this.props.door,
-            decorate: nextProps.decorate > this.props.decorate,
-            sort:nextProps.sort > this.props.sort,
-            dataSource:this.props.sort==='面积由大到小'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
-                    .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                    .filtered("door_model CONTAINS[c] $0",this.props.door)
-                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", true)):
-                this.props.sort==='面积由小到大'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
-                        .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                        .filtered("door_model CONTAINS[c] $0",this.props.door)
-                        .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", false)):
-                    this.props.sort==='租金由高到低'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
-                            .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                            .filtered("door_model CONTAINS[c] $0",this.props.door)
-                            .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("rent_fee", true)):
-                        this.props.sort==='租金由低到高'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
-                                .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                                .filtered("door_model CONTAINS[c] $0",this.props.door)
-                                .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("rent_fee", false)):
-                            ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
-                                .filtered("lease_type CONTAINS[c] $0",this.props.typee)
-                                .filtered("door_model CONTAINS[c] $0",this.props.door)
-                                .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
-
-        });
-
-        console.log('testSearch!!!2222'+JSON.stringify(this.state.dataSource));
-    }
     _onRefresh() {
         if(!this.props){ alert('没有更多数据啦！')}
         if(this.props){
@@ -85,12 +45,6 @@ export default class HouseCell extends Component {
             )
         }
     }
-
-    /**  根据从TabPage传递的DropDown参数
-     *    进行关键字查询
-     **/
-
-
 
 
     /**
@@ -120,8 +74,8 @@ export default class HouseCell extends Component {
         if(this.state.dataSource._cachedRowCount===0){
             console.log('行数'+ListView._cachedRowCount);
             return(
-                <View>
-                <DataMissing />
+                <View style={{justifyContent:'center'}}>
+                    <DataMissing />
                 </View>
             );
         }else {

@@ -32,6 +32,7 @@ import ActionButton from "react-native-action-button";
 import {NormalHeader} from "../component/BackHeader";
 import MyCarousel from "../component/MyCarousel";
 import {Carousel} from 'teaset';
+import CollectList from "../component/CollectList";
 
 const {width,height}=Dimensions.get("window");
 
@@ -177,42 +178,14 @@ export default class TabPage extends Component<Props> {
                         renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hstar.png')} />}
                         renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hstar.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_star' })}>
-                        {/*<View styles={styles.page2}>
-                        </View>*/}
-                        {this._renderActionBtn()}
-                    </TabNavigator.Item>
-{/*                    <TabNavigator.Item
-                        selected={this.state.selectedTab === 'tb_msg'}
-                        selectedTitleStyle={{color:'#B0C4DE'}}
-                        title="消息"
-                        renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hmsg1.png')} />}
-                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hmsg1.png')} />}
-                        badgeText="1"
-                        onPress={() => this.setState({ selectedTab: 'tb_msg' })}>
-                        <View styles={styles.page3}>
-                            <NormalHeader navigation={this.props.navigation} title={'消息栏'}/>
-                            <View style={styles.container}> key token
-                                <Text style={styles.text}>
-                                    {errorMsg ? errorMsg : username + ', Welcome home!'}
-                                </Text>
-                                <Button
-                                    onPress={this.getProfile}
-                                >刷新</Button>
-                            </View>
-                            <MsgCard
-                                msgtitle={'用户123'}
-                                msgbrief={'消息梗概消息梗概'}
-                                imgUri={'http://sowcar.com/t6/681/1552475145x986907160.png'}
-                                extra={'一条消息'}
-                                footerextracontent={'2019-2-22 16:40:34'}/>
-                            <MsgCard
-                                msgtitle={'用户123'}
-                                msgbrief={'消息梗概消息梗概'}
-                                imgUri={'http://sowcar.com/t6/681/1552475175x2890174339.png'}
-                                extra={'一条消息'}
-                                footerextracontent={'2019-2-22 16:40:34'}/>
+                        <View styles={styles.page2}>
+                            <NormalHeader title={'我的收藏'}/>
+                            <ScrollView>
+                            <CollectList/>
+                            </ScrollView>
                         </View>
-                    </TabNavigator.Item>*/}
+                    </TabNavigator.Item>
+
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_profile'}
                         selectedTitleStyle={{color:'#B0C4DE'}}

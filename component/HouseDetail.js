@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Menu} from 'teaset';
 import {toastShort} from "../util/ToastUtil";
 import * as WeiboAPI from "rn-weibo";
+import {NavigationPage, ListRow, ActionSheet, Label} from 'teaset';
 const winWidth=Dimensions.get('window').width;
 const winHeight=Dimensions.get('window').height;
 
@@ -378,18 +379,15 @@ export default class HouseDetail extends Component<Props> {
 
     //标题栏
     renderHeader(){
+
+
         const { navigation } = this.props;
         const isEdit = navigation.getParam('isEdit', 'NO-Edit');
         const itemId = navigation.getParam('itemId', 'NO-ID');
         console.log('itemId'+itemId);
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
-        //分享图文信息到新浪
-        let data={
-                type: 'image',
-                text: '发现了一家房屋在出租',
-                imageUrl:'https://b-ssl.duitang.com/uploads/item/201903/12/20190312113640_aPUfG.thumb.700_0.jpeg',
-            };
+
         if(isEdit===1){
             return(
                 <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
@@ -406,7 +404,7 @@ export default class HouseDetail extends Component<Props> {
                     {/*<View style={{height:48,width:48}}/>*/}
                     <TouchableOpacity ref='edit' onPress={() => this.show(this.refs['edit'],'end')}
                                       style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
-                        <Icon name="edit" size={20} color="#E6E6FA" light/>
+                        <Icon name="edit" size={20} color="rgb(248,248,255)" light/>
                     </TouchableOpacity>
                 </View>
             )
@@ -423,16 +421,11 @@ export default class HouseDetail extends Component<Props> {
                     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                         <Text style={{fontSize:18,color:'white',alignSelf:'center'}}>房屋详情</Text>
                     </View>
-                    {/*<View style={{height:48,width:48}}/>*/}
-                    <TouchableOpacity ref='edit' onPress={()=>{
-                        WeiboAPI.share(data).then(res=>{
-                            console.log('share success:',res);
-                            toastShort('分享成功');
-                        }).catch(err=>{
-                            console.log('share fail:',err)
-                        });
-                    }} style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
-                        <Icon name="external-link-alt" size={20} color="#E6E6FA" light/>
+                    {/*<View style={{height:48,width:48}}/>  // style={{width:48,height:48,alignItems:'center',justifyContent:'center'}} */}
+                    <TouchableOpacity ref='edit'
+                                      style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}
+                                      onPress={() => this.showaction(true)}>
+                        <Icon name="ellipsis-v" size={20} color="rgb(248,248,255)" light/>
                     </TouchableOpacity>
                 </View>
             )
@@ -463,6 +456,49 @@ export default class HouseDetail extends Component<Props> {
             toastShort('删除成功');
 
         });
+    }
+
+    showaction(modal) {
+        let user=realm.objects('User').filtered("online == $0", 1)[0];//获取当前用户，存储collector_id
+        const itemId = this.props.navigation.getParam('itemId', 'NO-ID');//获取HouseCell中的house_id作为collect_id
+        let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0]
+        //分享图文信息到新浪
+        let items = [
+            {title: '分享到微博',  onPress:()=>/*{
+                    WeiboAPI.share(data).then(res=>{
+                        console.log('share success:',res);
+                        toastShort('分享成功');
+                    }).catch(err=>{
+                        console.log('share fail:',err)
+                    })}*/{
+                        WeiboAPI.share({
+                            type: 'image',
+                            text: '发现了一家房屋在出租:'+'地址：'+thehouse.house_location+
+                                '楼层：'+thehouse.house_floor
+                                +'小区：'+thehouse.area_name+'月租：'+thehouse.rent_fee,
+                            //imageUrl:'https://dwz.cn/lm7OADew',
+                        })
+                }
+            },
+            {title: '收藏此房屋', onPress:()=>{
+                let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id);
+                if(thiscollect.collect_id===itemId){
+                    toastShort('你已成功收藏此房屋')
+                }else{
+                    realm.write(() => {
+                        realm.create('Collections', {
+                            id:realm.objects('Collections').length+1,
+                            collect_id: itemId,
+                            collector_id:user.id,
+                            collect_time:new Date().toLocaleTimeString()
+                        });
+                        toastShort('收藏成功');
+                    });}
+                }},
+            /*{title: 'Disabled', disabled: true},*/
+        ];
+        let cancelItem = {title: '取消'};
+        ActionSheet.show(items, cancelItem, {modal});
     }
 
     render() {

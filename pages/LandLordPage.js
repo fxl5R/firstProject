@@ -20,17 +20,16 @@ import {
     TouchableOpacity,
     ListView,
     InteractionManager,
-    ImageBackground
+    ImageBackground, Linking
 } from 'react-native';
 
 import { toastShort } from '../util/ToastUtil';
 import ShortLine from '../component/ShortLine';
-import {COMMENT_DATA} from '../res/data/VirtualData'
-import GridView from '../component/GridView';
 import BackHeader from '../component/BackHeader';
 import realm from "../util/realm";
 
 import * as WeiboAPI from 'rn-weibo';
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 
 let {height, width} = Dimensions.get('window');
@@ -101,9 +100,37 @@ class LandLordPage extends React.Component {
             });*/
         }
     }
+    //渲染微博认证信息
+    renderWeibo(){
+
+        let weibo_user=realm.objects('User').filtered('id==$0',
+            this.props.navigation.getParam('itemId', 'NO-ID'))[0];
+        if(weibo_user.sinaID){
+            return(
+                <TouchableOpacity onPress={()=>{
+                    let profilelink='https://weibo.com/';
+                    console.log( '个人主页链接'+profilelink);
+                    let url = profilelink.toString()+weibo_user.sinaID;
+                    Linking.openURL(url)
+                }}>
+                <View style={{flexDirection:'row',marginTop:5,alignItems:'center'}}>
+                    <Icon name="weibo" size={16} color="rgb(220,20,60)" light/>
+                    <Text style={{color:'#708090',fontSize:13,marginLeft:5,backgroundColor:'rgba(1,1,1,0)'}}>已认证微博</Text>
+                </View>
+                </TouchableOpacity>
+            )
+        }else {
+            return(
+                <View style={{flexDirection:'row',marginTop:5,alignItems:'center'}}>
+                    <Icon name="weibo" size={16} color="rgb(220,20,60)" light/>
+                    <Text style={{color:'#708090',fontSize:13,marginLeft:5,backgroundColor:'rgba(1,1,1,0)'}}>未进行微博认证</Text>
+                </View>
+            )
+        }
+
+    }
     //渲染房东基本信息布局
     renderStoreBasic(){
-        const {navigator,route} = this.props;
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
@@ -111,7 +138,7 @@ class LandLordPage extends React.Component {
         let commentNum=comments.length;//查找用户收到的评论数目require('../res/images/logo_dog.png')
         console.log('评论条数'+commentNum);
         return (
-            <View style={{height: 160,alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{height: 160,alignItems: 'center',justifyContent: 'center',backgroundColor:'rgba(248,248,255,0.9)'}}>
                 <ImageBackground source={require('../res/images/beed.jpeg')} style={{width:width,height:160}}>
                     <View style={{flexDirection:'row',marginLeft:24,height:68,alignItems:'center',marginTop:12}}>
                         <Image source={{uri:user_publisher.portrait}}
@@ -120,14 +147,14 @@ class LandLordPage extends React.Component {
                             <Text style={{color:'#708090',fontSize:16,marginTop:8,backgroundColor:'rgba(1,1,1,0)'}}>{user_publisher.nickName}</Text>
                             <View style={{flexDirection:'row',alignItems:'center',marginTop:10}}>
                                 <Image source={require('../res/images/fire-fill.png')}
-                                       style={{width:14,height:14}}/>
+                                       style={{width:16,height:16}}/>
                                 <Text style={{color:'#708090',fontSize:13,marginLeft:5,backgroundColor:'rgba(1,1,1,0)'}}>收到{commentNum}条评论</Text>
                             </View>
-                            <View style={{flexDirection:'row',marginTop:5,alignItems:'center'}}>
-                                <Image source={require('../res/images/time-circle-fill.png')}
-                                       style={{width:14,height:14}}/>
+                            {/*<View style={{flexDirection:'row',marginTop:5,alignItems:'center'}}>
+                                <Image source={require('../res/images/time-circle-fill.png')} style={{width:14,height:14}}/>
                                 <Text style={{color:'#708090',fontSize:13,marginLeft:5,backgroundColor:'rgba(1,1,1,0)'}}>最快回复：6小时</Text>
-                            </View>
+                            </View>*/}
+                            {this.renderWeibo()}
                         </View>
                     </View>
                 </ImageBackground>
@@ -251,41 +278,7 @@ class LandLordPage extends React.Component {
             <View key={`${sectionID}-${rowID}`} style={styles.separator} />
         );
     }
-    //渲染评论
-/*    renderItem(comments) {
-        comments=this.state.commentList;
-        console.log('renderItem22'+JSON.stringify(comments));
-        return (
-            <View>
-                <View style={{flexDirection:'row',margin:10}} key={index}>
-                    {/!*<Image source={{uri:comments.}} style={{width:35,height:35}}/>*!/}
-                    <View style={{flex:1,marginLeft:8}}>
-                        <Text style={{color:'black',fontSize:15}}>{comments.from_uid}</Text>
-                        <Text style={{color:'#777',fontSize:12,marginTop:5}}>{comments.content}</Text>
-                    </View>
-                    <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{comments.createTime}</Text></View>
-                </View>
-                {/!*{this.renderCommentImage(comment.imges)}*!/}
-            </View>
-        );
-    }*/
-    //渲染图片布局
-/*    renderCommentImage(imges){
-        return (
-            <View style={{marginLeft:50,marginBottom:5}}>
-                <GridView
-                    items={Array.from(imges)}
-                    itemsPerRow={3}
-                    renderItem={this.renderImageItem}
-                />
-            </View>
-        );
-    }
-    renderImageItem(rowData) {
-        return (
-            <Image  key={rowData.imgUrl} source={{uri:rowData.imgUrl}} style={{width:70,height:70,margin:5}}/>
-        );
-    }*/
+
     //渲染ListView的Header布局
     renderHeaderContent(){
         const { navigation } = this.props;

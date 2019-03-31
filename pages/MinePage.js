@@ -13,6 +13,7 @@ import realm from '../util/realm.js';
 import { WhiteSpace, WingBlank,Button} from "@ant-design/react-native";
 import platform from "../util/platform";
 import {AlertDialog} from "react-native-pickers";
+import {NormalHeader} from "../component/BackHeader";
 
 let userdatas=realm.objects('User').filtered("online == $0", 1);
 let userdata=userdatas[0];
@@ -32,12 +33,12 @@ export default class MinePage extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
+                {/*<View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
                     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                         <Text style={{fontSize:18,color:'white',alignSelf:'center'}}>个人中心</Text>
                     </View>
-                    <View style={{height:48,width:48}}/>
-                </View>
+                </View>*/}
+                <NormalHeader title={'个人中心'}/>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={styles.partContainer}>
                         <FormWithPicture
