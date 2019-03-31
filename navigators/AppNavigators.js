@@ -30,8 +30,8 @@ import RealConfirm from '../pages/Mine/RealConfirm';
 
 import MDropDown from '../component/ActionMenu/MDropDown';
 import ImageBrowers from '../component/ImageBrowers';
+import TagsSelect from '../component/TagsSelect';
 
-import AddHouseButton from '../component/Collecthouse';
 const AppStackNavigator = createStackNavigator({
 
     TabPage:{
@@ -44,9 +44,12 @@ const AppStackNavigator = createStackNavigator({
         screen:login,
         navigationOptions:{header: null}
     },
-    AddHouseButton:{
-        screen:AddHouseButton,
 
+    TagsSelect:{
+        screen:TagsSelect,
+        navigationOptions:{
+            header:null
+        }
     },
     WeiboUtil:{
         screen:WeiboUtil,

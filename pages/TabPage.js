@@ -159,7 +159,7 @@ export default class TabPage extends Component<Props> {
                                 decorate={this.state.decorate==='不限'?'':this.state.decorate}
                                 sort={this.state.sort}
                             />
-                                <View style={{height:Platform.OS === 'ios' ? 0:200}}/>
+                                {/*<View style={{height:Platform.OS === 'ios' ? 0:200}}/>*/}
                             </ScrollView>
                         </View>
                             <ActionButton buttonColor='#B0C4DE'>

@@ -30,7 +30,7 @@ class ValidRegister extends Component {
         this.setState({ form: values })
     }
     handle_registerClick(){
-        //realm.js.close();
+
         console.log('昵称'+JSON.stringify(this.state.form.nickName)+'用户名'
             +this.state.form.username+'密码'+this.state.form.password+'邮箱地址'+this.state.form.emailAddress
             +'联系电话'+this.state.form.userTel
@@ -43,7 +43,8 @@ class ValidRegister extends Component {
                     userName: [this.state.form.username].toString(),
                     userPassword: [this.state.form.password].toString(),
                     nickName:[this.state.form.nickName].toString(),
-                    //userEmail:[this.state.form.password].toString(),
+                    userEmail:[this.state.form.emailAddress].toString(),
+                    userTel:[this.state.form.userTel].toString(),
                     userLocation:'所在地',
                     userSex: '性别',
                     cTime:new Date().toLocaleTimeString()

@@ -114,6 +114,177 @@ export default class HouseDetail extends Component<Props> {
             </View>
         );
     }
+    //渲染配套设施项目
+    rendershower(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "热水淋浴"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_shower.png')}/>
+                <Text style={styles.brickText}>热水淋浴</Text>
+            </View>
+        )}
+    }
+    renderwasher(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "洗衣机"');
+        if(house.length>0){return(
+                <View style={styles.brick}>
+                    <Image style={styles.brickIcon} source={require('../res/setting/sd_washer.png')}/>
+                    <Text style={styles.brickText}>洗衣机</Text>
+                </View>
+            )}
+    }
+    renderbathtub(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "浴缸"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_bathtub.png')}/>
+                <Text style={styles.brickText}>浴缸</Text>
+            </View>
+        )}
+    }
+    renderlinewifi(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "有线网络"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_linewifi.png')}/>
+                <Text style={styles.brickText}>有线网络</Text>
+            </View>
+        )}
+    }
+    renderTV(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "电视"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_TV.png')}/>
+                <Text style={styles.brickText}>电视</Text>
+            </View>
+        )}
+    }
+    renderWiFi(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "无线网络"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_wifi.png')}/>
+                <Text style={styles.brickText}>无线网络</Text>
+            </View>
+        )}
+    }
+    renderfreezer(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "冰箱"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_freezer.png')}/>
+                <Text style={styles.brickText}>冰箱</Text>
+            </View>
+        )}
+    }
+    renderair(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "空调"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_aircon.png')}/>
+                <Text style={styles.brickText}>空调</Text>
+            </View>
+        )}
+    }
+    renderWarm(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "暖气"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_warm.png')}/>
+                <Text style={styles.brickText}>暖气</Text>
+            </View>
+        )}
+    }
+    renderSafe(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "门禁系统"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_safed.png')}/>
+                <Text style={styles.brickText}>门禁系统</Text>
+            </View>
+        )}
+    }
+    renderLift(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "电梯"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_lift.png')}/>
+                <Text style={styles.brickText}>电梯</Text>
+            </View>
+        )}
+    }
+    renderPark(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "停车位"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_park.png')}/>
+                <Text style={styles.brickText}>停车位</Text>
+            </View>
+        )}
+    }
+    renderWater(){
+        let house=realm.objects('House_Info')
+            .filtered('house_id==$0',this.props.navigation.getParam('itemId', 'NO-ID'))
+            .filtered('support_set CONTAINS[c] "饮水设备"');
+        if(house.length>0){return(
+            <View style={styles.brick}>
+                <Image style={styles.brickIcon} source={require('../res/setting/sd_waterww.png')}/>
+                <Text style={styles.brickText}>饮水设备</Text>
+            </View>
+        )}
+    }
+    //渲染配套设施
+    renderSettings(){
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        console.log('itemId'+itemId);
+        let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
+        let house=houses[0];
+        return(
+            <View style={{backgroundColor:'white',height:180,marginEnd:20}}>
+                <View style={{flexDirection:'row', flexWrap: 'wrap'}}>
+                    {this.rendershower()}
+                    {this.renderwasher()}
+                    {this.renderbathtub()}
+                    {this.renderlinewifi()}
+                    {this.renderTV()}
+                    {this.renderWiFi()}
+                    {this.renderfreezer()}
+                    {this.renderair()}
+                    {this.renderWarm()}
+                    {this.renderSafe()}
+                    {this.renderLift()}
+                    {this.renderPark()}
+                    {this.renderWater()}
+                </View>
+            </View>
+        )
+    }
     //基本信息
     renderBaseInfo(){
         const { navigation } = this.props;
@@ -189,9 +360,16 @@ export default class HouseDetail extends Component<Props> {
                         expandView={()=>(<View style={styles.arrow}/>)}
                     >
                         {house.house_description}
-                        ceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshiceshices
+                        ceshiceshiceshiceshiceshiceshiceshiceshice
+                        shiceshiceshiceshiceshiceshiceshiceshiceshiceshices
                     </ExpandableText>
                 </View>
+                <Image style={{padding:4}} source={require('../res/images/ic_center_line.png')}/>
+                <View style={{height:35,justifyContent:'center'}}>
+                    <Text style={{color:'#777',marginLeft:8}}>配套设施</Text>
+                </View>
+                <Image source={require('../res/images/ic_center_line.png')}/>
+                {this.renderSettings()}
                 {/*<View style={{height:Platform.OS === 'ios' ? 0:45}}/>*/}
             </View>
                 </ScrollView>
@@ -413,6 +591,22 @@ const styles = StyleSheet.create({
     itemForm3:{
         fontSize:14,
         marginTop:10
+    },
+    brick:{
+        flexDirection:'column',
+        height:50,
+        width:50,
+        margin:5,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    brickText:{
+        fontSize:12,
+        color:'grey',
+    },
+    brickIcon:{
+        height:32,
+        width:32
     }
 
 });

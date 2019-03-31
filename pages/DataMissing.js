@@ -13,9 +13,11 @@ export default class DataMissing extends Component{
     render(){
         return(
             <View style={styles.container}>
+                <View style={{flex:4}}/>
                 <View style={styles.concontainer}>
-                    <Image style={{height:height/2,width:'90%',}} source={require('../res/images/tip_nodata.png')}/>
+                    <Image style={{height:height/2.5,width:'80%',}} source={require('../res/images/tip_nodata.png')}/>
                 </View>
+                <View style={{flex:4}}/>
             </View>
         )
     }
@@ -26,12 +28,16 @@ export default class DataMissing extends Component{
 const styles = StyleSheet.create({
   container:{
       backgroundColor:'#f1f1f1',
-      flex:1
+      flex:1,
+      justifyContent: 'center',
+      flexDirection:'column'
+      //alignItems:'center'
   },
   concontainer:{
       backgroundColor: 'white',
       borderColor:'#f1f1f1',
       justifyContent:'center',
-      flex:1
+      //alignItems:'center',
+      flex:4
   }
 });

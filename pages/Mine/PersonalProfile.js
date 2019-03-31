@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     Image,
     ToastAndroid,
+    TouchableNativeFeedback
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import FormWithPairText from '../../component/Form/FormWithPairText';
@@ -52,6 +53,20 @@ class PersonalProfile extends React.Component<Props> {
             style={{ paddingVertical: 15 }}
             arrowRight={true}
           />
+            <FormWithPairText
+                leftText={'联系电话'}
+                rightText={userdata.userTel}
+                onFormClick={() => this.onNickNameClick()}
+                style={{ paddingVertical: 15 }}
+                arrowRight={true}
+            />
+            <FormWithPairText
+                leftText={'邮件地址'}
+                rightText={userdata.userEmail}
+                onFormClick={() => this.onNickNameClick()}
+                style={{ paddingVertical: 15 }}
+                arrowRight={true}
+            />
             {/*<FormWithPairText
                 leftText={'密码'}
                 rightText={nickName}
@@ -227,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#B0C4DE',
     borderRadius:7,
     marginTop: 14,
-    elevation: 1
+    //elevation: 1
   },
 
 });

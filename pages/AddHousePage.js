@@ -27,6 +27,8 @@ import AreaJson from "../res/data/Area";
 import Toast from "@ant-design/react-native/lib/toast";
 //import {ImagePicker} from '@ant-design/react-native';
 import ImagePicker from "react-native-image-crop-picker";
+import TagsSelect from "../component/TagsSelect";
+import TagSelect from "react-native-tag-select/src/TagSelect";
 
 const {height, width} = Dimensions.get('window');
 
@@ -78,13 +80,14 @@ export default class AddHousePage extends Component {
             House_Pic4:'',            //卫生间图
             House_Pic5:'',            //图片补充1
             House_Pic6:'',            //图片补充2
-            Support_Set: '',          //配套设施
+            Support_Set: [],          //配套设施
             House_Description: '',    //房屋描述
             House_Location: '',       //房产地址
             Owner_Tel: '',            //房主联系电话
             Certification: ''         //是否已认证
         };
     }
+
 
     add_House = () => {
 
@@ -120,7 +123,7 @@ export default class AddHousePage extends Component {
                     house_pic4:this.state.House_Pic4,
                     house_pic5:this.state.House_Pic5,
                     house_pic6:this.state.House_Pic6,
-                    support_set: this.state.Support_Set,
+                    support_set:JSON.stringify(this.tag.itemsSelected), //this.state.Support_Set,
                     house_description: this.state.House_Description,
                     house_location: this.state.House_Location,
                     owner_tel: this.state.Owner_Tel,
@@ -128,8 +131,44 @@ export default class AddHousePage extends Component {
                 });
         });
         Alert.alert("成功添加房屋信息");
+        console.log('Selected items:', JSON.stringify(this.tag.itemsSelected));
         this.props.navigation.navigate('PublishResult');
     };
+
+    renderSetting() {
+        const data = [
+            { id: 1, label: '热水淋浴' },//shower
+            { id: 2, label: '洗衣机' },//washer
+            { id: 3, label: '浴缸' },//bathtub
+            { id: 4, label: '有线网络' },//line-wifi
+            { id: 5, label: '电视' },//TV
+            { id: 6, label: '无线网络' },//wifi
+            { id: 7, label: '冰箱'},//freezer
+            { id: 8, label: '空调'},//aircon
+            { id: 9, label: '暖气'},//warm
+            { id:10, label: '门禁系统'},//safed
+            { id:11, label: '电梯'},//lift
+            { id:12, label: '停车位'},//park
+            { id:13, label: '饮水设备'},//water
+
+        ];
+
+        return (
+            <View style={styles.container}>
+                <Text style={styles.labelText}>配套设施：</Text>
+                <TagSelect
+                    data={data}
+                    itemStyle={styles.item}
+                    itemLabelStyle={styles.label}
+                    itemStyleSelected={styles.itemSelected}
+                    itemLabelStyleSelected={styles.labelSelected}
+                    ref={(tag) => {
+                        this.tag = tag;
+                    }}
+                />
+            </View>
+        );
+    }
 
     render() {
         const {files}=this.state;
@@ -300,21 +339,9 @@ export default class AddHousePage extends Component {
                             onImageClick={(index, fs) => console.log('图片点击click'+index, fs)}
                             selectable={files.length < 7}
                             accept="image/gif,image/jpeg,image/jpg,image/png"
-                        />*/}
-                        {/*<View style={{flexDirection: 'row'}}>
-                            <WhiteSpace/>
-                            <Tag onChange={onChange} afterClose={() => {
-                                console.log('afterClose');
-                            }}>设施齐全</Tag>
-                            <WhiteSpace/>
-                        </View>*/}
-                        <TextInput
-                            placeholder="配套设施"
-                            style={styles.TextInputStyle}
-                            underlineColorAndroid="transparent"
-                            onChangeText={(text) => {
-                                this.setState({Support_Set: text})
-                            }}/>
+                        />
+                        <TagsSelect setValue={this.setValue}  />*/}
+                        {this.renderSetting()}
                         <TextareaItem
                             style={{
                                 width: width * 0.85, borderRadius: 10, margin: 10,
@@ -624,6 +651,32 @@ const styles = StyleSheet.create({
         width:22,
         height:40,
         marginTop: 20
-    }
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#FFF',
+        marginTop: 50,
+        marginLeft: 15,
+    },
+    labelText: {
+        color: '#B0C4DE',
+        fontSize: 15,
+        fontWeight: '500',
+        marginBottom: 15,
+    },
+    item: {
+        borderWidth: 1,
+        borderColor: '#333',
+        backgroundColor: '#FFF',
+    },
+    label: {
+        color: '#333'
+    },
+    itemSelected: {
+        backgroundColor: '#B0C4DE',//#333
+    },
+    labelSelected: {
+        color: '#FFF',
+    },
 
 });

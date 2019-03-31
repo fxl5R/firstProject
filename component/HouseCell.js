@@ -168,13 +168,7 @@ export default class HouseCell extends Component {
                                 </View>
                             }
                         />
-                        <View style={{flex:1}}>
-                            <ActionButton buttonColor='#B0C4DE'>
-                                <ActionButton.Item buttonColor='#6495ED' title="添加房屋" onPress={()=>{this.props.navigation.navigate('ProtocolPage')}}>
-                                    <Icon name="md-create" style={styles.actionButtonIcon} />
-                                </ActionButton.Item>
-                            </ActionButton>
-                        </View>
+
                     </ScrollView>
 
                 </View>

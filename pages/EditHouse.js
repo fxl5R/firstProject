@@ -27,6 +27,7 @@ import AreaJson from "../res/data/Area";
 //import {ImagePicker} from '@ant-design/react-native';
 import ImagePicker from "react-native-image-crop-picker";
 import {toastShort} from "../util/ToastUtil";
+import TagSelect from "react-native-tag-select/src/TagSelect";
 
 const {height, width} = Dimensions.get('window');
 
@@ -78,12 +79,63 @@ export default class EditHouse extends Component {
             House_Pic4:'',            //卫生间图
             House_Pic5:'',            //图片补充1
             House_Pic6:'',            //图片补充2
-            Support_Set: '',          //配套设施
+            Support_Set:'',//配套设施
             House_Description: '',    //房屋描述
             House_Location: '',       //房产地址
             Owner_Tel: '',            //房主联系电话
             Certification: ''         //是否已认证
         };
+    }
+
+    renderSetting() {
+        const data = [
+            { id: 1, label: '热水淋浴' },//shower
+            { id: 2, label: '洗衣机' },//washer
+            { id: 3, label: '浴缸' },//bathtub
+            { id: 4, label: '有线网络' },//line-wifi
+            { id: 5, label: '电视' },//TV
+            { id: 6, label: '无线网络' },//wifi
+            { id: 7, label: '冰箱'},//freezer
+            { id: 8, label: '空调'},//aircon
+            { id: 9, label: '暖气'},//warm
+            { id:10, label: '门禁系统'},//safed
+            { id:11, label: '电梯'},//lift
+            { id:12, label: '停车位'},//park
+            { id:13, label: '饮水设备'},//water
+
+        ];
+        /*const datas=[
+            { id: 1, label: '热水淋浴' },//shower
+            { id: 2, label: '洗衣机' },//washer
+            { id: 3, label: '浴缸' },//bathtub
+            { id: 4, label: '有线网络' },//line-wifi
+            { id: 5, label: '电视' }//TV
+         ];*/
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        let thisHouse=realm.objects('House_Info').filtered('house_id==$0',itemId)[0];//根据管理房屋页面传递的house_id查找该房屋在数据库中的信息
+        const datas=JSON.parse(thisHouse.support_set);//?thisHouse.support_set:JSON.stringify(this.tag.itemsSelected);
+        /*const datas=[{"id":1,"label":"热水淋浴"},{"id":2,"label":"洗衣机"},{"id":3,"label":"浴缸"},
+        {"id":5,"label":"电视"},{"id":8,"label":"空调"},{"id":9,"label":"暖气"},{"id":10,"label":"门禁系统"},
+        {"id":11,"label":"电梯"},{"id":13,"label":"饮水设备"}];*/
+        console.log('已经选择的tag:'+thisHouse.support_set);
+        return (
+            <View style={styles.container}>
+                <Text style={styles.labelText}>配套设施：</Text>
+                <TagSelect
+                    data={data}
+                    itemStyle={styles.item}
+                    itemLabelStyle={styles.label}
+                    itemStyleSelected={styles.itemSelected}
+                    itemLabelStyleSelected={styles.labelSelected}
+                    ref={(tag) => {
+                        this.tag = tag;
+                    }}
+                    //value={thisHouse.support_set?thisHouse.support_set:JSON.stringify(this.tag.itemsSelected)}
+                    value={JSON.parse(thisHouse.support_set)}
+                />
+            </View>
+        );
     }
 
     edit_House = () => {
@@ -121,7 +173,7 @@ export default class EditHouse extends Component {
                     house_pic4:this.state.House_Pic4?this.state.House_Pic4:thisHouse.house_pic4,
                     house_pic5:this.state.House_Pic5?this.state.House_Pic5:thisHouse.house_pic5,
                     house_pic6:this.state.House_Pic6?this.state.House_Pic6:thisHouse.house_pic6,
-                    support_set: this.state.Support_Set?this.state.Support_Set:thisHouse.support_set,
+                    support_set: this.tag.itemsSelected?JSON.stringify(this.tag.itemsSelected):JSON.stringify(thisHouse.support_set),
                     house_description: this.state.House_Description?this.state.House_Description:thisHouse.house_description,
                     house_location: this.state.House_Location?this.state.House_Location:thisHouse.house_location,
                     owner_tel: this.state.Owner_Tel?this.state.Owner_Tel:thisHouse.owner_tel,
@@ -369,17 +421,7 @@ export default class EditHouse extends Component {
                             }}>设施齐全</Tag>
                             <WhiteSpace/>
                         </View>*/}
-                        <View style={{flexDirection: 'row'}}>
-                            <Text style={{marginTop:30}}>配套设施：</Text>
-                            <TextInput
-                                placeholder="配套设施"
-                                style={[styles.TextInputStyle,{marginTop:20}]}
-                                value={this.state.Support_Set?this.state.Support_Set:thisHouse.support_set}
-                                underlineColorAndroid="transparent"
-                                onChangeText={(text) => {
-                                    this.setState({Support_Set: text})
-                                }}/>
-                        </View>
+                        {this.renderSetting()}
                         <View style={{flexDirection: 'row'}}>
                             <Text style={{marginTop:30}}>房屋描述：</Text>
                             <TextareaItem
@@ -623,6 +665,33 @@ const styles = StyleSheet.create({
         width:22,
         height:40,
         marginTop: 20
-    }
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#FFF',
+        marginTop: 50,
+        marginLeft: 15,
+    },
+    labelText: {
+        color: '#B0C4DE',
+        fontSize: 15,
+        fontWeight: '500',
+        marginBottom: 15,
+    },
+    item: {
+        borderWidth: 1,
+        borderColor: '#333',
+        backgroundColor: '#FFF',
+    },
+    label: {
+        color: '#333'
+    },
+    itemSelected: {
+        backgroundColor: '#B0C4DE',//#333
+    },
+    labelSelected: {
+        color: '#FFF',
+    },
+
 
 });

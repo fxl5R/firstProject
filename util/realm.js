@@ -1,6 +1,7 @@
 
 import Realm from 'realm';
 
+
 class House_Info extends Realm.Object {}
 House_Info.schema = {
     name: 'House_Info',
@@ -51,7 +52,7 @@ User.schema = {
         nickName:'string',                      // 昵称
         online: {type: 'int', optional: true }, //判断用户在线1:在线 0:离线
         userLocation:{type:'string',optional:true},         // 用户所在地
-        //userEmail:{type:'string',optional:true},            //用户邮件地址
+        userEmail:{type:'string',optional:true},            //用户邮件地址
         userTel:{type:'string',optional:true},              // 用户联系电话
         sinaID:{type:'string',optional:true},               //认证新浪微博后保存新浪账号ID
         isRealPeople:{type:'int',default: 0,optional:true}, // 是否实名认证1：实名0：未实名
