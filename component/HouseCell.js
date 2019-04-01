@@ -42,6 +42,8 @@ export default class HouseCell extends Component {
 
     /**  将父组件传来的props转为子(本)组件的state
      *    进行查询筛选，更新dataSource
+     *    根据从TabPage传递的MDropDown参数
+     *    进行关键字查询
      **/
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
@@ -74,7 +76,6 @@ export default class HouseCell extends Component {
                                 .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
 
         });
-
         console.log('testSearch!!!2222'+JSON.stringify(this.state.dataSource));
     }
     _onRefresh() {
@@ -85,12 +86,6 @@ export default class HouseCell extends Component {
             )
         }
     }
-
-    /**  根据从TabPage传递的DropDown参数
-     *    进行关键字查询
-     **/
-
-
 
 
     /**
@@ -116,7 +111,6 @@ export default class HouseCell extends Component {
      * 渲染房屋展示卡片列表
      **/
     render() {
-        //if(this.props.typee){Alert.alert(this.props.typee)}else{Alert.alert('without typee value')};<Text>{this.props.typee}</Text>
         if(this.state.dataSource._cachedRowCount===0){
             console.log('行数'+ListView._cachedRowCount);
             return(

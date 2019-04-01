@@ -65,10 +65,10 @@ export default class MinePage extends Component {
                             leftText={'我的评论'}
                             onFormClick={() => this.myComments()}
                         />
-                        <FormArrowToDetail
+{/*                        <FormArrowToDetail
                             leftText={'我的收藏'}
                             onFormClick={() => this.evaluateApp()}
-                        />
+                        />*/}
                         <FormArrowToDetail
                             leftText={'安全中心'}
                             onFormClick={() => this.aboutTheApp()}
@@ -88,7 +88,7 @@ export default class MinePage extends Component {
                     />*/}
                     <WhiteSpace size="xl" />
                     <WingBlank >
-                        <Button style={{ borderWidth: platform.borderH }}
+                        <Button style={{ borderWidth:1 }}
                                 onPress={() => {
 
                                     this.props.navigation.navigate('Login');

@@ -44,19 +44,18 @@ export default class login extends Component {
         }
     }
     handle_loginClick(){
-        let users=realm.objects('User').filtered('userName==$0',this.state.text.toString());
-        let user=users[0];                                     //从realm中查询到的是results数组类型，需要指定某一个数来进行判断
+        let users=realm.objects('User')
+            .filtered('userName==$0',this.state.text.toString());
+        let user=users[0];                             //从realm中查询到的是results数组类型，需要指定某一个数来进行判断
         if(!user){toastShort('请检查用户名或密码')}
         else{
-            let password1=user.userPassword;                   //从realm中取出username为textinput中的密码
-            if(this.state.password===password1){                   //判断密码
+            let password1=user.userPassword;           //从realm中取出username为textinput中的用户的密码
+            if(this.state.password===password1){       //判断密码
                 toastShort('用户'+user.userName+'登录成功');
                 realm.write(() => {
                     realm.create('User', {id:user.id,online: 1}, true);//更新在线状态
                 });
-                /*user.online=1;//更新在线状态*/
                 this.props.navigation.navigate('TabPage');
-                //realm.js.close();
                 }else{
                 toastShort('登录失败，请检查用户名或者密码');
                 }
@@ -108,7 +107,6 @@ export default class login extends Component {
                         <Text style={styles.style_view_register}
                               onPress={()=>{
                                   this.props.navigation.navigate('ValidRegister');
-                                  /*alert('test success');*/
                               }}>
                             新用户
                         </Text>

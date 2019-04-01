@@ -17,8 +17,19 @@ export default class CommentDisplay extends React.Component {
             from_nickName:'',
             to_uid:'',
             commentTime:''
-        }
+        };
+        this.GoToUserDetail=this.GoToUserDetail.bind(this);
     }
+
+    /**
+     * 根据用户id跳转用户个人主页
+     **/
+    GoToUserDetail(from_uid) {
+        this.props.navigation.navigate('UserPage',{
+            itemId: from_uid});
+    };
+
+
     _renderSeparatorView(sectionID: number, rowID: number) {
         return (
             <View key={`${sectionID}-${rowID}`} style={styles.separator}/>
@@ -33,7 +44,9 @@ export default class CommentDisplay extends React.Component {
                 renderRow={(rowData) =>
                     <View>
                         <View style={{flexDirection:'row',margin:10}} >
-                            <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
+                            <TouchableOpacity onPress={this.GoToUserDetail.bind(this,rowData.from_uid)}>
+                                <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
+                            </TouchableOpacity>
                             <View style={{flex:1,marginLeft:8}}>
                                 <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
                                 <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
@@ -54,7 +67,7 @@ export default class CommentDisplay extends React.Component {
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从个人中心获取用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
-        console.log('收到的评论收到的评论收到的评论!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
+        console.log('收到的评论'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
         return (
             <View style={{flex:1}}>
                 {this.renderContent(this.state.dataSource.cloneWithRows(
@@ -67,7 +80,7 @@ export default class CommentDisplay extends React.Component {
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从个人中心获取用户的ID
         let comments=realm.objects('Comments').filtered('from_uid==$0',itemId);
-        console.log('发出的评论发出的评论发出的评论!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
+        console.log('发出的评论'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
         return (
             <View style={{flex:1}}>
                 {this.renderContent(this.state.dataSource.cloneWithRows(

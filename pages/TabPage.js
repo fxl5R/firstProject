@@ -150,7 +150,9 @@ export default class TabPage extends Component<Props> {
                                 onChange={this.onChange}
                             />
                             {this._renderCarousel()}
+
                             <MDropDown setValue1={this.setValue1} setValue2={this.setValue2} setValue3={this.setValue3} setValue4={this.setValue4}/>
+
                             <ScrollView >
                             <HouseCell
                                 navigation={this.props.navigation}

@@ -13,6 +13,7 @@ import AddHousePage from '../pages/AddHousePage';
 import EditHouse from '../pages/EditHouse';
 import PublishResult from '../pages/PublishResult';
 import LandLordPage from '../pages/LandLordPage';
+import UserPage from '../pages/UserPage';
 
 import HouseDetail from '../component/HouseDetail';
 import HouseCell from '../component/HouseCell';
@@ -34,6 +35,7 @@ import TagsSelect from '../component/TagsSelect';
 
 const AppStackNavigator = createStackNavigator({
 
+
     TabPage:{
         screen:TabPage,
         navigationOptions:{
@@ -45,6 +47,7 @@ const AppStackNavigator = createStackNavigator({
         screen:login,
         navigationOptions:{header: null}
     },
+
 
     TagsSelect:{
         screen:TagsSelect,
@@ -108,6 +111,12 @@ const AppStackNavigator = createStackNavigator({
 
     LandLordPage:{
         screen:LandLordPage,
+        navigationOptions:{
+            header:null
+        }
+    },
+    UserPage:{
+        screen:UserPage,
         navigationOptions:{
             header:null
         }

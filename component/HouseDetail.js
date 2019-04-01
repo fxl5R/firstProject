@@ -461,16 +461,10 @@ export default class HouseDetail extends Component<Props> {
     showaction(modal) {
         let user=realm.objects('User').filtered("online == $0", 1)[0];//获取当前用户，存储collector_id
         const itemId = this.props.navigation.getParam('itemId', 'NO-ID');//获取HouseCell中的house_id作为collect_id
-        let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0]
+        let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
         //分享图文信息到新浪
         let items = [
-            {title: '分享到微博',  onPress:()=>/*{
-                    WeiboAPI.share(data).then(res=>{
-                        console.log('share success:',res);
-                        toastShort('分享成功');
-                    }).catch(err=>{
-                        console.log('share fail:',err)
-                    })}*/{
+            {title: '分享到微博',  onPress:()=>{
                         WeiboAPI.share({
                             type: 'image',
                             text: '发现了一家房屋在出租:'+'地址：'+thehouse.house_location+
@@ -478,20 +472,23 @@ export default class HouseDetail extends Component<Props> {
                                 +'小区：'+thehouse.area_name+'月租：'+thehouse.rent_fee,
                             //imageUrl:'https://dwz.cn/lm7OADew',
                         })
-                }
-            },
+                    }
+                },
             {title: '收藏此房屋', onPress:()=>{
                 let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id);
+                console.log('收藏后收藏者id：'+thiscollect.collector_id+'测试userid'+user.id);
                 if(thiscollect.collect_id===itemId){
+                    console.log('测试收藏者id1'+thiscollect.collector_id);
                     toastShort('你已成功收藏此房屋')
                 }else{
                     realm.write(() => {
                         realm.create('Collections', {
                             id:realm.objects('Collections').length+1,
-                            collect_id: itemId,
+                            collect_id:itemId,
                             collector_id:user.id,
                             collect_time:new Date().toLocaleTimeString()
                         });
+                        console.log('测试收藏者id22'+thiscollect.collector_id+itemId);
                         toastShort('收藏成功');
                     });}
                 }},

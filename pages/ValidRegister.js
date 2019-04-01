@@ -1,6 +1,5 @@
 'use strict';
 
-import moment from 'moment';
 import React,{Component} from 'react';
 import {Button} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
@@ -8,29 +7,25 @@ import {GiftedForm, GiftedFormManager, GiftedFormModal} from 'react-native-gifte
 import realm from "../util/realm";
 import {toastShort} from "../util/ToastUtil";
 import {NormalHeader} from "../component/BackHeader";
-import SimpleItemsDialog from "react-native-pickers/view/SimpleItemsDialog";
 
 class ValidRegister extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
             form: {
-                nickName: '',//FullName
+                nickName: '',
                 userName:'',
                 userPassword:'',
                 emailAddress:'',
                 userTel:'',
                 tos: false,
             },
-            //uSex:'',
         }
     }
     handleValueChange(values) {
-        //console.log('handleValueChange', values)
-        this.setState({ form: values })
-    }
-    handle_registerClick(){
+        this.setState({ form: values })}
 
+    handle_registerClick(){
         console.log('昵称'+JSON.stringify(this.state.form.nickName)+'用户名'
             +this.state.form.username+'密码'+this.state.form.password+'邮箱地址'+this.state.form.emailAddress
             +'联系电话'+this.state.form.userTel
@@ -53,26 +48,23 @@ class ValidRegister extends Component {
             toastShort('用户'+this.state.form.username+'注册成功，'+'跳转至登录页面');
             this.props.navigation.navigate('Login');
         }else {
-
             toastShort('请检查输入')
         }
     }
     render() {
         const { nickName, tos, userName , userPassword ,emailAddress,userTel} = this.state.form;
-        //console.log('render', this.state.form);
         return (
 
             <GiftedForm
-                formName='signupForm'// GiftedForm instances that use the same name will also share the same states
+                formName='signupForm'
                 openModal={(Second) => {
-                    this.props.navigation.navigate('Second'); // The ModalWidget will be opened using this method. Tested with ExNavigator
+                    this.props.navigation.navigate('Second');
                 }}
-                clearOnClose={false} // delete the values of the form when unmounted
+                clearOnClose={false}
 
                 defaults={{
                     username: '',
-                    password: '',
-                    //country: '123'
+                    password: ''
                 }}
                 onValueChange={this.handleValueChange.bind(this)}
 
@@ -126,26 +118,7 @@ class ValidRegister extends Component {
                             message: '{TITLE} 非法'
                         }]
                     },
-/*                    gender: {
-                        title: 'Gender',
-                        validate: [{
-                            validator: (...args) => {
-                                if (args[0] === undefined) {
-                                    return false;
-                                }
-                                return true;
-                            },
-                            message: '{TITLE} is required',
-                        }]
-                    },
-                    country: {
-                        title: '所在地',
-                        validate: [{
-                            validator: 'isLength',
-                            arguments: [2],
-                            message: '{TITLE} is required'
-                        }]
-                    }*/
+
                 }}
             >
                 <GiftedForm.SeparatorWidget />
@@ -206,69 +179,9 @@ class ValidRegister extends Component {
                 />
 
                 <GiftedForm.SeparatorWidget />
-{/*               <TouchableOpacity
-                    onPress={() => { this.SimpleItemsDialog.show() }} >
-                <GiftedForm.ModalWidget
-                    title='性别'
-                    displayValue='gender'
-                    image={require('../res/icons/color/gender.png')}
-                    openModal={this.onPress}
-                >
-                <GiftedForm.SeparatorWidget />
-
-                </GiftedForm.ModalWidget>
-                </TouchableOpacity>
-
-                <SimpleItemsDialog
-                    items={['男' , '女' ]}
-                    ref={ref => this.SimpleItemsDialog = ref}
-                    onPress={(items) => {
-                        this.setState({uSex:items===1?'女':'男'});
-                        console.log('items:'+items+'state:'+this.state.uSex);
-                    }} />*/}
-
-  {/*              <GiftedForm.ModalWidget
-                    title='所在地'
-                    displayValue='country'
-                    image={require('../res/icons/color/passport.png')}
-                    scrollEnabled={false}
-
-                >
-                    <GiftedForm.SelectCountryWidget
-                        code='alpha2'
-                        name='country'
-                        title='Country'
-                        autoFocus={true}
-                    />
-                </GiftedForm.ModalWidget>
-*/}
 
                 <GiftedForm.ErrorsWidget/>
-{/*                <GiftedForm.SubmitWidget
-                    title='Sign up'
-                    widgetStyles={{
-                        submitButton: {
-                         backgroundColor:'#4682B4',
-                        }
-                    }}
-                    onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {
-                        if (isValid === true) {
-                            values.gender = values.gender[0];
-                            values.birthday = moment(values.birthday).format('YYYY-MM-DD');
 
-                            /* Implement the request to your server using values variable
-                            ** then you can do:
-                            ** postSubmit(); // disable the loader
-                            ** postSubmit(['An error occurred, please try again']); // disable the loader and display an error message
-                            ** postSubmit(['Username already taken', 'Email already taken']); // disable the loader and display an error message
-                            ** GiftedFormManager.reset('signupForm'); // clear the states of the form manually. 'signupForm' is the formName used
-                            */
-         /*               }
-
-                    }}
-
-                />
-*/}
                 <Button
                     style={{
                         margin: 10,
@@ -280,7 +193,6 @@ class ValidRegister extends Component {
                     }}
                     title={'注    册'}
                     onPress={this.handle_registerClick.bind(this)}
-
                 />
                 <GiftedForm.NoticeWidget title='' />
                 <GiftedForm.HiddenWidget name='tos' value={true} />

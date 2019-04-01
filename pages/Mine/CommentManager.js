@@ -3,33 +3,7 @@ import {ScrollView, Text, TouchableOpacity, View, ListView, Image, StyleSheet} f
 import { Tabs,Modal, } from '@ant-design/react-native';
 import BackHeader from '../../component/BackHeader';
 import realm from '../../util/realm';
-/*const renderContent = (tab, index) => {
-    const style = {
-        paddingVertical: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 10,
-        backgroundColor: '#ddd',
-    };
-/!*    this.TabContentClick = () => {
-        Modal.operation([
-            { text: '标为已读', onPress: () => console.log('标为已读被点击了') },
-            { text: '删除聊天', onPress: () => console.log('删除聊天被点击了') },
-        ]);
-    };*!/
-    const content = [1, 2, 3, 4, 5, 6, 7, 8].map(i => {
-        return (
-            <TouchableOpacity onPress={()=>this.TabContentClick} key={`${index}_${i}`}>
-                <View key={`${index}_${i}`} style={style}>
-                    <Text>
-                        {tab.title} - {i}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-        );
-    });
-    return <ScrollView style={{ backgroundColor: '#fff' }}>{content}</ScrollView>;
-};*/
+
 export default class CommentManager extends React.Component {
     constructor(props) {
         super(props);
@@ -42,8 +16,18 @@ export default class CommentManager extends React.Component {
             from_nickName:'',
             to_uid:'',
             commentTime:''
-        }
+        };
+        this.GoToUserDetail=this.GoToUserDetail.bind(this);
     }
+
+    /**
+     * 根据用户id跳转用户个人主页
+     **/
+    GoToUserDetail(from_uid) {
+        this.props.navigation.navigate('UserPage',{
+            itemId: from_uid});
+    };
+
     _renderSeparatorView(sectionID: number, rowID: number) {
         return (
             <View key={`${sectionID}-${rowID}`} style={styles.separator}/>
@@ -58,7 +42,9 @@ export default class CommentManager extends React.Component {
                 renderRow={(rowData) =>
                     <View>
                         <View style={{flexDirection:'row',margin:10}} >
-                            <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
+                            <TouchableOpacity onPress={this.GoToUserDetail.bind(this,rowData.from_uid)}>
+                                <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
+                            </TouchableOpacity>
                             <View style={{flex:1,marginLeft:8}}>
                                 <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
                                 <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>

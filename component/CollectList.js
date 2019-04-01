@@ -17,7 +17,7 @@ import {AddHouseButton} from "./Collecthouse";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-let user=realm.objects('User').filtered('online==$0',1)[0];//获取当前用户
+let user=realm.objects('User').filtered('online==$0',1);//获取当前用户[0]
 let collector=realm.objects('Collections').filtered('collector_id==$0',user.id);//根据用户id关联collector_id获取收藏信息
 let mydata=realm.objects('House_Info').filtered("house_id == $0", collector.collect_id)
     .sorted("publish_time", true);

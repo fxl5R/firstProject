@@ -7,7 +7,7 @@
  */
 
 /**
- * 商家详情
+ * 个人主页详情
  */
 'use strict';
 import React from 'react';
@@ -19,7 +19,6 @@ import {
     StyleSheet,
     TouchableOpacity,
     ListView,
-    InteractionManager,
     ImageBackground, Linking
 } from 'react-native';
 
@@ -34,7 +33,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 
 let {height, width} = Dimensions.get('window');
 
-class LandLordPage extends React.Component {
+class UserPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -42,7 +41,7 @@ class LandLordPage extends React.Component {
         //this.renderItem = this.renderItem.bind(this);
         this.renderHeaderContent = this.renderHeaderContent.bind(this);
         const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从评论列表详情获取发布评论的用户的ID
         let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];//用发布人ID关联User表查询该用户的相关信息
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);//查询该用户的收到的所有评论
         this.state={
@@ -59,7 +58,6 @@ class LandLordPage extends React.Component {
         barStyle: 'light-content',
         hidden:false
     };
-
     /**
      * 根据用户id跳转用户个人主页
      **/
@@ -81,15 +79,6 @@ class LandLordPage extends React.Component {
             };
             WeiboAPI.share(data).then(res=>{
                 console.log('share success:',res)
-                //登陆成功后打印出的数据如下：
-                // {
-                //     refreshToken: '2.00Gc2PbDcecpWC127d0bc690FE7TzD',
-                //     type: 'WBAuthorizeResponse',
-                //     expirationDate: 1686362993740.243,
-                //     userID: '3298780934',
-                //     errCode: 0,
-                //     accessToken: '2.00Gc2PbDcecpWCa981899f410o5hEX'
-                // }
             }).catch(err=>{
                 console.log('share fail:',err)
             });
@@ -102,12 +91,6 @@ class LandLordPage extends React.Component {
         }else if(position === 5 || position ===0){
             //点击评论
             this.props.navigation.navigate('CommentManager');
-            /*InteractionManager.runAfterInteractions(() => {
-                navigator.push({
-                    component: Comment,
-                    name: 'Comment'
-                });
-            });*/
         }
     }
     //渲染微博认证信息
@@ -123,10 +106,10 @@ class LandLordPage extends React.Component {
                     let url = profilelink.toString()+weibo_user.sinaID;
                     Linking.openURL(url)
                 }}>
-                <View style={{flexDirection:'row',marginTop:5,alignItems:'center'}}>
-                    <Icon name="weibo" size={16} color="rgb(220,20,60)" light/>
-                    <Text style={{color:'#708090',fontSize:13,marginLeft:5,backgroundColor:'rgba(1,1,1,0)'}}>已认证微博</Text>
-                </View>
+                    <View style={{flexDirection:'row',marginTop:5,alignItems:'center'}}>
+                        <Icon name="weibo" size={16} color="rgb(220,20,60)" light/>
+                        <Text style={{color:'#708090',fontSize:13,marginLeft:5,backgroundColor:'rgba(1,1,1,0)'}}>已认证微博</Text>
+                    </View>
                 </TouchableOpacity>
             )
         }else {
@@ -142,7 +125,7 @@ class LandLordPage extends React.Component {
     //渲染房东基本信息布局
     renderStoreBasic(){
         const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从评论列表详情获取发布评论的用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
         let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];//用发布人ID关联User表查询该用户的相关信息
         let commentNum=comments.length;//查找用户收到的评论数目require('../res/images/logo_dog.png')
@@ -174,7 +157,7 @@ class LandLordPage extends React.Component {
     //渲染中间部分功能界面布局
     renderCenterBar(){
         const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从评论列表详情获取发布评论的用户的ID
         let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
         return (
             <View style={{backgroundColor:'white'}}>
@@ -243,7 +226,7 @@ class LandLordPage extends React.Component {
     //渲染底部评论信息模块
     renderBottomComment(){
         const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从评论列表详情获取发布评论的用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
         console.log('renderBottomComment!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
         return (
@@ -262,18 +245,18 @@ class LandLordPage extends React.Component {
                 //renderRow={this.renderItem}
                 renderRow={(rowData) =>
                     <View>
-                    <View style={{flexDirection:'row',margin:10}} >
-                        <TouchableOpacity onPress={this.GoToUserDetail.bind(this,rowData.from_uid)}>
-                        <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
-                        </TouchableOpacity>
-                        <View style={{flex:1,marginLeft:8}}>
-                            <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
-                            <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
+                        <View style={{flexDirection:'row',margin:10}} >
+                            <TouchableOpacity onPress={this.GoToUserDetail.bind(this,rowData.from_uid)}>
+                                <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
+                            </TouchableOpacity>
+                            <View style={{flex:1,marginLeft:8}}>
+                                <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                                <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
+                            </View>
+                            <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
                         </View>
-                        <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
-                    </View>
-                    {/*{this.renderCommentImage(comment.imges)}*/}
-                </View>}
+                        {/*{this.renderCommentImage(comment.imges)}*/}
+                    </View>}
                 style={{backgroundColor:'white',flex:1}}
                 onEndReachedThreshold={10}
                 enableEmptySections={true}
@@ -324,7 +307,7 @@ class LandLordPage extends React.Component {
 
         return (
             <View style={{backgroundColor:'#f5f5f5',flex:1}}>
-                <BackHeader navigation={this.props.navigation} title={'房主信息'}/>
+                <BackHeader navigation={this.props.navigation} title={'个人主页'}/>
                 {this.renderBottomComment()}
             </View>
         );
@@ -351,4 +334,4 @@ let styles = StyleSheet.create({
         fontStyle:'italic'
     },
 });
-export default LandLordPage;
+export default UserPage;
