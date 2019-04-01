@@ -1,7 +1,7 @@
 
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View, ListView, Image, StyleSheet} from 'react-native';
-import { Tabs,Modal, } from '@ant-design/react-native';
+import { Tabs } from '@ant-design/react-native';
 import BackHeader from '../../component/BackHeader';
 import realm from '../../util/realm';
 

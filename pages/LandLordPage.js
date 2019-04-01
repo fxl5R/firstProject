@@ -20,7 +20,7 @@ import {
     TouchableOpacity,
     ListView,
     InteractionManager,
-    ImageBackground, Linking
+    ImageBackground, Linking, ScrollView, Platform
 } from 'react-native';
 
 import { toastShort } from '../util/ToastUtil';
@@ -30,10 +30,11 @@ import realm from "../util/realm";
 
 import * as WeiboAPI from 'rn-weibo';
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { Tabs,SegmentedControl } from '@ant-design/react-native';
 
 
 let {height, width} = Dimensions.get('window');
-
+let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 class LandLordPage extends React.Component {
 
     constructor(props) {
@@ -50,9 +51,16 @@ class LandLordPage extends React.Component {
                 rowHasChanged: (row1, row2) => row1 !== row2,
             }),
             commentList:[comments],
+            bottomValue:''
         };
-        this.GoToUserDetail=this.GoToUserDetail.bind(this);
 
+        this.GoToUserDetail=this.GoToUserDetail.bind(this);
+        this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
+
+        this.onValueChange = value => {
+            this.setState({bottomValue:value});
+            console.log(value);
+        };
     }
     static statusBar:{
         color:'#B0C4DE',
@@ -67,7 +75,15 @@ class LandLordPage extends React.Component {
         this.props.navigation.navigate('UserPage',{
             itemId: from_uid});
     };
-
+    /**
+     * 根据house_id跳转房源详情
+     **/
+    GoToHouseDetail(house_id) {
+        this.props.navigation.navigate('HouseDetail',{
+            itemId: house_id,
+            isEdit:1
+        });
+    };
     buttonItemAction(position){
         if(position === 1){
             //收藏
@@ -240,6 +256,8 @@ class LandLordPage extends React.Component {
             </View>
         );
     }
+
+
     //渲染底部评论信息模块
     renderBottomComment(){
         const { navigation } = this.props;
@@ -253,6 +271,74 @@ class LandLordPage extends React.Component {
             </View>
         );
     }
+    //渲染底部房源信息模块
+    renderHouse(){
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        let ishisHouseData=realm.objects('House_Info').filtered("publisher_id==$0", itemId)
+            .sorted("publish_time", true);
+        return (
+            <ScrollView>
+                <View style={{flex:1}}>
+                    <View style = {styles.MainContainer }>
+                        <ListView
+                            enableEmptySections = {true}
+                            dataSource={ds.cloneWithRows(ishisHouseData)}
+                            /*renderSeparator={this.ListViewItemSeparator}*/
+                            renderRow={(rowData) =>
+                                <View style={{flex:1, flexDirection: 'column',borderWidth: 1 ,borderColor:'#f1f1f1',}}>
+                                    <TouchableOpacity onPress={
+                                        this.GoToHouseDetail.bind(this,rowData.house_id)}>
+                                        <View style={{backgroundColor: '#FFF'}}>
+                                            <View style={{padding: 10, flexDirection: 'row'}}>
+                                                <Image style={styles.thumb} source={rowData.house_pic?
+                                                    {uri:rowData.house_pic}:require('../res/images/detailbg.jpg')}/>
+                                                <View style={{flex: 2, paddingLeft: 10}}>
+                                                    <Text style={{fontSize: 16}}>{rowData.area_name}</Text>
+                                                    <Text style={{marginTop: 8, marginBottom: 8}}>{rowData.lease_type}</Text>
+                                                    <Text style={{color: '#999'}}>{rowData.house_floor}</Text>
+                                                </View>
+
+                                                <View style={{flex: 1, paddingLeft: 10}}>
+                                                    <Text style={{color: '#999', textAlign: 'right'}}>{rowData.publish_time}</Text>
+                                                    <Text style={{marginTop: 8, color: 'red', textAlign: 'right'}}>{rowData.rent_fee}</Text>
+                                                </View>
+                                            </View>
+
+                                            <View style={{padding: 10, flexDirection: 'row'}}>
+                                                <Text style={styles.houseTag}>{rowData.house_decorate}</Text>
+                                                <Text style={styles.houseTag}>{rowData.total_area}</Text>
+                                                <Text style={styles.houseTag}>{rowData.toward_direct}</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            }
+                            renderHeader={this.renderHeaderContent}
+                        />
+                    </View>
+                </View>
+            </ScrollView>
+        );
+    }
+
+
+    //渲染底部模块
+    renderBottom(){
+        if(this.state.bottomValue==='发布的房源'){
+            return(
+                <View style={{ flex: 1 }}>
+                    <ScrollView>{this.renderHouse()}</ScrollView>
+                </View>)
+        }else {
+        return (
+            <View style={{ flex: 1 }}>
+                  <ScrollView>{this.renderBottomComment()}</ScrollView>
+            </View>);
+        }
+    }
+
+
     //进行渲染数据
     renderContent(dataSource) {
         return (
@@ -301,7 +387,7 @@ class LandLordPage extends React.Component {
                 {this.renderStoreBasic()}
                 {this.renderCenterBar()}
                 <View style={{height:32,alignItems:'center',flexDirection:'row',backgroundColor:'#f5f5f5'}}>
-                    <Text style={{marginLeft:10}}>评论信息</Text>
+                    <Text style={{marginLeft:10}}>平台信息</Text>
                     <View style={{flex:1,alignItems:'flex-end'}}>
                         <TouchableOpacity onPress={()=>{this.buttonItemAction(6)}}>
                             <View style={{flexDirection:'row',height:32,alignItems:'center'}}>
@@ -317,15 +403,19 @@ class LandLordPage extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <SegmentedControl
+                    values={['收到的评论', '发布的房源']}
+                    //onChange={this.onChange}
+                    onValueChange={this.onValueChange}
+                />
             </View>
         );
     }
     render() {
-
         return (
             <View style={{backgroundColor:'#f5f5f5',flex:1}}>
                 <BackHeader navigation={this.props.navigation} title={'房主信息'}/>
-                {this.renderBottomComment()}
+                {this.renderBottom()}
             </View>
         );
     }
@@ -349,6 +439,30 @@ let styles = StyleSheet.create({
     comment_username:{
         color:'#00a3cf',
         fontStyle:'italic'
+    },
+    MainContainer :{
+        flex:1,
+        //justifyContent: 'center',
+        paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+        margin: 0,
+        backgroundColor: '#F5FCFF'
+    },
+    thumb: {
+        width: 80,
+        height: 80,
+    },
+    houseTag: {
+        color: '#999',
+        fontSize: 12,
+        marginLeft: 5,
+        marginRight: 5,
+        height: 20,
+        paddingTop: 3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        borderWidth: 0.5,
+        borderRadius: 10,
+        borderColor: '#E8E8E8'
     },
 });
 export default LandLordPage;

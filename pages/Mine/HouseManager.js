@@ -42,7 +42,7 @@ export default class HouseManager extends Component {
     };
 
     /*listView 分割线*/
-    ListViewItemSeparator = () => {
+/*    ListViewItemSeparator = () => {
         return (
             <View
                 style={{
@@ -51,7 +51,7 @@ export default class HouseManager extends Component {
                     backgroundColor: "#000",}}
             />
         );
-    };
+    };*/
 
     render() {
         const { navigation } = this.props;

@@ -387,8 +387,8 @@ export default class HouseDetail extends Component<Props> {
         console.log('itemId'+itemId);
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
-
-        if(isEdit===1){
+        let user=realm.objects('User').filtered("online == $0", 1);
+        if(isEdit===1&&user.id===house.house_publisher){
             return(
                 <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
                     <TouchableOpacity onPress={() => {this.props.navigation.goBack();}}
