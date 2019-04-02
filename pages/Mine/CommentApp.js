@@ -61,7 +61,7 @@ class CommentApp extends Component {
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
-        console.log('renderBottomComment!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
+        console.log('renderBottomComment'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
         return (
             <View style={{flex:1}}>
                 {this.renderContent(this.state.dataSource.cloneWithRows(
@@ -78,9 +78,7 @@ class CommentApp extends Component {
                     <View>
                         {this.renderExistComment()}
                     </View>
-{/*
-                    <CommentList comments={this.state.comments}/>
-*/}
+                    {/*<CommentList comments={this.state.comments}/>*/}
                 </ScrollView>
                 <View style={styles.container}>
                     <CommentInput
@@ -108,10 +106,9 @@ class CommentApp extends Component {
         });
         this.state.comments.push(comment);
         console.log(comment);
-        console.log('评论内容：'+comment.content+'评论来自：'+comment.from_uid+'评论对象：'+to_uid+
-            '评论时间：'+comment.commentTime+'评论者头像：'+comment.from_portrait);
+        console.log('评论内容：'+comment.content+'评论来自：'+comment.from_uid
+            +'评论对象：'+to_uid+'评论时间：'+comment.commentTime);
         toastShort('评论发表成功');
-        //alert('111from_uid is '+comment.from_uid);
         //写评论入数据库
         realm.write(()=> {
             realm.create('Comments', {

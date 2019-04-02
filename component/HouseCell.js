@@ -47,17 +47,19 @@ export default class HouseCell extends Component {
      **/
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
-
         this.setState({
             searchString: nextProps.value1,
             typee: nextProps.typee > this.props.typee,
             door: nextProps.door > this.props.door,
             decorate: nextProps.decorate > this.props.decorate,
             sort:nextProps.sort > this.props.sort,
-            dataSource:this.props.sort==='面积由大到小'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
+            dataSource:this.props.sort==='面积由大到小'?ds.cloneWithRows(mydata.filtered(
+                "area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0"
+                ,this.props.value1)//过滤‘由TabPage的SearchBar传递来的searchstring关键字’
                     .filtered("lease_type CONTAINS[c] $0",this.props.typee)
                     .filtered("door_model CONTAINS[c] $0",this.props.door)
-                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate).sorted("total_area", true)):
+                    .filtered("house_decorate CONTAINS[c] $0",this.props.decorate)
+                    .sorted("total_area", true)):
                 this.props.sort==='面积由小到大'?ds.cloneWithRows(mydata.filtered("area_name CONTAINS[c] $0 OR house_location CONTAINS[c] $0",this.props.value1)
                         .filtered("lease_type CONTAINS[c] $0",this.props.typee)
                         .filtered("door_model CONTAINS[c] $0",this.props.door)
@@ -110,6 +112,8 @@ export default class HouseCell extends Component {
     /**
      * 渲染房屋展示卡片列表
      **/
+
+
     render() {
         if(this.state.dataSource._cachedRowCount===0){
             console.log('行数'+ListView._cachedRowCount);
@@ -143,19 +147,16 @@ export default class HouseCell extends Component {
                                             <View style={{padding: 10, flexDirection: 'row'}}>
                                                 <Image style={styles.thumb} source={rowData.house_pic?
                                                     {uri:rowData.house_pic}:require('../res/images/detailbg.jpg')}/>
-
                                                 <View style={{flex: 2, paddingLeft: 10}}>
                                                     <Text style={{fontSize: 16}}>{rowData.area_name}</Text>
                                                     <Text style={{marginTop: 8, marginBottom: 8}}>{rowData.lease_type}</Text>
                                                     <Text style={{color: '#999'}}>{rowData.house_floor}</Text>
                                                 </View>
-
                                                 <View style={{flex: 1, paddingLeft: 10}}>
                                                     <Text style={{color: '#999', textAlign: 'right'}}>{rowData.publish_time}</Text>
                                                     <Text style={{marginTop: 8, color: 'red', textAlign: 'right'}}>{rowData.rent_fee}</Text>
                                                 </View>
                                             </View>
-
                                             <View style={{padding: 10, flexDirection: 'row'}}>
                                                 <Text style={styles.houseTag}>{rowData.house_decorate}</Text>
                                                 <Text style={styles.houseTag}>{rowData.total_area}</Text>
@@ -166,9 +167,7 @@ export default class HouseCell extends Component {
                                 </View>
                             }
                         />
-
                     </ScrollView>
-
                 </View>
 
             );

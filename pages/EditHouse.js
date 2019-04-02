@@ -104,20 +104,11 @@ export default class EditHouse extends Component {
             { id:13, label: '饮水设备'},//water
 
         ];
-        /*const datas=[
-            { id: 1, label: '热水淋浴' },//shower
-            { id: 2, label: '洗衣机' },//washer
-            { id: 3, label: '浴缸' },//bathtub
-            { id: 4, label: '有线网络' },//line-wifi
-            { id: 5, label: '电视' }//TV
-         ];*/
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');
-        let thisHouse=realm.objects('House_Info').filtered('house_id==$0',itemId)[0];//根据管理房屋页面传递的house_id查找该房屋在数据库中的信息
-        const datas=JSON.parse(thisHouse.support_set);//?thisHouse.support_set:JSON.stringify(this.tag.itemsSelected);
-        /*const datas=[{"id":1,"label":"热水淋浴"},{"id":2,"label":"洗衣机"},{"id":3,"label":"浴缸"},
-        {"id":5,"label":"电视"},{"id":8,"label":"空调"},{"id":9,"label":"暖气"},{"id":10,"label":"门禁系统"},
-        {"id":11,"label":"电梯"},{"id":13,"label":"饮水设备"}];*/
+        //根据管理房屋页面传递的house_id查找该房屋在数据库中的信息
+        let thisHouse=realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
+        //const datas=JSON.parse(thisHouse.support_set);
         console.log('已经选择的tag:'+thisHouse.support_set);
         return (
             <View style={styles.container}>
@@ -131,7 +122,6 @@ export default class EditHouse extends Component {
                     ref={(tag) => {
                         this.tag = tag;
                     }}
-                    //value={thisHouse.support_set?thisHouse.support_set:JSON.stringify(this.tag.itemsSelected)}
                     value={JSON.parse(thisHouse.support_set)}
                 />
             </View>
@@ -141,13 +131,13 @@ export default class EditHouse extends Component {
     edit_House = () => {
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');
-        let thisHouse=realm.objects('House_Info').filtered('house_id==$0',itemId)[0];//根据管理房屋页面传递的house_id查找该房屋在数据库中的信息
+        //根据管理房屋页面传递的house_id查找该房屋在数据库中的信息
+        let thisHouse=realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
         realm.write(() => {
             let Publisher=realm.objects('User').filtered("online == $0", 1)[0];
             let thisPublisherID=Publisher.id;
-            console.log(thisPublisherID+'111111发布人ID'+this.state.Publisher_Id);
             this.setState({Publisher_Id:thisPublisherID});
-            console.log(thisPublisherID+'222222发布人ID'+this.state.Publisher_Id);
+            console.log(thisPublisherID+'发布人ID'+this.state.Publisher_Id);
             realm.create('House_Info',
                 {
                     house_id: itemId,
@@ -178,7 +168,7 @@ export default class EditHouse extends Component {
                     house_location: this.state.House_Location?this.state.House_Location:thisHouse.house_location,
                     owner_tel: this.state.Owner_Tel?this.state.Owner_Tel:thisHouse.owner_tel,
                     certification: null
-                },true);
+                },true);//此处合起数据项写入数据库部分内容
         });
         Alert.alert("成功修改房屋信息");
         toastShort('跳转至房屋管理界面');

@@ -127,8 +127,6 @@ export default class TabPage extends Component<Props> {
     };
 
     render() {
-
-        const { errorMsg, username } = this.state;
         return (
             <View style={styles.container}>
                 <TabNavigator>
@@ -136,23 +134,22 @@ export default class TabPage extends Component<Props> {
                         selected={this.state.selectedTab === 'tb_home'}
                         selectedTitleStyle={{color:'#B0C4DE'}}
                         title="发现"
-                        renderIcon={() => <Image style={styles.image} source={require('../res/images/ic_hindex.png')} />}
-                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]} source={require('../res/images/ic_hindex.png')} />}
+                        renderIcon={() => <Image style={styles.image}
+                                                 source={require('../res/images/ic_hindex.png')} />}
+                        renderSelectedIcon={() => <Image style={[styles.image,{tintColor:'#B0C4DE'}]}
+                                                         source={require('../res/images/ic_hindex.png')} />}
                         onPress={() => this.setState({ selectedTab: 'tb_home' })}>
                         <View style={{flex:1}}>
                         <View style={{flex:1}}>
                             <SearchBar
                                 value={this.state.value1}
                                 placeholder="输入小区名或地址"
-                                //onSubmit={value1 => Alert.alert(value1)}
                                 cancelText={'进入'}
                                 onCancel={this.onChange}
-                                onChange={this.onChange}
-                            />
+                                onChange={this.onChange}/>
                             {this._renderCarousel()}
-
-                            <MDropDown setValue1={this.setValue1} setValue2={this.setValue2} setValue3={this.setValue3} setValue4={this.setValue4}/>
-
+                            <MDropDown setValue1={this.setValue1} setValue2={this.setValue2}
+                                       setValue3={this.setValue3} setValue4={this.setValue4}/>
                             <ScrollView >
                             <HouseCell
                                 navigation={this.props.navigation}
@@ -162,16 +159,15 @@ export default class TabPage extends Component<Props> {
                                 decorate={this.state.decorate==='不限'?'':this.state.decorate}
                                 sort={this.state.sort}
                             />
-                                {/*<View style={{height:Platform.OS === 'ios' ? 0:200}}/>*/}
                             </ScrollView>
                         </View>
                             <ActionButton buttonColor='#B0C4DE'>
-                                <ActionButton.Item buttonColor='#6495ED' title="添加房屋" onPress={()=>{this.props.navigation.navigate('ProtocolPage')}}>
+                                <ActionButton.Item buttonColor='#6495ED' title="添加房屋"
+                                                   onPress={()=>{this.props.navigation.navigate('ProtocolPage')}}>
                                     <Icon name="paint-roller" style={styles.actionButtonIcon} />
                                 </ActionButton.Item>
                             </ActionButton>
                         </View>
-
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'tb_star'}

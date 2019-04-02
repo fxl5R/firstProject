@@ -40,28 +40,27 @@ export default class HouseDetail extends Component<Props> {
     renderHousePic(){
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');
-        console.log('itemId'+itemId);
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
         return(
             <View style={{alignItems: 'center'}}>
-                {/*<View style={{width:winWidth,height:winHeight/3}}><MyCarousel /></View>*/}
-                <ImageBackground source={house.house_pic?{uri:house.house_pic}:require('../res/images/detailbg.jpg')}
+                <ImageBackground source={house.house_pic?{uri:house.house_pic}
+                                        :require('../res/images/detailbg.jpg')}
                                  style={{width:winWidth,height:winHeight/3}}>
                     <View style={{alignItems:'flex-end',marginRight:10,flexDirection:'row'}}>
                         <Image source={require('../res/images/store/merchants/ic_merchants_location.png')}
                                style={{width:16,height:20}}/>
-                        <Text style={{color:'white',fontSize:13,backgroundColor:'rgba(1,1,1,0)'}}>{house.house_location}</Text>
+                        <Text style={{color:'white',fontSize:13,backgroundColor:'rgba(1,1,1,0)'}}>
+                            {house.house_location}
+                        </Text>
                     </View>
                 </ImageBackground>
                 <View style={styles.cardcontainer}>
                     <View style={styles.leftContainer}>
                         <View style={styles.briefInfoContainer}>
-                            {/*<TouchableOpacity style={{marginVertical: 5}} onPress={() => {this.props.navigation.navigate('LandLordPage')}}>
-                                <Image style={styles.avatarImage} source={require('../res/images/bathroom.jpeg')}/>source={{uri: musicDetailData.author.web_url} height: 240,
-                            </TouchableOpacity>
-                            resizeMode="contain"*/}
-                            <Text style={{marginVertical: 5,fontSize:18,color:'black'}}>{house.area_name}{house.lease_type}</Text>
+                            <Text style={{marginVertical: 5,fontSize:18,color:'black'}}>
+                                {house.area_name}{house.lease_type}
+                            </Text>
                             <View style={styles.timeInfo}>
                                 <Text numberOfLines={2} style={styles.putoutTime}>{house.publish_time}发布</Text>
                             </View>
@@ -290,7 +289,6 @@ export default class HouseDetail extends Component<Props> {
     renderBaseInfo(){
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');
-        console.log('itemId'+itemId);
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
             return(
@@ -388,7 +386,7 @@ export default class HouseDetail extends Component<Props> {
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
         let user=realm.objects('User').filtered("online == $0", 1);
-        if(isEdit===1&&user.id===house.house_publisher){
+        if(isEdit===1){//&&user.id===houses.house_publisher
             return(
                 <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
                     <TouchableOpacity onPress={() => {this.props.navigation.goBack();}}

@@ -19,7 +19,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ListView,
-    ImageBackground, Linking, ScrollView
+    ImageBackground, Linking, ScrollView, Platform
 } from 'react-native';
 
 import { toastShort } from '../util/ToastUtil';
@@ -256,7 +256,7 @@ class UserPage extends React.Component {
     //渲染底部房源信息模块
     renderHouse(){
         const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从上级页面（评论列表或房源详情页面）中获取用户的ID
         let ishisHouseData=realm.objects('House_Info').filtered("publisher_id==$0", itemId)
             .sorted("publish_time", true);
         return (
@@ -360,7 +360,7 @@ class UserPage extends React.Component {
     //渲染ListView的Header布局
     renderHeaderContent(){
         const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从上级页面（评论列表或房源详情页面）中获取用户的ID
         let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];//用发布人ID关联User表查询该用户的相关信息
         return (
             <View>
@@ -420,6 +420,30 @@ let styles = StyleSheet.create({
     comment_username:{
         color:'#00a3cf',
         fontStyle:'italic'
+    },
+    MainContainer :{
+        flex:1,
+        //justifyContent: 'center',
+        paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
+        margin: 0,
+        backgroundColor: '#F5FCFF'
+    },
+    thumb: {
+        width: 80,
+        height: 80,
+    },
+    houseTag: {
+        color: '#999',
+        fontSize: 12,
+        marginLeft: 5,
+        marginRight: 5,
+        height: 20,
+        paddingTop: 3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        borderWidth: 0.5,
+        borderRadius: 10,
+        borderColor: '#E8E8E8'
     },
 });
 export default UserPage;

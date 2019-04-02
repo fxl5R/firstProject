@@ -29,6 +29,7 @@ import Toast from "@ant-design/react-native/lib/toast";
 import ImagePicker from "react-native-image-crop-picker";
 import TagsSelect from "../component/TagsSelect";
 import TagSelect from "react-native-tag-select/src/TagSelect";
+import {toastShort} from "../util/ToastUtil";
 
 const {height, width} = Dimensions.get('window');
 
@@ -94,9 +95,7 @@ export default class AddHousePage extends Component {
         realm.write(() => {
             let Publisher=realm.objects('User').filtered("online == $0", 1);
             let thisPublisherID=Publisher[0].id;
-            console.log(thisPublisherID+'111111发布人ID'+this.state.Publisher_Id);
             this.setState({Publisher_Id:thisPublisherID});
-            console.log(thisPublisherID+'222222发布人ID'+this.state.Publisher_Id);
             let ID = realm.objects('House_Info').length + 1;
             realm.create('House_Info',
                 {
@@ -184,8 +183,8 @@ export default class AddHousePage extends Component {
                                 value={this.state.House_Location ? this.state.House_Location : ''}
                                 underlineColorAndroid="transparent"
                                 onChangeText={(text) => {
-                                    this.setState({House_Location: text})
-                                    && Toast.show('请继续添加门牌号信息');
+                                    this.setState({House_Location: text});
+                                    toastShort('请继续添加门牌号信息');
                                 }}
                             />
                             <TouchableOpacity onPress={() => {

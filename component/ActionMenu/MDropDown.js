@@ -17,7 +17,7 @@ export default class MDropDown extends Component {
 
     handleChange1 = (typee) => {
         this.setState({typee});
-        this.props.setValue1(this.state.typee)
+        this.props.setValue1(this.state.typee)//传递选择的下拉值到父组件（TabPage）中
     };
     handleChange2 = (door) => {
         this.setState({door});
