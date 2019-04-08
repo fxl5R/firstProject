@@ -50,7 +50,7 @@ User.schema = {
         userSex: {type:'string',optional: true},// 用户性别
         portrait:{type:'string',optional: true,default:'https://dwz.cn/WchJqy0C'},// 头像 {type:'string',default:'../res/images/logo_peo.png'}
         nickName:'string',                      // 昵称
-        online: {type: 'int', optional: true }, //判断用户在线1:在线 0:离线
+        online: {type: 'int', optional: true ,default:0}, //判断用户在线1:在线 0:离线
         userLocation:{type:'string',optional:true},         // 用户所在地
         userEmail:{type:'string',optional:true},            //用户邮件地址
         userTel:{type:'string',optional:true},              // 用户联系电话

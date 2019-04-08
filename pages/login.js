@@ -51,10 +51,10 @@ export default class login extends Component {
         else{
             let password1=user.userPassword;           //从realm中取出username为textinput中的用户的密码
             if(this.state.password===password1){       //判断密码
-                toastShort('用户'+user.userName+'登录成功');
                 realm.write(() => {
                     realm.create('User', {id:user.id,online: 1}, true);//更新在线状态
                 });
+                toastShort('用户'+user.userName+'登录成功'+'在线状态为：'+user.online);
                 this.props.navigation.navigate('TabPage');
                 }else{
                 toastShort('登录失败，请检查用户名或者密码');

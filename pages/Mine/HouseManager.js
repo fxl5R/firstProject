@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import {
     Image,
-    ListView, Platform,
+    ListView, Platform, RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
@@ -26,7 +26,7 @@ export default class HouseManager extends Component {
     constructor(props){
         super(props);
         this.state={
-
+            isRefreshing: false,
         };
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
     }
@@ -52,6 +52,14 @@ export default class HouseManager extends Component {
             />
         );
     };*/
+    _onRefresh() {
+        if(!this.props){ alert('没有更多数据啦！')}
+        if(this.props){
+            this.setState(
+                {dataSource:this.state.dataSource}
+            )
+        }
+    }
 
     render() {
         const { navigation } = this.props;
@@ -60,11 +68,6 @@ export default class HouseManager extends Component {
         let ismyHouseData=mydata.filtered("publisher_id==$0", itemId)
             .sorted("publish_time", true);
 
-        /*if(isHouseData){
-            console.log('test success'+JSON.stringify(isHouseData));
-        }else {
-            ToastAndroid.show('!!import failed!!',ToastAndroid.SHORT);
-        }*/
         return (
             <ScrollView>
                 <View style={styles.container}>
@@ -72,7 +75,16 @@ export default class HouseManager extends Component {
                     {/*<HouseCell navigation={this.props.navigation}/>*/}
                     <View style = {styles.MainContainer }>
                         <ListView
-
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.isRefreshing}
+                                    onRefresh={this._onRefresh.bind(this)}
+                                    tintColor="#ff0000"
+                                    title="加载中..."
+                                    titleColor="#00ff00"
+                                    colors={['#ff0000', '#00ff00', '#0000ff']}
+                                    progressBackgroundColor="#ffffff"
+                                />}
                             enableEmptySections = {true}
                             dataSource={ds.cloneWithRows(ismyHouseData)}
                             /*renderSeparator={this.ListViewItemSeparator}*/

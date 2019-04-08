@@ -10,7 +10,7 @@ import {
     ScrollView,
     Dimensions,
     Platform,
-    ImageBackground
+    ImageBackground, Alert
 } from 'react-native';
 import BackHeader from "./BackHeader";
 import realm from "../util/realm";
@@ -386,7 +386,7 @@ export default class HouseDetail extends Component<Props> {
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
         let user=realm.objects('User').filtered("online == $0", 1);
-        if(isEdit===1){//&&user.id===houses.house_publisher
+        if(isEdit===1){
             return(
                 <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
                     <TouchableOpacity onPress={() => {this.props.navigation.goBack();}}
@@ -434,7 +434,6 @@ export default class HouseDetail extends Component<Props> {
         const itemId = navigation.getParam('itemId', 'NO-ID');
         view.measure((x, y, width, height, pageX, pageY) => {
             let items = [
-                /*{title: '查看', icon: require('../res/images/ic_search.png'), onPress: () => alert('Search')},*/
                 {title: '修改', icon: require('../res/images/ic_edit.png'), onPress: () => {
                     this.props.navigation.navigate('EditHouse',{
                     itemId:itemId});}},
@@ -447,13 +446,21 @@ export default class HouseDetail extends Component<Props> {
     delete_House(){
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');
-        realm.write(() => {
+        Alert.alert(
+            '提示',
+            '确定移除此房屋？',
+            [
+                {text:'取消',onPress:(()=>{}),style:'cancel'},
+                {text:'确定',onPress: (()=>{
+                        realm.write(() => {
+                            let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
+                            realm.delete(thehouse);
+                            toastShort('删除成功');
+                        });
+                        this.props.navigation.navigate('HouseManager');
+                })}]
+        );
 
-            let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
-            realm.delete(thehouse);
-            toastShort('删除成功');
-
-        });
     }
 
     showaction(modal) {
@@ -477,7 +484,7 @@ export default class HouseDetail extends Component<Props> {
                 console.log('收藏后收藏者id：'+thiscollect.collector_id+'测试userid'+user.id);
                 if(thiscollect.collect_id===itemId){
                     console.log('测试收藏者id1'+thiscollect.collector_id);
-                    toastShort('你已成功收藏此房屋')
+                    toastShort('你已成功收藏此房屋');
                 }else{
                     realm.write(() => {
                         realm.create('Collections', {

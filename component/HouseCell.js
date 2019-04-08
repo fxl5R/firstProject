@@ -45,6 +45,7 @@ export default class HouseCell extends Component {
      *    根据从TabPage传递的MDropDown参数
      *    进行关键字查询
      **/
+
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
         this.setState({
@@ -80,6 +81,7 @@ export default class HouseCell extends Component {
         });
         console.log('testSearch!!!2222'+JSON.stringify(this.state.dataSource));
     }
+
     _onRefresh() {
         if(!this.props){ alert('没有更多数据啦！')}
         if(this.props){
@@ -88,7 +90,6 @@ export default class HouseCell extends Component {
             )
         }
     }
-
 
     /**
      * 根据house_id跳转房源详情

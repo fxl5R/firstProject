@@ -79,7 +79,7 @@ class UserPage extends React.Component {
     GoToHouseDetail(house_id) {
         this.props.navigation.navigate('HouseDetail',{
             itemId: house_id,
-            isEdit:1
+            //isEdit:1 只能在管理房屋页面对房屋进行修改
         });
     };
     buttonItemAction(position){

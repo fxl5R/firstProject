@@ -13,13 +13,11 @@ import {
 import HouseDetail from "./HouseDetail";
 import realm from '../util/realm.js';
 import DataMissing from "../pages/DataMissing";
-import {AddHouseButton} from "./Collecthouse";
-import ActionButton from "react-native-action-button";
-import Icon from "react-native-vector-icons/FontAwesome5";
 
 let user=realm.objects('User').filtered('online==$0',1);//获取当前用户[0]
-let collector=realm.objects('Collections').filtered('collector_id==$0',user.id);//根据用户id关联collector_id获取收藏信息
-let mydata=realm.objects('House_Info').filtered("house_id == $0", collector.collect_id)
+let collect=realm.objects('Collections').filtered('collector_id==$0',user.id);//根据用户id关联collector_id获取收藏信息
+console.log('收藏列表中的房屋ID：'+collect.collect_id);//4
+let housedata=realm.objects('House_Info').filtered("house_id == $0", collect.collect_id)
     .sorted("publish_time", true);
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -27,10 +25,9 @@ export default class CollectList extends Component {
 
     constructor(props) {
         super(props);
-
-        console.log('testSearch!111'+mydata);
+        console.log('房屋详细信息：'+JSON.stringify(housedata));
         this.state = {
-            dataSource: ds.cloneWithRows(mydata),
+            dataSource: ds.cloneWithRows(housedata),
             isRefreshing: false,
         };
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);

@@ -5,7 +5,8 @@ import {
     Text,
     View,
     TouchableOpacity,
-    Image, ViewStyle
+    Image,
+    ViewStyle
 } from 'react-native';
 
 /** 
@@ -22,9 +23,9 @@ export default class FormArrowToDetail extends Component<Props> {
     super(props);
   }
   render() {
-      const defaultCutOffLineStyle: ViewStyle = { borderBottomWidth: 0.5, borderBottomColor: '#D3D3D3' }
-      let cutOffLineStyle: ViewStyle
-      cutOffLineStyle = this.props.cutOffLine === undefined ? defaultCutOffLineStyle : this.props.cutOffLine ? defaultCutOffLineStyle : {}
+      const defaultCutOffLineStyle: ViewStyle = { borderBottomWidth: 0.5, borderBottomColor: '#D3D3D3' };
+      let cutOffLineStyle: ViewStyle;
+      cutOffLineStyle = this.props.cutOffLine === undefined ? defaultCutOffLineStyle : this.props.cutOffLine ? defaultCutOffLineStyle : {};
     return (
       <TouchableOpacity activeOpacity={0.5} onPress={() => {this.props.onFormClick()}}>
         <View style={[styles.container, cutOffLineStyle]}>

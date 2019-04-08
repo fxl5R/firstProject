@@ -12,6 +12,7 @@
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.24.0",
     "prop-types": "^15.6.2",
+    "rc-form": "^2.4.4",
     "react": "^16.6.3",
     "react-native": "^0.58.5",
     "react-native-action-button": "^2.8.5",

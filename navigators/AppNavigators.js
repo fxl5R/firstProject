@@ -28,16 +28,26 @@ import HouseManager from "../pages/Mine/HouseManager";
 import CommentDisplay from '../pages/Mine/CommentDisplay';
 import CommentApp from '../pages/Mine/CommentApp';
 import RealConfirm from '../pages/Mine/RealConfirm';
+import AboutSecurity from '../pages/Mine/AboutSecurity';
 
 import MDropDown from '../component/ActionMenu/MDropDown';
 import ImageBrowers from '../component/ImageBrowers';
 import TagsSelect from '../component/TagsSelect';
+
+import FormWithInput from '../component/Form/FormWithInput';
 
 const AppStackNavigator = createStackNavigator({
 
 
     TabPage:{
         screen:TabPage,
+        navigationOptions:{
+            header:null
+        }
+    },
+
+    FormWithInput:{
+        screen:FormWithInput,
         navigationOptions:{
             header:null
         }
@@ -128,13 +138,7 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
-    /*    UserInfo:{
-            screen:UserInfo,
-            navigationOptions:{
-                header:null
-            }
 
-        },*/
     CommentManager:{
         screen:CommentManager,
         navigationOptions:{
@@ -163,6 +167,13 @@ const AppStackNavigator = createStackNavigator({
 
     RealConfirm:{
         screen:RealConfirm,
+        navigationOptions:{
+            header:null
+        }
+    },
+
+    AboutSecurity:{
+        screen:AboutSecurity,
         navigationOptions:{
             header:null
         }
