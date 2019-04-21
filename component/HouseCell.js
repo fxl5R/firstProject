@@ -26,7 +26,6 @@ export default class HouseCell extends Component {
     constructor(props) {
         super(props);
 
-        console.log('testSearch!111'+mydata);
         this.state = {
             dataSource: ds.cloneWithRows(mydata),
             isRefreshing: false,
@@ -79,7 +78,7 @@ export default class HouseCell extends Component {
                                 .filtered("house_decorate CONTAINS[c] $0",this.props.decorate))
 
         });
-        console.log('testSearch!!!2222'+JSON.stringify(this.state.dataSource));
+        console.log('新的数据源：'+JSON.stringify(this.state.dataSource));
     }
 
     _onRefresh() {

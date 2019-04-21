@@ -31,6 +31,32 @@ export default class HouseManager extends Component {
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
     }
 
+/*
+    componentDidMount() {
+
+        // Get a result containing all projects
+        const houses = realm
+            .objects("House_Info")
+            .filtered("publisher_id == $0", this.props.user.identity)
+            .sorted("publish_time", true);
+
+        // When the list of houses changes, React won't know about it because the Result object itself will not change.
+        houses.addListener(() => {
+            // Bump a data version counter that we'll pass to components that should update when the projects change.
+            this.setState({ dataVersion: this.state.dataVersion + 1 });
+        });
+
+        // Create a subscription and add a listener
+        // Remember to remove the listener when component unmounts
+        this.subscription = houses.subscribe();
+        this.subscription.addListener(this.onSubscriptionChange);
+
+        // Update the state with the houses
+        this.setState({ houses });
+    }*/
+
+
+
     /**
      * 根据house_id跳转房源详情
      **/

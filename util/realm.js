@@ -1,7 +1,6 @@
 
 import Realm from 'realm';
 
-
 class House_Info extends Realm.Object {}
 House_Info.schema = {
     name: 'House_Info',
@@ -35,7 +34,8 @@ House_Info.schema = {
             house_description:'string',               //房屋描述
             house_location:'string',                  //房产地址
             owner_tel:'string',                       //房主联系电话
-            certification:{type:'int',default: 0,optional: true}//是否后台认证
+            certification:{type:'int',default: 0,optional: true},//是否后台认证
+            collects: { type: 'linkingObjects', objectType:'Collections',property:'houses'}//与收藏表双向链接
         }
 };
 
@@ -61,6 +61,7 @@ User.schema = {
         cTime:   { type: 'string'}               // 创建时间  toLocaleTimeString
     }
 };
+
 class Comments extends Realm.Object {}
 Comments.schema = {
     name: 'Comments',
@@ -75,6 +76,64 @@ Comments.schema = {
         commentTime: { type: 'string', optional: true } // 创建时间 toLocaleTimeString
     }
 };
+
+class Collections extends Realm.Object {}
+Collections.schema = {
+    name: 'Collections',
+    primaryKey: 'id',
+    properties: {                               // 属性
+        id: { type:'int', indexed: true },      // 收藏ID，主键
+        collect_id:'int',                       // 收藏内容的id
+        houses:'House_Info',                    //与房屋表双向链接，存储房屋信息to-many relationship：{type:'list',objectType:'House_Info'}
+        collector_id:'int',                     // 收藏者id
+        collect_time:{ type: 'string'}          //收藏时间
+    }
+};
+
+class Rent_Relate extends Realm.Object {}
+Rent_Relate.schema = {
+    name: 'Rent_Relate',
+    primaryKey: 'relate_id',
+    properties: {                               // 属性
+        relate_id: { type:'int', indexed: true }, // 收藏ID，主键
+        roomer_id:'int',                        // 租客id
+        owner_id:'int',                         // 房主id
+        rented_id:'int',                        // 租赁的房屋id
+        isRenting:{ type: 'string',default:null,optional:true},//房屋租赁状态：0：未租赁，1：正在出租，2：被申请中
+        isFinish:{ type: 'string',default:null} //租赁交易状态：0：未完成，1：交易结束
+    }
+};
+export default new Realm({ schema: [House_Info,User,Comments,Collections,Rent_Relate] });
+
+
+/*
+const URL = 'comfirstproject.us1.cloud.realm.io';
+const username = 'realm-admin';
+const password = 'admin';
+const myCredentials=Credentials.usernamePassword(username,password,true);
+let userRealmPath = "/userRealm";
+
+export default {
+    realm: null,
+    initialize (username, password)  {
+        Realm.Sync.User.register(`https://${URL}`,username , password, (error, user) => {
+            if (!error) {
+                this.realm = new Realm({
+                    sync: {
+                        user: user,
+                        url: `realms://${URL}${userRealmPath}`,
+                    },
+                    schema: [House_Info,User,Comments,Collections]
+                });
+            }
+            else {
+                console.log(error);
+            }
+        })
+    }
+};
+*/
+/*
 class Reply extends Realm.Object {}
 Reply.schema = {
     name: 'Reply',
@@ -86,16 +145,6 @@ Reply.schema = {
         from_uid:'int',                        // 回复用户id
         replyTime: { type: 'string', optional: true } // 创建时间 toLocaleTimeString
     }
+    export USer?
 };
-class Collections extends Realm.Object {}
-Collections.schema = {
-    name: 'Collections',
-    primaryKey: 'id',
-    properties: {                               // 属性
-        id: { type:'int', indexed: true },      // 收藏ID，主键
-        collect_id:'int',                       // 收藏内容的id
-        collector_id:'int',                     // 收藏者id
-        collect_time:{ type: 'string'}          //收藏时间
-    }
-};
-export default new Realm({ schema: [House_Info,User,Comments,Collections] });
+*/

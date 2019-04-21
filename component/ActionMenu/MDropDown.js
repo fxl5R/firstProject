@@ -14,10 +14,11 @@ export default class MDropDown extends Component {
             sort: '',
         };
     }
-
+    //传递选择的下拉值到父组件（TabPage）中,
+    // handleChange2、3、4分别传递door、decorate、sort的值
     handleChange1 = (typee) => {
         this.setState({typee});
-        this.props.setValue1(this.state.typee)//传递选择的下拉值到父组件（TabPage）中
+        this.props.setValue1(this.state.typee)
     };
     handleChange2 = (door) => {
         this.setState({door});
@@ -74,6 +75,8 @@ export default class MDropDown extends Component {
         return (
             <View>
             <View style={{ flexDirection: 'row',marginEnd:-5 }}>
+
+                {/*过程①*/}
                 <View style={{ flex: 1 }}>
                     <Dropdown
                         label='出租类型'
@@ -82,6 +85,7 @@ export default class MDropDown extends Component {
                         onChangeText={this.handleChange1}
                         />
                 </View>
+
                 <View style={{ flex: 1.2 }}>
                     <Dropdown
                         label='房源户型'

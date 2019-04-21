@@ -4,9 +4,25 @@ import React,{Component} from 'react';
 import {Button} from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import {GiftedForm, GiftedFormManager, GiftedFormModal} from 'react-native-gifted-form';
-import realm from "../util/realm";
+//import realm from "../util/realm";
 import {toastShort} from "../util/ToastUtil";
 import {NormalHeader} from "../component/BackHeader";
+import realm from "../util/realm.js";
+import {User} from "../util/realm";
+
+
+//insert the your connection information
+const URL = 'comfirstproject.us1.cloud.realm.io';
+const username = 'realm-admin';
+const password = 'admin';
+let userRealmPath = "~/userRealm";
+
+
+const errorCallback = function errorCallback(message, isFatal, category, code) {
+    console.log(`Message: ${message} - isFatal: ${isFatal} - category: ${category} - code: ${code}`)
+};
+
+
 
 class ValidRegister extends Component {
     constructor(props, context) {
@@ -22,6 +38,20 @@ class ValidRegister extends Component {
             },
         }
     }
+
+    componentWillMount() {
+        Realm.Sync.User.login('http://192.168.2.105:9080', 'test@user2.com', 'test')
+            .then (user => {
+                Realm.open({schema: [LogBook],
+                    sync: {user: user, url: 'realm://192.168.2.105:9080/~/logbook',error: err => alert(err)}
+                })
+                    .then(realm => {
+                        this.setState({ realm });
+                    });
+            });
+    }
+
+
     handleValueChange(values) {
         this.setState({ form: values })}
 
@@ -32,6 +62,7 @@ class ValidRegister extends Component {
             +JSON.stringify(GiftedFormManager.validate('signupForm')));
 
         if(GiftedFormManager.validate('signupForm').isValid){
+
             realm.write(()=> {
                 realm.create('User', {
                     id:realm.objects('User').length+1,
@@ -45,6 +76,42 @@ class ValidRegister extends Component {
                     cTime:new Date().toLocaleTimeString()
                 });
             });
+
+/*
+            Realm.Sync.User.login(`https://${URL}`, username, password)
+                .then((user) => {
+                    Realm.open({
+                        sync: {
+                            url: `realms://${URL}${userRealmPath}`,
+                            user: user,
+                            error: errorCallback,
+                            partial: true
+                        },
+                        schema: [User.schema]
+                    }).then((realm) => {
+                            //write to the realm
+                            realm.write(()=> {
+                                realm.create('User', {
+                                    id:realm.objects('User').length+1,
+                                    userName: [this.state.form.username].toString(),
+                                    userPassword: [this.state.form.password].toString(),
+                                    nickName:[this.state.form.nickName].toString(),
+                                    userEmail:[this.state.form.emailAddress].toString(),
+                                    userTel:[this.state.form.userTel].toString(),
+                                    userLocation:'所在地',
+                                    userSex: '性别',
+                                    cTime:new Date().toLocaleTimeString()
+                                });
+                            });
+
+                            realm.close()
+                        })
+                });
+
+*/
+
+
+
             toastShort('用户'+this.state.form.username+'注册成功，'+'跳转至登录页面');
             this.props.navigation.navigate('Login');
         }else {
@@ -212,4 +279,3 @@ export default ValidRegister = createStackNavigator(
         },
         Second: { screen: GiftedFormModal }
     });
-//export default ValidRegister;

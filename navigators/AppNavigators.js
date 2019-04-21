@@ -17,10 +17,12 @@ import UserPage from '../pages/UserPage';
 
 import HouseDetail from '../component/HouseDetail';
 import HouseCell from '../component/HouseCell';
+import CollectList from '../component/CollectList';
 import navigatorExpo from '../navigators/navigatorExpo';
 import MapLocation from '../util/MapLocation';
 import ActionSheetExample from '../util/ActionSheetExample';
 import WeiboUtil from '../util/WeiBoUtil';
+import convertRealm from '../util/convertRealm';
 
 import PersonalProfile from '../pages/Mine/PersonalProfile';
 import CommentManager from '../pages/Mine/CommentManager';
@@ -38,6 +40,17 @@ import FormWithInput from '../component/Form/FormWithInput';
 
 const AppStackNavigator = createStackNavigator({
 
+    Login:{
+        screen:login,
+        navigationOptions:{header: null}
+    },
+
+    convertRealm:{
+        screen:convertRealm,
+        navigationOptions:{
+            header:null
+        }
+    },
 
     TabPage:{
         screen:TabPage,
@@ -46,6 +59,8 @@ const AppStackNavigator = createStackNavigator({
         }
     },
 
+
+
     FormWithInput:{
         screen:FormWithInput,
         navigationOptions:{
@@ -53,10 +68,7 @@ const AppStackNavigator = createStackNavigator({
         }
     },
 
-    Login:{
-        screen:login,
-        navigationOptions:{header: null}
-    },
+
 
 
     TagsSelect:{
@@ -69,13 +81,6 @@ const AppStackNavigator = createStackNavigator({
         screen:WeiboUtil,
         navigationOptions:{header: null}
     },
-/*
-    TabPage:{
-        screen:TabPage,
-        navigationOptions:{
-            header:null
-        }
-    },*/
 
     ActionSheetExample:{
         screen:ActionSheetExample,
@@ -89,10 +94,7 @@ const AppStackNavigator = createStackNavigator({
         navigationOptions:{header: null}
     },
 
-    register:{
-        screen:register,
-        navigationOptions:{header:null}
-    },
+
 
     MDropDown:{
         screen:MDropDown,
@@ -186,6 +188,13 @@ const AppStackNavigator = createStackNavigator({
         }
     },
 
+    CollectList:{
+      screen:CollectList,
+      navigationOptions:{
+          header:null
+      }
+    },
+
     ProtocolPage:{
         screen:ProtocolPage,
         navigationOptions:{
@@ -241,7 +250,10 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
-
+    /*    register:{
+            screen:register,
+            navigationOptions:{header:null}
+        },*/
 });
 const AppContainer = createAppContainer(AppStackNavigator);
 export default AppContainer;

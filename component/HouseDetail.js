@@ -13,7 +13,7 @@ import {
     ImageBackground, Alert
 } from 'react-native';
 import BackHeader from "./BackHeader";
-import realm from "../util/realm";
+import realm,{Collections} from "../util/realm";
 import ExpandableText from 'rn-expandable-text';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Menu} from 'teaset';
@@ -359,8 +359,6 @@ export default class HouseDetail extends Component<Props> {
                         expandView={()=>(<View style={styles.arrow}/>)}
                     >
                         {house.house_description}
-                        ceshiceshiceshiceshiceshiceshiceshiceshice
-                        shiceshiceshiceshiceshiceshiceshiceshiceshiceshices
                     </ExpandableText>
                 </View>
                 <Image style={{padding:4}} source={require('../res/images/ic_center_line.png')}/>
@@ -377,7 +375,6 @@ export default class HouseDetail extends Component<Props> {
 
     //标题栏
     renderHeader(){
-
 
         const { navigation } = this.props;
         const isEdit = navigation.getParam('isEdit', 'NO-Edit');
@@ -399,7 +396,6 @@ export default class HouseDetail extends Component<Props> {
                     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                         <Text style={{fontSize:18,color:'white',alignSelf:'center'}}>管理房屋</Text>
                     </View>
-                    {/*<View style={{height:48,width:48}}/>*/}
                     <TouchableOpacity ref='edit' onPress={() => this.show(this.refs['edit'],'end')}
                                       style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
                         <Icon name="edit" size={20} color="rgb(248,248,255)" light/>
@@ -407,6 +403,14 @@ export default class HouseDetail extends Component<Props> {
                 </View>
             )
         }else {
+            let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
+            let user=realm.objects('User').filtered("online == $0", 1)[0];//获取当前用户，存储collector_id
+            //无租赁关系
+            let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)
+                .filtered('isFinish == $0', '1').filtered('rented_id==$0',thehouse.house_id);
+            //正在申请中
+            let withRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)
+                .filtered('isRenting == $0', '2').filtered('rented_id==$0',thehouse.house_id);
             return(
                 <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
                     <TouchableOpacity onPress={() => {this.props.navigation.goBack();}}
@@ -422,7 +426,8 @@ export default class HouseDetail extends Component<Props> {
                     {/*<View style={{height:48,width:48}}/>  // style={{width:48,height:48,alignItems:'center',justifyContent:'center'}} */}
                     <TouchableOpacity ref='edit'
                                       style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}
-                                      onPress={() => this.showaction(true)}>
+                                      onPress={() =>this.showaction(true)}
+                                          >
                         <Icon name="ellipsis-v" size={20} color="rgb(248,248,255)" light/>
                     </TouchableOpacity>
                 </View>
@@ -460,50 +465,156 @@ export default class HouseDetail extends Component<Props> {
                         this.props.navigation.navigate('HouseManager');
                 })}]
         );
-
     }
-
+    //存在租赁关系且交易结束
     showaction(modal) {
         let user=realm.objects('User').filtered("online == $0", 1)[0];//获取当前用户，存储collector_id
         const itemId = this.props.navigation.getParam('itemId', 'NO-ID');//获取HouseCell中的house_id作为collect_id
         let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
-        //分享图文信息到新浪
-        let items = [
+        //无租赁关系
+        let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)
+            .filtered('isFinish == $0', '1').filtered('rented_id==$0',thehouse.house_id);
+        //正在申请中
+        let withRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)
+            .filtered('isRenting == $0', '2').filtered('rented_id==$0',thehouse.house_id);
+        //正在收藏时
+        let withCollect=realm.objects('Collections').filtered('collector_id==$0',user.id)
+            .filtered('collect_id==$0',thehouse.house_id);
+            let items = [
             {title: '分享到微博',  onPress:()=>{
-                        WeiboAPI.share({
-                            type: 'image',
-                            text: '发现了一家房屋在出租:'+'地址：'+thehouse.house_location+
-                                '楼层：'+thehouse.house_floor
-                                +'小区：'+thehouse.area_name+'月租：'+thehouse.rent_fee,
-                            //imageUrl:'https://dwz.cn/lm7OADew',
-                        })
+                    WeiboAPI.share({
+                        type: 'image',
+                        text: '发现了一家房屋在出租:'+'地址：'+thehouse.house_location+
+                            '楼层：'+thehouse.house_floor
+                            +'小区：'+thehouse.area_name+'月租：'+thehouse.rent_fee,
+                    })
+                }
+            },
+            withCollect.length>0?
+                {title: '取消收藏', onPress:()=>{
+                        let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id)
+                            .filtered('collect_id==$0',thehouse.house_id);
+                        realm.write(() => {
+                            realm.delete(thiscollect);
+                            toastShort('已取消收藏');
+                        });
+
+                    }}:{title: '收藏此房屋', onPress:()=>{
+                        let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id);
+                        console.log('houseDetail-收藏后收藏者id：'+thiscollect.collector_id+'测试userid'+user.id+'传递的房屋ItemID'+itemId);
+                        realm.write(() => {
+                            realm.create('Collections', {
+                                id:realm.objects('Collections').length+1,
+                                collect_id:itemId,
+                                collector_id:user.id,
+                                collect_time:new Date().toLocaleTimeString(),
+
+                            });
+                            console.log('测试收藏者id22'+thiscollect.collector_id+itemId);
+                            toastShort('收藏成功');
+                        });
+                    }}
+            ,
+            withRelate.length>0?
+                {title: '取消租赁申请', onPress:()=>{
+                        realm.write(() => {
+                            let withrent = realm.objects('Rent_Relate').filtered('roomer_id==$0', user.id)
+                                .filtered('isRenting == $0', '2').filtered('rented_id==$0', thehouse.house_id);
+                            realm.delete(withrent);
+                            toastShort('已取消申请');
+                        });
+                    }
+                }:{title: '申请租赁此房屋', onPress:()=>{
+                        let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0', user.id);//.filtered('isFinish == $0', '1')
+                        console.log('申请后roomerid：'+theRelate.roomer_id);
+                        realm.write(() => {
+                            realm.create('Rent_Relate', {
+                                relate_id:realm.objects('Rent_Relate').length+1,
+                                roomer_id:user.id,
+                                owner_id:thehouse.publisher_id,//房主id
+                                rented_id:itemId,
+                                isRenting:'2',  //房屋状态：被申请中
+                                isFinish:'0'    //交易状态：为完成
+                            });
+                            console.log('申请后roomerid：'+theRelate.roomer_id);
+                            toastShort('发送申请成功，请等待');
+                        });
                     }
                 },
-            {title: '收藏此房屋', onPress:()=>{
-                let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id);
-                console.log('收藏后收藏者id：'+thiscollect.collector_id+'测试userid'+user.id);
-                if(thiscollect.collect_id===itemId){
-                    console.log('测试收藏者id1'+thiscollect.collector_id);
-                    toastShort('你已成功收藏此房屋');
-                }else{
-                    realm.write(() => {
-                        realm.create('Collections', {
-                            id:realm.objects('Collections').length+1,
-                            collect_id:itemId,
-                            collector_id:user.id,
-                            collect_time:new Date().toLocaleTimeString()
-                        });
-                        console.log('测试收藏者id22'+thiscollect.collector_id+itemId);
-                        toastShort('收藏成功');
-                    });}
-                }},
-            /*{title: 'Disabled', disabled: true},*/
-        ];
-        let cancelItem = {title: '取消'};
-        ActionSheet.show(items, cancelItem, {modal});
-    }
+            {title: '评论此房屋', onPress:()=>{
 
-    render() {
+                }
+            },
+
+        ];
+        let itemswithoutcomment = [
+            {title: '分享到微博',  onPress:()=>{
+                    WeiboAPI.share({
+                        type: 'image',
+                        text: '发现了一家房屋在出租:'+'地址：'+thehouse.house_location+
+                            '楼层：'+thehouse.house_floor
+                            +'小区：'+thehouse.area_name+'月租：'+thehouse.rent_fee,
+                    })
+                }
+            },
+            withCollect.length>0?
+                {title: '取消收藏', onPress:()=>{
+                        let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id)
+                            .filtered('collect_id==$0',thehouse.house_id);
+                        realm.write(() => {
+                            realm.delete(thiscollect);
+                            toastShort('已取消收藏');
+                        });
+
+                    }}:{title: '收藏此房屋', onPress:()=>{
+                        let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id);
+                        console.log('houseDetail-收藏后收藏者id：'+thiscollect.collector_id+'测试userid'+user.id+'传递的房屋ItemID'+itemId);
+                        realm.write(() => {
+                            realm.create('Collections', {
+                                id:realm.objects('Collections').length+1,
+                                collect_id:itemId,
+                                collector_id:user.id,
+                                collect_time:new Date().toLocaleTimeString(),
+
+                            });
+                            console.log('测试收藏者id22'+thiscollect.collector_id+itemId);
+                            toastShort('收藏成功');
+                        });
+                    }}
+            ,
+            withRelate.length>0?
+                {title: '取消租赁申请', onPress:()=>{
+                        realm.write(() => {
+                            let withrent = realm.objects('Rent_Relate').filtered('roomer_id==$0', user.id)
+                                .filtered('isRenting == $0', '2').filtered('rented_id==$0', thehouse.house_id);
+                            realm.delete(withrent);
+                            toastShort('已取消申请');
+                        });
+                    }
+                }:{title: '申请租赁此房屋', onPress:()=>{
+                        let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0', user.id);//.filtered('isFinish == $0', '1')
+                        console.log('申请后roomerid：'+theRelate.roomer_id);
+                        realm.write(() => {
+                            realm.create('Rent_Relate', {
+                                relate_id:realm.objects('Rent_Relate').length+1,
+                                roomer_id:user.id,
+                                owner_id:thehouse.publisher_id,//房主id
+                                rented_id:itemId,
+                                isRenting:'2',  //房屋状态：被申请中
+                                isFinish:'0'    //交易状态：为完成
+                            });
+                            console.log('申请后roomerid：'+theRelate.roomer_id);
+                            toastShort('发送申请成功，请等待');
+                        });
+                    }
+                },
+
+        ];
+            let cancelItem = {title: '取消'};
+            ActionSheet.show(theRelate.length>0?items:itemswithoutcomment, cancelItem, {modal});
+
+    }
+        render() {
 /*        const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');
         console.log('itemId'+itemId);

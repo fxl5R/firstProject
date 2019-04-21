@@ -24,19 +24,11 @@ import {SimpleItemsDialog,AreaPicker } from 'react-native-pickers';
 
 import realm from '../util/realm.js';
 import AreaJson from "../res/data/Area";
-import Toast from "@ant-design/react-native/lib/toast";
-//import {ImagePicker} from '@ant-design/react-native';
 import ImagePicker from "react-native-image-crop-picker";
-import TagsSelect from "../component/TagsSelect";
 import TagSelect from "react-native-tag-select/src/TagSelect";
 import {toastShort} from "../util/ToastUtil";
 
 const {height, width} = Dimensions.get('window');
-
-//标签被选中时回调
-/*function onChange(selected) {
-    console.log(`tag selected: ${selected}`);
-}*/
 
 
 export default class AddHousePage extends Component {
@@ -122,7 +114,7 @@ export default class AddHousePage extends Component {
                     house_pic4:this.state.House_Pic4,
                     house_pic5:this.state.House_Pic5,
                     house_pic6:this.state.House_Pic6,
-                    support_set:JSON.stringify(this.tag.itemsSelected), //this.state.Support_Set,
+                    support_set:JSON.stringify(this.tag.itemsSelected),
                     house_description: this.state.House_Description,
                     house_location: this.state.House_Location,
                     owner_tel: this.state.Owner_Tel,
@@ -133,6 +125,8 @@ export default class AddHousePage extends Component {
         console.log('Selected items:', JSON.stringify(this.tag.itemsSelected));
         this.props.navigation.navigate('PublishResult');
     };
+
+
 
     renderSetting() {
         const data = [
@@ -284,13 +278,15 @@ export default class AddHousePage extends Component {
                                 this.setState({Rent_Limit: text})
                             }}/>
                             <Text style={{fontSize: 16,color:'#B0C4DE'}}>上传房屋图片</Text>
-                        <View style={{flexDirection:'row',justifyContent: 'center',alignItems:'center',marginLeft:45}}>
+                        <View style={{flexDirection:'row',justifyContent: 'center',
+                            alignItems:'center',marginLeft:45}}>
                             <View style={{flexDirection:'column',flex:1}} >
                             <TouchableOpacity onPress={() => { this.onHP1Click() }}
                                               style={[styles.button,{width:'40%',marginTop:20}]}>
                                 <Text style={{alignItems: 'center'}}>客厅</Text>
                             </TouchableOpacity>
-                            <Image source={this.state.House_Pic?{uri:this.state.House_Pic}:require('../res/images/living.png')}
+                            <Image source={this.state.House_Pic?{uri:this.state.House_Pic}:
+                                require('../res/images/living.png')}
                                    style={{height:100,width:100}} />
 
                             <TouchableOpacity onPress={() => { this.onHP2Click() }}
@@ -391,8 +387,7 @@ export default class AddHousePage extends Component {
                         this.setState({House_Location: value.join("")});
                         console.log(JSON.stringify(value));
                         console.log(value.join(""));
-                        {/*alert(value.join(""));*/
-                        }
+                        {/*alert(value.join(""));*/}
                     }}
                     ref={ref => this.AreaPicker = ref}/>
                 {/*弹出选择出租类型*/}

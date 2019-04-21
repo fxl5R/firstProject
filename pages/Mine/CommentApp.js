@@ -13,9 +13,6 @@ let {height, width} = Dimensions.get('window');
 class CommentApp extends Component {
     constructor () {
         super();
-        /*const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
-        let commentdatas=realm.objects('Comments').filtered('to_uid==$0',itemId);*/
         this.state = {
             comments: [],
             dataSource: new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2}),
@@ -59,8 +56,8 @@ class CommentApp extends Component {
     //渲染底部评论信息模块
     renderExistComment(){
         const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
-        let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
+        const user_publisherId = navigation.getParam('user_publisherId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        let comments=realm.objects('Comments').filtered('to_uid==$0',user_publisherId);
         console.log('renderBottomComment'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
         return (
             <View style={{flex:1}}>
@@ -93,7 +90,7 @@ class CommentApp extends Component {
         if (!comment) return;
         if (!comment.username) return alert('获取用户信息失败');
         if (!comment.content)  return alert('请输入评论内容');
-        let to_uid=this.props.navigation.getParam('itemId','NO-ID');
+        let to_uid=this.props.navigation.getParam('user_publisherId','NO-ID');
         this.setState({
             //当用户发表评论时就将评论数据插入this.state.comments中，通过setState把数据更新到页面上
             comments: this.state.comments,
@@ -105,10 +102,11 @@ class CommentApp extends Component {
             commentTime:comment.commentTime
         });
         this.state.comments.push(comment);
+        toastShort('评论发表成功');
         console.log(comment);
         console.log('评论内容：'+comment.content+'评论来自：'+comment.from_uid
             +'评论对象：'+to_uid+'评论时间：'+comment.commentTime);
-        toastShort('评论发表成功');
+
         //写评论入数据库
         realm.write(()=> {
             realm.create('Comments', {

@@ -198,7 +198,9 @@ class LandLordPage extends React.Component {
                     <View style={{flex:1}}>
                         <TouchableOpacity style={{justifyContent:'center',alignItems:'center',flex:1}}
                                           onPress={()=>{this.props.navigation.navigate('CommentApp',{
-                                              itemId: user_publisher.id})}}>{/*onPress={()=>{this.buttonItemAction(0)}}*/}
+                                              user_publisherId: user_publisher.id,
+                                              thishouseID:user
+                                          })}}>{/*onPress={()=>{this.buttonItemAction(0)}}*/}
                             <View style={{justifyContent:'center',alignItems:'center'}}>
                                 <Image source={require('../res/images/ic_hmsg2.png')}
                                        style={{width:20,height:20}}/>

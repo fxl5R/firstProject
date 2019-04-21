@@ -8,31 +8,58 @@ import {
     ListView,
     TouchableOpacity,
     Platform,
-    RefreshControl, ScrollView
+    RefreshControl,
+    ScrollView
 } from 'react-native';
 import HouseDetail from "./HouseDetail";
 import realm from '../util/realm.js';
 import DataMissing from "../pages/DataMissing";
+//import {Collections} from "../util/realm";
 
 let user=realm.objects('User').filtered('online==$0',1);//获取当前用户[0]
-let collect=realm.objects('Collections').filtered('collector_id==$0',user.id);//根据用户id关联collector_id获取收藏信息
-console.log('收藏列表中的房屋ID：'+collect.collect_id);//4
-let housedata=realm.objects('House_Info').filtered("house_id == $0", collect.collect_id)
+const user_id=user.id;
+
+/*打印收藏者信息
+
+let collectOwners = realm.objects('Collections').filtered('collect_id.@length > 0');
+console.log('进行了收藏操作的人有：'+collectOwners);
+for (let p of collectOwners) {
+    console.log(`  ${p.collector_id}`);
+}
+for (let p of collectOwners) {
+    console.log(`  ${p.name}`);
+}
+*/
+
+let collects=realm.objects('Collections').filtered('collector_id==$0',user_id).houses;//[0]根据用户id关联collector_id获取收藏信息houses
+//let collect=realm.objects('Collections').filtered('collector_id==$0',user_id)[0];//根据用户id关联collector_id获取收藏信息[0]
+
+
+//const collect_id=collect.collect_id;
+console.log('collect-收藏的人'+JSON.stringify(user)+'收藏人ID：'+user_id);
+//console.log('collect-收藏列表中的房屋ID：'+collects.house_id);
+console.log('collect-收藏列表中的房屋：'+JSON.stringify(collects));
+
+
+/*let housedata=realm.objects('House_Info').filtered("house_id == $0", collects.house_id)
     .sorted("publish_time", true);
+let houseList=Collections.houses;
+let houses=houseList[1];
+console.log('collect-被收藏的房屋信息'+JSON.stringify(housedata));*/
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class CollectList extends Component {
 
     constructor(props) {
         super(props);
-        console.log('房屋详细信息：'+JSON.stringify(housedata));
+        //console.log('collect-房屋详细信息：'+JSON.stringify(housedata));
         this.state = {
-            dataSource: ds.cloneWithRows(housedata),
+            //dataSource: ds.cloneWithRows(housedata),
+            dataSource: ds.cloneWithRows(collects),
             isRefreshing: false,
         };
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
     }
-
 
     _onRefresh() {
         if(!this.props){ alert('没有更多数据啦！')}
@@ -42,7 +69,6 @@ export default class CollectList extends Component {
             )
         }
     }
-
 
     /**
      * 根据house_id跳转房源详情
@@ -67,9 +93,8 @@ export default class CollectList extends Component {
      * 渲染房屋展示卡片列表
      **/
     render() {
-        //if(this.props.typee){Alert.alert(this.props.typee)}else{Alert.alert('without typee value')};<Text>{this.props.typee}</Text>
         if(this.state.dataSource._cachedRowCount===0){
-            console.log('行数'+ListView._cachedRowCount);
+            console.log('collect-行数'+ListView._cachedRowCount);
             return(
                 <View style={{justifyContent:'center'}}>
                     <DataMissing />
@@ -138,7 +163,6 @@ export default class CollectList extends Component {
 const styles = StyleSheet.create({
     MainContainer :{
         flex:1,
-        //justifyContent: 'center',
         paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
         margin: 0,
         backgroundColor: '#F5FCFF'

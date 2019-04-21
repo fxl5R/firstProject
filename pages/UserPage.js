@@ -360,8 +360,10 @@ class UserPage extends React.Component {
     //渲染ListView的Header布局
     renderHeaderContent(){
         const { navigation } = this.props;
-        const itemId = navigation.getParam('itemId', 'NO-ID');//从上级页面（评论列表或房源详情页面）中获取用户的ID
-        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];//用发布人ID关联User表查询该用户的相关信息
+        //从上级页面（评论列表或房源详情页面）中获取用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        //用发布人ID关联User表查询该用户的相关信息
+        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
         return (
             <View>
                 {this.renderStoreBasic()}

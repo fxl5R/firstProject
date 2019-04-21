@@ -15,7 +15,7 @@ export default class DataMissing extends Component{
             <View style={styles.container}>
                 <View style={{flex:4}}/>
                 <View style={styles.concontainer}>
-                    <Image style={{height:150,width:150}} source={require('../res/images/ic_nodata_box.png')}/>
+                    <Image style={{height:150,width:150,marginTop:20}} source={require('../res/images/ic_nodata_box.png')}/>
                     <Text>暂无数据</Text>
                 </View>
                 <View style={{flex:4}}/>

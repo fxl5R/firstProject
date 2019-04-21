@@ -15,8 +15,7 @@ import {
     TouchableHighlight,
     Dimensions,
     ScrollView,
-    Platform,
-    Alert
+
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -24,13 +23,12 @@ import TabNavigator from 'react-native-tab-navigator';
 import HouseCell from '../component/HouseCell';
 import MinePage from './MinePage';
 
-import {MsgCard } from '../component/antComponent';
 import MDropDown from '../component/ActionMenu/MDropDown';
 import {SearchBar} from "@ant-design/react-native";
 import { requestWithToken } from '../util/request';
 import ActionButton from "react-native-action-button";
 import {NormalHeader} from "../component/BackHeader";
-import MyCarousel from "../component/MyCarousel";
+//import MyCarousel from "../component/MyCarousel";
 import {Carousel} from 'teaset';
 import CollectList from "../component/CollectList";
 
@@ -57,8 +55,9 @@ export default class TabPage extends Component<Props> {
         this._renderHeader = this._renderHeader.bind(this);
     }
 
-    //TabPage父组件接收MDropDown子组件的参数，并改变state，
-    // 用作传递给HouseCell中更新dataSource
+    /*过程③
+    TabPage父组件接收MDropDown子组件的参数，并改变state，
+    用作传递给HouseCell中更新dataSource*/
     setValue1 = typee => {
         this.setState({typee});
     };
@@ -144,7 +143,7 @@ export default class TabPage extends Component<Props> {
                             <SearchBar
                                 value={this.state.value1}
                                 placeholder="输入小区名或地址"
-                                cancelText={'进入'}
+                                cancelText={'搜索'}
                                 onCancel={this.onChange}
                                 onChange={this.onChange}/>
                             {this._renderCarousel()}
@@ -179,7 +178,7 @@ export default class TabPage extends Component<Props> {
                         <View styles={styles.page2}>
                             <NormalHeader title={'我的收藏'}/>
                             <ScrollView>
-                            <CollectList/>
+                            <CollectList navigation={this.props.navigation} />
                             </ScrollView>
                         </View>
                     </TabNavigator.Item>
