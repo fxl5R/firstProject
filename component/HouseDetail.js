@@ -10,7 +10,7 @@ import {
     ScrollView,
     Dimensions,
     Platform,
-    ImageBackground, Alert
+    ImageBackground, Alert, ListView
 } from 'react-native';
 import BackHeader from "./BackHeader";
 import realm,{Collections} from "../util/realm";
@@ -20,21 +20,31 @@ import {Menu} from 'teaset';
 import {toastShort} from "../util/ToastUtil";
 import * as WeiboAPI from "rn-weibo";
 import {NavigationPage, ListRow, ActionSheet, Label} from 'teaset';
+import FormWithPicture from "./Form/FormWithPicture";
 const winWidth=Dimensions.get('window').width;
 const winHeight=Dimensions.get('window').height;
 
-export default class HouseDetail extends Component<Props> {
+//let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+export default class HouseDetail extends React.Component {
 
     constructor(props){
         super(props);
         this.state={
-
-        }
+            dataSource: new ListView.DataSource({
+                rowHasChanged: (row1, row2) => row1 !== row2,
+            }),
+        };
     }
-
     GoToGallery(house_id) {
         this.props.navigation.navigate('ImageBrowers',{
             itemId: house_id});
+    };
+    /**
+     * 根据用户id跳转用户个人主页
+     **/
+    GoToUserDetail(from_uid) {
+        this.props.navigation.navigate('UserPage',{
+            itemId: from_uid});
     };
     //渲染房屋图片和简介
     renderHousePic(){
@@ -82,6 +92,101 @@ export default class HouseDetail extends Component<Props> {
             </View>
         );
     }
+    //渲染申请人信息卡片
+    renderApplier(){
+        const { navigation } = this.props;
+        const isEdit = navigation.getParam('isEdit', 'NO-Edit');        //from管理房屋页面
+        const house_id = navigation.getParam('itemId', 'NO-ID');        //house_id
+        let user=realm.objects('User').filtered("online == $0", 1)[0];//房主
+        let thehouse = realm.objects('House_Info').filtered('house_id==$0',house_id)[0];
+        let theRelate=realm.objects('Rent_Relate').filtered('owner_id == $0',user.id)
+            .filtered('rented_id==$0',house_id);                //.filtered('isRenting == $0', '2')
+        if(theRelate.length>0&&theRelate[0].isRenting!=='0'){
+            let applierId=theRelate[0].roomer_id;
+            let theApplier=realm.objects('User').filtered("id == $0", applierId)[0];
+            return(
+                <View>
+                    <View style={{height:35,justifyContent:'center'}}>
+                        <Text style={{color:'#777',marginLeft:8}}>租赁情况</Text>
+                    </View>
+                    <View style={styles.partContainer}>
+                        <FormWithPicture
+                            nickName={theApplier.nickName}
+                            contactText={theApplier.userName}
+                            pictureUri={{uri:theApplier.portrait}}
+                            onFormClick={() => {
+                                this.props.navigation.navigate('UserPage',{
+                                    itemId: applierId,
+                                    tradeID:theRelate[0].relate_id,
+                                    houseID:thehouse.house_id,
+                                    isRenting:theRelate[0].isRenting,
+                                    appliersym:1
+                                });
+                            }}
+                        />
+                    </View>
+                </View>
+            )
+        }else {
+            return(
+                <View>
+                    <View style={{height:35,justifyContent:'center'}}>
+                        <Text style={{color:'#777',marginLeft:8}}>租赁情况</Text>
+                    </View>
+                    <Image source={require('../res/images/ic_center_line.png')}/>
+                    <View style={{alignItems:'center',margin:20}}>
+                        <Text>暂时无人申请</Text>
+                    </View>
+                    <Image style={{padding:4}} source={require('../res/images/ic_center_line.png')}/>
+                </View>
+            )
+        }
+    }
+
+    //渲染房屋评论信息模块
+    renderBottomComment(){
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从housecell中获取房屋id
+        let comments=realm.objects('Comments').filtered('to_hid==$0',itemId).filtered('to_uid==$0',-1);
+        console.log('renderBottomComment!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
+        return (
+            <View style={{flex:1}}>
+                {this.renderContent(this.state.dataSource.cloneWithRows(
+                    comments === undefined ? [] : comments))}
+            </View>
+        );
+    }
+    //进行渲染数据
+    renderContent(dataSource) {
+
+        return (
+            <ListView
+                initialListSize={1}
+                dataSource={dataSource}
+                //renderRow={this.renderItem}
+                renderRow={(rowData) =>
+                    <View>
+                        <View style={{flexDirection:'row',margin:10}} >
+                            <TouchableOpacity onPress={this.GoToUserDetail.bind(this,rowData.from_uid)}>
+                                <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
+                            </TouchableOpacity>
+                            <View style={{flex:1,marginLeft:8}}>
+                                <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                                <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
+                            </View>
+                            <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
+                        </View>
+                        {/*{this.renderCommentImage(comment.imges)}*/}
+                    </View>}
+                style={{backgroundColor:'white',flex:1}}
+                onEndReachedThreshold={10}
+                enableEmptySections={true}
+                renderSeparator={this._renderSeparatorView}
+            />
+        );
+    }
+
+
     //渲染房主卡片布局
     renderOwner(){
         const { navigation } = this.props;
@@ -97,7 +202,9 @@ export default class HouseDetail extends Component<Props> {
             <View style={{margin: 28}}>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => {
                     this.props.navigation.navigate('LandLordPage',{
-                        itemId: publisherID});
+                        itemId: publisherID,
+                        houseId:house.house_id,
+                    });
                 }}>
                     <View>
                     <View style={styles.container}>
@@ -292,6 +399,7 @@ export default class HouseDetail extends Component<Props> {
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];
             return(
+
                 <ScrollView style={{marginTop:10}}>
             <View>
                 <View style={{height:35,justifyContent:'center'}}>
@@ -375,14 +483,11 @@ export default class HouseDetail extends Component<Props> {
 
     //标题栏
     renderHeader(){
-
         const { navigation } = this.props;
         const isEdit = navigation.getParam('isEdit', 'NO-Edit');
         const itemId = navigation.getParam('itemId', 'NO-ID');
         console.log('itemId'+itemId);
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
-        let house=houses[0];
-        let user=realm.objects('User').filtered("online == $0", 1);
         if(isEdit===1){
             return(
                 <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
@@ -403,14 +508,6 @@ export default class HouseDetail extends Component<Props> {
                 </View>
             )
         }else {
-            let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
-            let user=realm.objects('User').filtered("online == $0", 1)[0];//获取当前用户，存储collector_id
-            //无租赁关系
-            let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)
-                .filtered('isFinish == $0', '1').filtered('rented_id==$0',thehouse.house_id);
-            //正在申请中
-            let withRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)
-                .filtered('isRenting == $0', '2').filtered('rented_id==$0',thehouse.house_id);
             return(
                 <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
                     <TouchableOpacity onPress={() => {this.props.navigation.goBack();}}
@@ -471,9 +568,11 @@ export default class HouseDetail extends Component<Props> {
         let user=realm.objects('User').filtered("online == $0", 1)[0];//获取当前用户，存储collector_id
         const itemId = this.props.navigation.getParam('itemId', 'NO-ID');//获取HouseCell中的house_id作为collect_id
         let thehouse = realm.objects('House_Info').filtered('house_id==$0',itemId)[0];
-        //无租赁关系
-        let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)
+        //租赁关系
+        let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)//调整AppNavigatior
             .filtered('isFinish == $0', '1').filtered('rented_id==$0',thehouse.house_id);
+        let theComment=realm.objects('Comments').filtered('to_hid==$0',thehouse.house_id)
+            .filtered('from_uid==$0',user.id);
         //正在申请中
         let withRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0',user.id)
             .filtered('isRenting == $0', '2').filtered('rented_id==$0',thehouse.house_id);
@@ -485,8 +584,9 @@ export default class HouseDetail extends Component<Props> {
                     WeiboAPI.share({
                         type: 'image',
                         text: '发现了一家房屋在出租:'+'地址：'+thehouse.house_location+
-                            '楼层：'+thehouse.house_floor
-                            +'小区：'+thehouse.area_name+'月租：'+thehouse.rent_fee,
+                            '；楼层：'+thehouse.house_floor
+                            +'小区：'+thehouse.area_name+'；月租：'+thehouse.rent_fee,
+                        imageUrl:thehouse.house_pic
                     })
                 }
             },
@@ -498,8 +598,7 @@ export default class HouseDetail extends Component<Props> {
                             realm.delete(thiscollect);
                             toastShort('已取消收藏');
                         });
-
-                    }}:{title: '收藏此房屋', onPress:()=>{
+                    }}:{title: '收藏房屋', onPress:()=>{
                         let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id);
                         console.log('houseDetail-收藏后收藏者id：'+thiscollect.collector_id+'测试userid'+user.id+'传递的房屋ItemID'+itemId);
                         realm.write(() => {
@@ -524,7 +623,7 @@ export default class HouseDetail extends Component<Props> {
                             toastShort('已取消申请');
                         });
                     }
-                }:{title: '申请租赁此房屋', onPress:()=>{
+                }:{title: '申请租赁', onPress:()=>{
                         let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0', user.id);//.filtered('isFinish == $0', '1')
                         console.log('申请后roomerid：'+theRelate.roomer_id);
                         realm.write(() => {
@@ -542,8 +641,11 @@ export default class HouseDetail extends Component<Props> {
                     }
                 },
             {title: '评论此房屋', onPress:()=>{
-
-                }
+                this.props.navigation.navigate('CommentApp',{
+                    house_rented: thehouse.house_id,
+                    houseID:thehouse.house_id,
+                    pageSym:1
+                })}
             },
 
         ];
@@ -552,8 +654,9 @@ export default class HouseDetail extends Component<Props> {
                     WeiboAPI.share({
                         type: 'image',
                         text: '发现了一家房屋在出租:'+'地址：'+thehouse.house_location+
-                            '楼层：'+thehouse.house_floor
-                            +'小区：'+thehouse.area_name+'月租：'+thehouse.rent_fee,
+                            '；楼层：'+thehouse.house_floor
+                            +'小区：'+thehouse.area_name+'；月租：'+thehouse.rent_fee,
+                        imageUrl:thehouse.house_pic,
                     })
                 }
             },
@@ -605,13 +708,14 @@ export default class HouseDetail extends Component<Props> {
                             });
                             console.log('申请后roomerid：'+theRelate.roomer_id);
                             toastShort('发送申请成功，请等待');
+                            realm.create('House_Info',{house_id:thehouse.house_id,certification:2},true);//阻止显示房源
                         });
                     }
                 },
 
         ];
             let cancelItem = {title: '取消'};
-            ActionSheet.show(theRelate.length>0?items:itemswithoutcomment, cancelItem, {modal});
+            ActionSheet.show(theRelate.length>0&&theComment.length<0?items:itemswithoutcomment, cancelItem, {modal});
 
     }
         render() {
@@ -620,23 +724,52 @@ export default class HouseDetail extends Component<Props> {
         console.log('itemId'+itemId);
         let houses=realm.objects('House_Info').filtered('house_id==$0',itemId);//取出从HouseCell传递的对应id的房屋信息
         let house=houses[0];*/
-        return (
-            <View>
-                {/*<BackHeader navigation={this.props.navigation} title={'房屋详情'}/>*/}
-                {this.renderHeader()}
-                <ScrollView>
-                {this.renderHousePic()}
-                {this.renderBaseInfo()}
-                <Image style={{padding:4}}  source={require('../res/images/ic_center_line.png')}/>
-                <View style={{height:35,justifyContent:'center'}}>
-                    <Text style={{color:'#777',marginLeft:8}}>房东信息</Text>
-                </View>
-                <Image source={require('../res/images/ic_center_line.png')}/>
-                {this.renderOwner()}
-                    <View style={{height:Platform.OS === 'ios' ? 0:40}}/>
-                </ScrollView>
-            </View>
-        );
+        const { navigation } = this.props;
+        const isEdit = navigation.getParam('isEdit', 'NO-Edit');        //from管理房屋页面
+            if(isEdit===1){
+                return (
+                    <View>
+                        {/*<BackHeader navigation={this.props.navigation} title={'房屋详情'}/>*/}
+                        {this.renderHeader()}
+                        <ScrollView>
+                            {this.renderHousePic()}
+                            {this.renderApplier()}
+                            {this.renderBaseInfo()}
+                            <Image style={{padding:4}}  source={require('../res/images/ic_center_line.png')}/>
+                            <View style={{height:35,justifyContent:'center'}}>
+                                <Text style={{color:'#777',marginLeft:8}}>房东信息</Text>
+                            </View>
+                            <Image source={require('../res/images/ic_center_line.png')}/>
+                            {this.renderOwner()}
+                            <View style={{height:Platform.OS === 'ios' ? 0:40}}/>
+                        </ScrollView>
+                    </View>
+                );
+            }else {
+                return (
+                    <View>
+                        {/*<BackHeader navigation={this.props.navigation} title={'房屋详情'}/>*/}
+                        {this.renderHeader()}
+                        <ScrollView>
+                            {this.renderHousePic()}
+                            {this.renderBaseInfo()}
+                            <Image style={{padding:4}}  source={require('../res/images/ic_center_line.png')}/>
+                            <View style={{height:35,justifyContent:'center'}}>
+                                <Text style={{color:'#777',marginLeft:8}}>房东信息</Text>
+                            </View>
+                            <Image source={require('../res/images/ic_center_line.png')}/>
+                            {this.renderOwner()}
+                            <Image style={{padding:4}}  source={require('../res/images/ic_center_line.png')}/>
+                            <View style={{height:35,justifyContent:'center'}}>
+                                <Text style={{color:'#777',marginLeft:8}}>评论信息</Text>
+                            </View>
+                            <Image source={require('../res/images/ic_center_line.png')}/>
+                            {this.renderBottomComment()}
+                            <View style={{height:Platform.OS === 'ios' ? 0:140}}/>
+                        </ScrollView>
+                    </View>
+                );
+            }
     }
 }
 
@@ -756,6 +889,14 @@ const styles = StyleSheet.create({
     brickIcon:{
         height:32,
         width:32
+    },
+    partContainer: {
+        marginTop: 10,
+        borderTopColor:'#D3D3D3',
+        borderTopWidth: 0.5,
+        borderBottomColor:'#D3D3D3',
+        borderBottomWidth: 0.5,
+        paddingVertical: 5
     }
 
 });

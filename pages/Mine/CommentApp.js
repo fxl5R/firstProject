@@ -53,12 +53,28 @@ class CommentApp extends Component {
             />
         );
     }
-    //渲染底部评论信息模块
-    renderExistComment(){
+    //渲染用户底部评论信息模块
+    renderUserExistComment(){
         const { navigation } = this.props;
         const user_publisherId = navigation.getParam('user_publisherId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',user_publisherId);
         console.log('renderBottomComment'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
+
+        return (
+            <View style={{flex:1}}>
+                {this.renderContent(this.state.dataSource.cloneWithRows(
+                    comments === undefined ? [] : comments))}
+            </View>
+        );
+    }
+    //渲染房屋底部评论信息模块
+    renderHouseExistComment(){
+        const { navigation } = this.props;
+        const houseID = navigation.getParam('houseID', 'NO-ID');//从房屋详情获取房屋的ID
+        let comments=realm.objects('Comments').filtered('to_hid==$0',houseID)
+            .filtered('to_uid==$0',-1);
+        console.log('renderBottomComment'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
+
         return (
             <View style={{flex:1}}>
                 {this.renderContent(this.state.dataSource.cloneWithRows(
@@ -67,22 +83,25 @@ class CommentApp extends Component {
         );
     }
     render() {
-
+        const { navigation } = this.props;
+        const houseID = navigation.getParam('houseID', 'NO-ID');//从房屋详情获取房屋的ID
+        let comments=realm.objects('Comments').filtered('to_hid==$0',houseID)
+            .filtered('to_uid==$0',-1);
+        const pageSym=navigation.getParam('pageSym',0);
         return (
             <View style={{ flex: 1 }}>
                 <CommentHeader navigation={this.props.navigation}/>
-                <ScrollView style={{flex:1,height:height}}>
-                    <View>
-                        {this.renderExistComment()}
-                    </View>
-                    {/*<CommentList comments={this.state.comments}/>*/}
-                </ScrollView>
                 <View style={styles.container}>
                     <CommentInput
                         {...this.props}
                         onSubmit={this.handleSubmitComment.bind(this)} />
                 </View>
-
+                <ScrollView style={{flex:1,height:height}}>
+                    <View>
+                        {pageSym===1?this.renderHouseExistComment():this.renderUserExistComment()}
+                    </View>
+                    {/*<CommentList comments={this.state.comments}/>*/}
+                </ScrollView>
             </View>
         )
     }
@@ -91,6 +110,13 @@ class CommentApp extends Component {
         if (!comment.username) return alert('获取用户信息失败');
         if (!comment.content)  return alert('请输入评论内容');
         let to_uid=this.props.navigation.getParam('user_publisherId','NO-ID');
+        const { navigation } = this.props;
+        const houseID = navigation.getParam('houseID', 'NO-ID');
+        const pageSym=navigation.getParam('pageSym',0);
+        let thehouse = realm.objects('House_Info').filtered('house_id==$0',houseID)[0];
+        //const house_rented=navigation.get('house_rented','NO-ID');
+        let houserented = realm.objects('Rent_Relate').filtered('rented_id==$0',houseID)
+            .filtered('roomer_id==$0',comment.from_uid);//[0]
         this.setState({
             //当用户发表评论时就将评论数据插入this.state.comments中，通过setState把数据更新到页面上
             comments: this.state.comments,
@@ -99,6 +125,8 @@ class CommentApp extends Component {
             from_uid:comment.from_uid,
             from_portrait:comment.from_portrait,
             to_uid:to_uid,
+            to_hid:houseID,
+            h_tile:thehouse.house_location+thehouse.area_name+thehouse.lease_type,
             commentTime:comment.commentTime
         });
         this.state.comments.push(comment);
@@ -106,19 +134,37 @@ class CommentApp extends Component {
         console.log(comment);
         console.log('评论内容：'+comment.content+'评论来自：'+comment.from_uid
             +'评论对象：'+to_uid+'评论时间：'+comment.commentTime);
-
-        //写评论入数据库
-        realm.write(()=> {
-            realm.create('Comments', {
-                id:realm.objects('Comments').length,
-                content: comment.content,
-                from_uid:comment.from_uid,
-                from_portrait:comment.from_portrait,
-                from_nickName:comment.username,
-                to_uid:  to_uid,
-                commentTime:comment.commentTime
+        //记录房屋评论的数据
+        if(houserented.length>0&&pageSym===1){
+            realm.write(()=> {
+                realm.create('Comments', {
+                    id:realm.objects('Comments').length,
+                    content: comment.content,
+                    from_uid:comment.from_uid,
+                    from_portrait:comment.from_portrait,
+                    from_nickName:comment.username,
+                    to_uid: -1,
+                    to_hid:houseID,
+                    commentTime:comment.commentTime
+                });
             });
-        });
+        }else {
+            //写记录用户间的评论入数据库
+            realm.write(()=> {
+                realm.create('Comments', {
+                    id:realm.objects('Comments').length,
+                    content: comment.content,
+                    from_uid:comment.from_uid,
+                    from_portrait:comment.from_portrait,
+                    from_nickName:comment.username,
+                    to_uid: to_uid,
+                    to_hid:houseID,
+                    h_tile:thehouse.house_location+thehouse.area_name+thehouse.lease_type,
+                    commentTime:comment.commentTime
+                });
+            });
+        }
+
     }
 }
 

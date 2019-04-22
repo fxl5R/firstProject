@@ -92,7 +92,7 @@ export default class HouseManager extends Component {
         const itemId = navigation.getParam('itemId', 'NO-ID');//从个人中心获取用户的ID
         let mydata = realm.objects('House_Info');
         let ismyHouseData=mydata.filtered("publisher_id==$0", itemId)
-            .sorted("publish_time", true);
+            .sorted("certification", true);
 
         return (
             <ScrollView>

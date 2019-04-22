@@ -56,7 +56,7 @@ class LandLordPage extends React.Component {
 
         this.GoToUserDetail=this.GoToUserDetail.bind(this);
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
-
+        this.GoToComment=this.GoToComment.bind(this);
         this.onValueChange = value => {
             this.setState({bottomValue:value});
             console.log(value);
@@ -84,6 +84,28 @@ class LandLordPage extends React.Component {
             //isEdit:1 只能在管理房屋页面对房屋进行修改
         });
     };
+    /**
+     * 根据house_id和房东ID判断交易是否完成，是则跳转至评论，否则提示无评论权限
+     **/
+    GoToComment (itemId,houseID){
+        let user_roomer=realm.objects('User').filtered("online == $0", 1)[0];
+        let isRelated=realm.objects('Rent_Relate').filtered('owner_id == $0',itemId)
+            .filtered('roomer_id==$0',user_roomer.id).filtered('rented_id==$0',houseID)
+            .filtered('isFinish==$0','1');
+        let comments=realm.objects('Comments').filtered('to_uid==$0',itemId)
+            .filtered('from_uid==$0',user_roomer.id);
+        if(isRelated.length>0&&comments.length<0){
+            this.props.navigation.navigate('CommentApp',{
+                user_publisherId: itemId,
+                houseID:houseID,
+                pageSym:2
+            })
+        }else {
+            toastShort('暂无评论权限');
+        }
+
+    }
+
     buttonItemAction(position){
         if(position === 1){
             //收藏
@@ -191,16 +213,19 @@ class LandLordPage extends React.Component {
     renderCenterBar(){
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从房屋详情获取发布房屋的用户的ID
+        const houseID=navigation.getParam('houseId','NO-ID');//从房屋详情处获取房屋的ID
         let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
         return (
             <View style={{backgroundColor:'white'}}>
                 <View style={{flexDirection:'row',height:45}}>
                     <View style={{flex:1}}>
                         <TouchableOpacity style={{justifyContent:'center',alignItems:'center',flex:1}}
-                                          onPress={()=>{this.props.navigation.navigate('CommentApp',{
+                                          /*onPress={()=>{this.props.navigation.navigate('CommentApp',{
                                               user_publisherId: user_publisher.id,
-                                              thishouseID:user
-                                          })}}>{/*onPress={()=>{this.buttonItemAction(0)}}*/}
+                                              houseID:houseID//房屋ID
+                                          })}}*/
+                                            onPress={() => this.GoToComment(itemId,houseID)}
+                        >
                             <View style={{justifyContent:'center',alignItems:'center'}}>
                                 <Image source={require('../res/images/ic_hmsg2.png')}
                                        style={{width:20,height:20}}/>
@@ -258,7 +283,6 @@ class LandLordPage extends React.Component {
             </View>
         );
     }
-
 
     //渲染底部评论信息模块
     renderBottomComment(){
@@ -343,6 +367,7 @@ class LandLordPage extends React.Component {
 
     //进行渲染数据
     renderContent(dataSource) {
+
         return (
             <ListView
                 initialListSize={1}
@@ -355,7 +380,13 @@ class LandLordPage extends React.Component {
                         <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
                         </TouchableOpacity>
                         <View style={{flex:1,marginLeft:8}}>
-                            <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                            <View style={{flexDirection:'row'}}>
+                                <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                                <TouchableOpacity onPress={
+                                    this.GoToHouseDetail.bind(this,rowData.to_hid)}>
+                                    <Text style={styles.link_housetext}>{rowData.h_tile}►</Text>
+                                </TouchableOpacity>
+                            </View>
                             <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
                         </View>
                         <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
@@ -441,6 +472,12 @@ let styles = StyleSheet.create({
     comment_username:{
         color:'#00a3cf',
         fontStyle:'italic'
+    },
+    link_housetext:{
+        color:'black',
+        fontStyle:'italic',
+        fontSize:12,
+        marginLeft:30
     },
     MainContainer :{
         flex:1,

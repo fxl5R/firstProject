@@ -72,7 +72,9 @@ Comments.schema = {
         from_uid:'int',                        // 评论用户id
         from_portrait:'string',                // 评论用户头像地址
         from_nickName:'string',                // 评论用户昵称
-        to_uid:  'int',                        // 评论的目标用户id
+        to_uid:{type:'int',optional:true},     // 评论的目标用户id
+        to_hid:{type:'int',optional:true},     //评论的目标房屋id
+        h_tile:{type:'string',optional:true},  //目标房屋简称
         commentTime: { type: 'string', optional: true } // 创建时间 toLocaleTimeString
     }
 };

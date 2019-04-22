@@ -28,7 +28,15 @@ export default class CommentDisplay extends React.Component {
         this.props.navigation.navigate('UserPage',{
             itemId: from_uid});
     };
-
+    /**
+     * 根据house_id跳转房源详情
+     **/
+    GoToHouseDetail(house_id) {
+        this.props.navigation.navigate('HouseDetail',{
+            itemId: house_id,
+            //isEdit:1 只能在管理房屋页面对房屋进行修改
+        });
+    };
 
     _renderSeparatorView(sectionID: number, rowID: number) {
         return (
@@ -48,7 +56,13 @@ export default class CommentDisplay extends React.Component {
                                 <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
                             </TouchableOpacity>
                             <View style={{flex:1,marginLeft:8}}>
-                                <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                                <View style={{flexDirection:'row'}}>
+                                    <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                                    <TouchableOpacity onPress={
+                                        this.GoToHouseDetail.bind(this,rowData.to_hid)}>
+                                        <Text style={styles.link_housetext}>{rowData.h_tile}►</Text>
+                                    </TouchableOpacity>
+                                </View>
                                 <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
                             </View>
                             <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
@@ -141,6 +155,12 @@ let styles = StyleSheet.create({
     comment_username:{
         color:'#00a3cf',
         fontStyle:'italic'
+    },
+    link_housetext:{
+        color:'black',
+        fontStyle:'italic',
+        fontSize:12,
+        marginLeft:30
     },
     comment_content:{
         margin:0

@@ -40,6 +40,13 @@ import FormWithInput from '../component/Form/FormWithInput';
 
 const AppStackNavigator = createStackNavigator({
 
+    TabPage:{
+        screen:TabPage,
+        navigationOptions:{
+            header:null
+        }
+    },
+
     Login:{
         screen:login,
         navigationOptions:{header: null}
@@ -47,13 +54,6 @@ const AppStackNavigator = createStackNavigator({
 
     convertRealm:{
         screen:convertRealm,
-        navigationOptions:{
-            header:null
-        }
-    },
-
-    TabPage:{
-        screen:TabPage,
         navigationOptions:{
             header:null
         }

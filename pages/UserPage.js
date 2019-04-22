@@ -19,7 +19,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ListView,
-    ImageBackground, Linking, ScrollView, Platform
+    ImageBackground, Linking, ScrollView, Platform, Alert
 } from 'react-native';
 
 import { toastShort } from '../util/ToastUtil';
@@ -30,6 +30,7 @@ import realm from "../util/realm";
 import * as WeiboAPI from 'rn-weibo';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import {SegmentedControl, Tabs} from '@ant-design/react-native';
+import {Menu} from "teaset";
 
 
 let {height, width} = Dimensions.get('window');
@@ -393,11 +394,98 @@ class UserPage extends React.Component {
             </View>
         );
     }
+    renderBackHeader(){
+        const { navigation } = this.props;
+        //从上级页面（评论列表或房源详情页面）中获取用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        //用发布人ID关联User表查询该用户的相关信息
+        let user_applier=realm.objects('User').filtered('id==$0',itemId)[0];
+        const appliersym = navigation.getParam('appliersym', 'NO-SYM');
+        if(appliersym===1){
+            return(
+                <View style={{height:48,backgroundColor:'#B0C4DE',flexDirection:'row',alignItems:'center'}}>
+                    <TouchableOpacity onPress={() => {this.props.navigation.goBack();}}
+                                      style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
+                        <Image
+                            style={{width:13,height:20}}
+                            source={require('../res/images/ic_center_back.png')}
+                        />
+                    </TouchableOpacity>
+                    <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+                        <Text style={{fontSize:18,color:'white',alignSelf:'center'}}>个人主页</Text>
+                    </View>
+                    <TouchableOpacity ref='edit' onPress={() => this.show(this.refs['edit'],'end')}
+                                      style={{width:48,height:48,alignItems:'center',justifyContent:'center'}}>
+                        <Icon name="hand-holding-usd" size={20} color="rgb(248,248,255)" light/>
+                    </TouchableOpacity>
+                </View>
+            )
+        }else{
+            return(
+                    <BackHeader navigation={this.props.navigation} title={'个人主页'}/>
+                )
+        }
+    }
+    show(view,align) {
+        const { navigation } = this.props;
+        //从上级页面（评论列表或房源详情页面）中获取用户的ID
+        const tradeID=navigation.getParam('tradeID','No-Id');
+        const isRenting=navigation.getParam('isRenting','No-status');
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        let house_rented=realm.objects('Rent_Relate').filtered('relate_id==$0', tradeID)[0];
+        //用发布人ID关联User表查询该用户的相关信息
+        let user_applier=realm.objects('User').filtered('id==$0',itemId)[0];
+        view.measure((x, y, width, height, pageX, pageY) => {
+            let items = [
+                isRenting==='2'?
+                    {title: '同意交易', icon: require('../res/images/ic_selected.png'), onPress: () => {
+                            /*if(this.state.newPwd2){}*/
+                            realm.write(() => {
+                                realm.create('Rent_Relate', {relate_id: tradeID, isRenting: '1'}, true);
+                            })
+                    }}:
+                    {title: '交易完成', icon: require('../res/images/ic_finish.png'), onPress: () => {
+                            /*if(this.state.newPwd2){}*/
+                            realm.write(() => {
+                                realm.create('Rent_Relate', {relate_id: tradeID, isRenting: '0',isFinish:'1'}, true);
+                                realm.create('House_Info',{house_id:house_rented.rented_id,certification:null},true);//重新放出房源
+                            })
+                        }},
+                {title: '清除交易', icon: require('../res/images/ic_del.png'), onPress: () =>{this.delete_Trade()}},
+            ];
+            Menu.show({x: pageX, y: pageY, width, height}, items,{align});
+        });
+    }
+
+    delete_Trade(){
+        const { navigation } = this.props;
+        const houseID=navigation.getParam('houseID','No-Id');
+        //从上级页面（评论列表或房源详情页面）中获取用户的ID
+        const itemId = navigation.getParam('itemId', 'NO-ID');
+        //用发布人ID关联User表查询该用户的相关信息
+        let user_applier=realm.objects('User').filtered('id==$0',itemId)[0];
+        Alert.alert(
+            '提示',
+            '确定清除交易？',
+            [
+                {text:'取消',onPress:(()=>{}),style:'cancel'},
+                {text:'确定',onPress: (()=>{
+                        realm.write(() => {
+                            let withrent = realm.objects('Rent_Relate').filtered('roomer_id==$0', user_applier.id)
+                                .filtered('isRenting == $0', '2').filtered('rented_id==$0', houseID);
+                            realm.delete(withrent);
+                            toastShort('已拒绝交易');
+                        });
+                        this.props.navigation.navigate('HouseManager');
+                    })}]
+        );
+    }
+
     render() {
 
         return (
             <View style={{backgroundColor:'#f5f5f5',flex:1}}>
-                <BackHeader navigation={this.props.navigation} title={'个人主页'}/>
+                {this.renderBackHeader()}
                 {this.renderBottom()}
             </View>
         );
