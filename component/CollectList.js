@@ -16,8 +16,6 @@ import realm from '../util/realm.js';
 import DataMissing from "../pages/DataMissing";
 //import {Collections} from "../util/realm";
 
-let user=realm.objects('User').filtered('online==$0',1);//获取当前用户[0]
-const user_id=user.id;
 
 /*打印收藏者信息
 
@@ -31,43 +29,16 @@ for (let p of collectOwners) {
 }
 */
 
-let collects=realm.objects('Collections').filtered('collector_id==$0',user_id).houses;//[0]根据用户id关联collector_id获取收藏信息houses
-//let collect=realm.objects('Collections').filtered('collector_id==$0',user_id)[0];//根据用户id关联collector_id获取收藏信息[0]
-
-
-//const collect_id=collect.collect_id;
-console.log('collect-收藏的人'+JSON.stringify(user)+'收藏人ID：'+user_id);
-//console.log('collect-收藏列表中的房屋ID：'+collects.house_id);
-console.log('collect-收藏列表中的房屋：'+JSON.stringify(collects));
-
-
-/*let housedata=realm.objects('House_Info').filtered("house_id == $0", collects.house_id)
-    .sorted("publish_time", true);
-let houseList=Collections.houses;
-let houses=houseList[1];
-console.log('collect-被收藏的房屋信息'+JSON.stringify(housedata));*/
-let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
 export default class CollectList extends Component {
 
     constructor(props) {
         super(props);
-        //console.log('collect-房屋详细信息：'+JSON.stringify(housedata));
+
         this.state = {
-            //dataSource: ds.cloneWithRows(housedata),
-            dataSource: ds.cloneWithRows(collects),
-            isRefreshing: false,
+            //dataSource: ds.cloneWithRows(collects),
+            //isRefreshing: false,
         };
         this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
-    }
-
-    _onRefresh() {
-        if(!this.props){ alert('没有更多数据啦！')}
-        if(this.props){
-            this.setState(
-                {dataSource:this.state.dataSource}
-            )
-        }
     }
 
     /**
@@ -77,24 +48,22 @@ export default class CollectList extends Component {
         this.props.navigation.navigate('HouseDetail',{
             itemId: house_id});
     };
-
-    ListViewItemSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: .5,
-                    width: "100%",
-                    backgroundColor: "#000",}}
-            />
-        );
+    GoToGallery(house_id) {
+        this.props.navigation.navigate('ImageBrowers',{
+            itemId: house_id});
     };
 
     /**
      * 渲染房屋展示卡片列表
      **/
     render() {
-        if(this.state.dataSource._cachedRowCount===0){
-            console.log('collect-行数'+ListView._cachedRowCount);
+        let user=realm.objects('User').filtered('online==$0',1)[0];//获取当前用户
+        const user_id=user.id;
+        let collects=realm.objects('Collections').filtered('collector_id==$0',user_id);
+        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        console.log('collect-行数'+collects.length);
+        console.log('collect-数据'+JSON.stringify(collects));
+        if(collects.length<1){
             return(
                 <View style={{justifyContent:'center'}}>
                     <DataMissing />
@@ -105,43 +74,33 @@ export default class CollectList extends Component {
                 <View style = {styles.MainContainer }>
                     <ScrollView style={{flex:1}}>
                         <ListView
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={this.state.isRefreshing}
-                                    onRefresh={this._onRefresh.bind(this)}
-                                    tintColor="#ff0000"
-                                    title="加载中..."
-                                    titleColor="#00ff00"
-                                    colors={['#ff0000', '#00ff00', '#0000ff']}
-                                    progressBackgroundColor="#ffffff"
-                                />}
                             enableEmptySections = {true}
-                            dataSource={this.state.dataSource}
-                            renderSeparator={this.ListViewItemSeparator}
+                            //dataSource={this.state.dataSource}
+                            dataSource={ds.cloneWithRows(collects)}
                             renderRow={(rowData) =>
-                                <View style={{flex:1, flexDirection: 'column'}}>
-                                    <TouchableOpacity onPress={this.GoToHouseDetail.bind(this,rowData.house_id)}>
-                                        <View style={{backgroundColor: '#FFF'}}>
-                                            <View style={{padding: 10, flexDirection: 'row'}}>
-                                                <Image style={styles.thumb} source={rowData.house_pic?
-                                                    {uri:rowData.house_pic}:require('../res/images/detailbg.jpg')}/>
-
-                                                <View style={{flex: 2, paddingLeft: 10}}>
-                                                    <Text style={{fontSize: 16}}>{rowData.area_name}</Text>
-                                                    <Text style={{marginTop: 8, marginBottom: 8}}>{rowData.lease_type}</Text>
-                                                    <Text style={{color: '#999'}}>{rowData.house_floor}</Text>
+                                <View>
+                                    <TouchableOpacity onPress={this.GoToHouseDetail.bind(this,rowData.collect_id)}>
+                                        <View style={styles.cardcontainer}>
+                                            <View style={styles.leftContainer}>
+                                                <View style={styles.briefInfoContainer}>
+                                                    <Text style={{marginVertical: 5,fontSize:18,color:'black'}}>
+                                                        {rowData.areaname}{rowData.leasetype}
+                                                    </Text>
+                                                    <View style={styles.timeInfo}>
+                                                        <Text numberOfLines={2} style={styles.putoutTime}>{rowData.collect_time}收藏</Text>
+                                                    </View>
                                                 </View>
-
-                                                <View style={{flex: 1, paddingLeft: 10}}>
-                                                    <Text style={{color: '#999', textAlign: 'right'}}>{rowData.publish_time}</Text>
-                                                    <Text style={{marginTop: 8, color: 'red', textAlign: 'right'}}>{rowData.rent_fee}</Text>
-                                                </View>
+                                                <Text numberOfLines={2} style={styles.doorText}>{rowData.doormodel}</Text>
+                                                <Text style={styles.feeText}>{rowData.rentfee}</Text>
                                             </View>
-
-                                            <View style={{padding: 10, flexDirection: 'row'}}>
-                                                <Text style={styles.houseTag}>{rowData.house_decorate}</Text>
-                                                <Text style={styles.houseTag}>{rowData.total_area}</Text>
-                                                <Text style={styles.houseTag}>{rowData.toward_direct}</Text>
+                                            <View style={styles.rightContainer}>
+                                                <TouchableOpacity onPress={this.GoToGallery.bind(this,rowData.collect_id)}>
+                                                    <Image style={styles.enterImage} source={require('../res/images/still_default1.png')} />
+                                                    <View style={{justifyContent:'flex-end'}}>
+                                                        <Text style={{color: '#5CACEE',fontSize: 12}}>更多图片</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <Text style={styles.areaText}>{rowData.totalarea}</Text>
                                             </View>
                                         </View>
                                     </TouchableOpacity>
@@ -187,19 +146,47 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#E8E8E8',
     },
-    houseTag: {
-        color: '#999',
-        fontSize: 12,
-        marginLeft: 5,
-        marginRight: 5,
-        height: 20,
-        paddingTop: 3,
-        paddingLeft: 5,
-        paddingRight: 5,
-        borderWidth: 0.5,
-        borderRadius: 10,
-        borderColor: '#B0C4DE',
-        //backgroundColor:'#B0C4DE'
+    cardcontainer: {
+        flexDirection: 'row',
+        marginBottom: 10,
+        marginHorizontal: 10,
+        marginTop: 3,
+        padding: 8,
+        borderWidth: 1,
+        borderColor: '#DADADA',
+        backgroundColor: 'white',
+        //elevation: 1
+    },
+    leftContainer: {
+        justifyContent: 'space-between',
+        flex: 1
+    },
+    rightContainer: {
+        //justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        justifyContent:'flex-end'
+    },
+    briefInfoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    timeInfo: {
+        flex: 1,
+        marginLeft: 10
+    },
+    putoutTime: {
+        color: '#5CACEE',
+        fontSize: 12
+    },
+    doorText: {
+        color:'#79767C',
+        marginTop: 5,
+        fontSize: 14
+    },
+    areaText: {
+        color: 'orange',
+        marginTop: 5,
+        fontSize: 16
     },
 });
 

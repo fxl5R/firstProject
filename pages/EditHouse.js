@@ -610,7 +610,6 @@ const styles = StyleSheet.create({
 
     TextInputStyle:
         {
-
             borderRadius: 10,
             borderWidth: 1,
             borderColor: '#6495ED',

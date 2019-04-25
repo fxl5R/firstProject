@@ -110,20 +110,20 @@ export default class login extends Component {
                               }}>
                             新用户
                         </Text>
-                        {/*<View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',bottom:10}}>
+                        <View style={{flex:1,flexDirection:'row',alignItems: 'flex-end',marginBottom:20}}>
                     <Text style={styles.style_view_unlogin}
                               onPress={()=>{
-                                  this.props.navigation.navigate('register');
+                                  this.props.navigation.navigate('ManaLogin');
                               }}>
-                            忘记密码?
+                            管理员入口
                         </Text>
-                        <Text style={styles.style_view_register}
+{/*                        <Text style={styles.style_view_register}
                               onPress={()=>{
                                   this.props.navigation.navigate('ValidRegister');
                               }}>
                             新用户
-                        </Text>
-                    </View>*/}
+                        </Text>*/}
+                    </View>
                     </View>
             </View>
             </ImageBackground>

@@ -35,7 +35,7 @@ House_Info.schema = {
             house_location:'string',                  //房产地址
             owner_tel:'string',                       //房主联系电话
             certification:{type:'int',default: 0,optional: true},//是否后台认证
-            collects: { type: 'linkingObjects', objectType:'Collections',property:'houses'}//与收藏表双向链接
+            //collects: { type: 'linkingObjects', objectType:'Collections',property:'houses'}//与收藏表双向链接
         }
 };
 
@@ -86,9 +86,14 @@ Collections.schema = {
     properties: {                               // 属性
         id: { type:'int', indexed: true },      // 收藏ID，主键
         collect_id:'int',                       // 收藏内容的id
-        houses:'House_Info',                    //与房屋表双向链接，存储房屋信息to-many relationship：{type:'list',objectType:'House_Info'}
+        //houses:'House_Info',                    //与房屋表双向链接，存储房屋信息to-many relationship：{type:'list',objectType:'House_Info'}
         collector_id:'int',                     // 收藏者id
-        collect_time:{ type: 'string'}          //收藏时间
+        collect_time:{ type: 'string'},         //收藏时间
+        areaname:'string',                      //收藏小区名
+        leasetype:'string',                     //收藏户型
+        rentfee:'string',                       //收藏租金
+        doormodel:'string',                     //收藏户型
+        totalarea:'string'                      //收藏总面积
     }
 };
 
@@ -97,7 +102,7 @@ Rent_Relate.schema = {
     name: 'Rent_Relate',
     primaryKey: 'relate_id',
     properties: {                               // 属性
-        relate_id: { type:'int', indexed: true }, // 收藏ID，主键
+        relate_id: { type:'int', indexed: true },// 收藏ID，主键
         roomer_id:'int',                        // 租客id
         owner_id:'int',                         // 房主id
         rented_id:'int',                        // 租赁的房屋id

@@ -101,7 +101,7 @@ export default class HouseDetail extends React.Component {
         let thehouse = realm.objects('House_Info').filtered('house_id==$0',house_id)[0];
         let theRelate=realm.objects('Rent_Relate').filtered('owner_id == $0',user.id)
             .filtered('rented_id==$0',house_id);                //.filtered('isRenting == $0', '2')
-        if(theRelate.length>0&&theRelate[0].isRenting!=='0'){
+        if(theRelate.length>0){
             let applierId=theRelate[0].roomer_id;
             let theApplier=realm.objects('User').filtered("id == $0", applierId)[0];
             return(
@@ -599,17 +599,20 @@ export default class HouseDetail extends React.Component {
                             toastShort('已取消收藏');
                         });
                     }}:{title: '收藏房屋', onPress:()=>{
-                        let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id);
-                        console.log('houseDetail-收藏后收藏者id：'+thiscollect.collector_id+'测试userid'+user.id+'传递的房屋ItemID'+itemId);
                         realm.write(() => {
                             realm.create('Collections', {
                                 id:realm.objects('Collections').length+1,
                                 collect_id:itemId,
+                                areaname:thehouse.area_name,
+                                leasetype:thehouse.lease_type,
+                                rentfee:thehouse.rent_fee,
+                                doormodel:thehouse.door_model,
+                                totalarea:thehouse.total_area,
                                 collector_id:user.id,
                                 collect_time:new Date().toLocaleTimeString(),
 
                             });
-                            console.log('测试收藏者id22'+thiscollect.collector_id+itemId);
+                            console.log('houseDetail-收藏后信息：'+JSON.stringify(realm.objects('Collections')));
                             toastShort('收藏成功');
                         });
                     }}
@@ -670,27 +673,29 @@ export default class HouseDetail extends React.Component {
                         });
 
                     }}:{title: '收藏此房屋', onPress:()=>{
-                        let thiscollect=realm.objects('Collections').filtered('collector_id==$0',user.id);
-                        console.log('houseDetail-收藏后收藏者id：'+thiscollect.collector_id+'测试userid'+user.id+'传递的房屋ItemID'+itemId);
                         realm.write(() => {
                             realm.create('Collections', {
                                 id:realm.objects('Collections').length+1,
                                 collect_id:itemId,
+                                areaname:thehouse.area_name,
+                                leasetype:thehouse.lease_type,
+                                rentfee:thehouse.rent_fee,
+                                doormodel:thehouse.door_model,
+                                totalarea:thehouse.total_area,
                                 collector_id:user.id,
                                 collect_time:new Date().toLocaleTimeString(),
-
                             });
-                            console.log('测试收藏者id22'+thiscollect.collector_id+itemId);
+                            console.log('houseDetail-收藏后信息2：'+JSON.stringify(realm.objects('Collections')));
                             toastShort('收藏成功');
                         });
-                    }}
-            ,
+                    }},
             withRelate.length>0?
                 {title: '取消租赁申请', onPress:()=>{
                         realm.write(() => {
                             let withrent = realm.objects('Rent_Relate').filtered('roomer_id==$0', user.id)
                                 .filtered('isRenting == $0', '2').filtered('rented_id==$0', thehouse.house_id);
                             realm.delete(withrent);
+                            realm.create('House_Info',{house_id:thehouse.house_id,certification:null},true);//重新显示房源
                             toastShort('已取消申请');
                         });
                     }
@@ -715,7 +720,7 @@ export default class HouseDetail extends React.Component {
 
         ];
             let cancelItem = {title: '取消'};
-            ActionSheet.show(theRelate.length>0&&theComment.length<0?items:itemswithoutcomment, cancelItem, {modal});
+            ActionSheet.show(theRelate.length>0&&theComment.length<1?items:itemswithoutcomment, cancelItem, {modal});
 
     }
         render() {

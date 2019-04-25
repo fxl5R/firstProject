@@ -38,7 +38,32 @@ import TagsSelect from '../component/TagsSelect';
 
 import FormWithInput from '../component/Form/FormWithInput';
 
+import ManaLogin from '../manager/ManaLogin';
+import Home from '../manager/Home';
+import UserTable from '../manager/UserTable';
+import TradeTable from '../manager/TradeTable';
+import HouseTable from '../manager/HouseTable';
+import CommentTable from '../manager/CommentTable';
+import TradeDetail from '../manager/TradeDetail';
+import UserDetail from '../manager/UserDetail';
+import HouseInfoDetail from '../manager/HouseInfoDetail';
+import CreateUser from '../manager/CreateUser';
+
+
+
 const AppStackNavigator = createStackNavigator({
+
+    Login:{
+        screen:login,
+        navigationOptions:{header: null}
+    },
+
+    Home:{
+        screen:Home,
+        navigationOptions:{
+            header:null
+        }
+    },
 
     TabPage:{
         screen:TabPage,
@@ -47,10 +72,6 @@ const AppStackNavigator = createStackNavigator({
         }
     },
 
-    Login:{
-        screen:login,
-        navigationOptions:{header: null}
-    },
 
     convertRealm:{
         screen:convertRealm,
@@ -222,7 +243,61 @@ const AppStackNavigator = createStackNavigator({
             header:null
         }
     },
+    ManaLogin:{
+      screen:ManaLogin,
+      navigationOptions:{
+          header:null
+      }
+    },
 
+    UserTable:{
+        screen:UserTable,
+        navigationOptions:{
+            header:null
+        }
+    },
+    UserDetail:{
+        screen:UserDetail,
+        navigationOptions:{
+            header:null
+        }
+    },
+    CreateUser:{
+        screen:CreateUser,
+        navigationOptions:{
+            header:null
+        }
+    },
+    TradeTable:{
+        screen:TradeTable,
+        navigationOptions:{
+            header:null
+        }
+    },
+    TradeDetail:{
+        screen:TradeDetail,
+        navigationOptions:{
+            header:null
+        }
+    },
+    HouseTable:{
+        screen:HouseTable,
+        navigationOptions:{
+            header:null
+        }
+    },
+    HouseInfoDetail:{
+      screen:HouseInfoDetail,
+      navigationOptions:{
+          header:null
+      }
+    },
+    CommentTable:{
+        screen:CommentTable,
+        navigationOptions:{
+            header:null
+        }
+    },
     Guide:{
         screen:guidePage,
         navigationOptions:{

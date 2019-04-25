@@ -60,23 +60,24 @@ class ValidRegister extends Component {
             +this.state.form.username+'密码'+this.state.form.password+'邮箱地址'+this.state.form.emailAddress
             +'联系电话'+this.state.form.userTel
             +JSON.stringify(GiftedFormManager.validate('signupForm')));
+        let hasUser=realm.objects('User').filtered('userName==$0',[this.state.form.username].toString());
 
         if(GiftedFormManager.validate('signupForm').isValid){
-
-            realm.write(()=> {
-                realm.create('User', {
-                    id:realm.objects('User').length+1,
-                    userName: [this.state.form.username].toString(),
-                    userPassword: [this.state.form.password].toString(),
-                    nickName:[this.state.form.nickName].toString(),
-                    userEmail:[this.state.form.emailAddress].toString(),
-                    userTel:[this.state.form.userTel].toString(),
-                    userLocation:'所在地',
-                    userSex: '性别',
-                    cTime:new Date().toLocaleTimeString()
+            if(hasUser.length<1){
+                realm.write(()=> {
+                    realm.create('User', {
+                        id:realm.objects('User').length+1,
+                        userName: [this.state.form.username].toString(),
+                        userPassword: [this.state.form.password].toString(),
+                        nickName:[this.state.form.nickName].toString(),
+                        userEmail:[this.state.form.emailAddress].toString(),
+                        userTel:[this.state.form.userTel].toString(),
+                        userLocation:'所在地',
+                        userSex: '性别',
+                        cTime:new Date().toLocaleTimeString()
+                    });
                 });
-            });
-
+            }else {toastShort('用户名已被使用')}
 /*
             Realm.Sync.User.login(`https://${URL}`, username, password)
                 .then((user) => {
@@ -109,9 +110,6 @@ class ValidRegister extends Component {
                 });
 
 */
-
-
-
             toastShort('用户'+this.state.form.username+'注册成功，'+'跳转至登录页面');
             this.props.navigation.navigate('Login');
         }else {
