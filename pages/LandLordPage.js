@@ -72,8 +72,11 @@ class LandLordPage extends React.Component {
      * 根据用户id跳转用户个人主页
      **/
     GoToUserDetail(from_uid) {
+        const houseId=this.props.navigation.getParam('houseId','No-HouseID');
         this.props.navigation.navigate('UserPage',{
-            itemId: from_uid});
+            itemId: from_uid,
+            houseID:houseId
+        });
     };
     /**
      * 根据house_id跳转房源详情
@@ -384,7 +387,7 @@ class LandLordPage extends React.Component {
                                 <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
                                 <TouchableOpacity onPress={
                                     this.GoToHouseDetail.bind(this,rowData.to_hid)}>
-                                    <Text style={styles.link_housetext}>{rowData.h_tile}►</Text>
+                                    <Text style={styles.link_housetext}>{rowData.to_uid===-1?'点击查看房屋':rowData.h_tile}►</Text>
                                 </TouchableOpacity>
                             </View>
                             <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>

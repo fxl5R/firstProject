@@ -8,6 +8,7 @@
 
 import React, {Component} from 'react';
 import {
+    Alert,
     Image,
     ListView,
     Platform,
@@ -19,6 +20,9 @@ import {
     View
 } from 'react-native';
 import realm from "../util/realm";
+import * as WeiboAPI from "rn-weibo";
+import {toastShort} from "../util/ToastUtil";
+import {ActionSheet} from "teaset";
 export default class CommentTable extends Component {
 
     /**
@@ -42,6 +46,29 @@ export default class CommentTable extends Component {
             user_id: user_id});
     };
 
+    showaction(modal,commentID) {
+        let items = [
+                {title: '删除此评论？', onPress:()=>{
+                        Alert.alert(
+                            '提示',
+                            '删除后信息无法找回',
+                            [
+                                {text:'取消',onPress:(()=>{}),style:'cancel'},
+                                {text:'确定',onPress: (()=>{
+                                        realm.write(() => {
+                                            let thecomment = realm.objects('Comments').filtered('id==$0',commentID)[0];
+                                            realm.delete(thecomment);
+                                        });
+                                            this.props.navigation.navigate('CommentTable');
+                                    })}]
+                        );
+                    }
+                }
+
+        ];
+        let cancelItem = {title: '取消'};
+        ActionSheet.show(items, cancelItem, {modal});
+    }
     render() {
         let comments=realm.objects('Comments');
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -55,7 +82,7 @@ export default class CommentTable extends Component {
                         dataSource={ds.cloneWithRows(comments)}
                         renderRow={(rowData) =>
                             <View>
-                                <TouchableOpacity onPress={this.GoToTradeDetail.bind(this,rowData.relate_id)}>
+                                <TouchableOpacity onPress={() =>this.showaction(true,rowData.id)}>
                                     <View style={styles.cardcontainer}>
                                         <View style={styles.briefInfoContainer}>
                                             <Text style={{marginVertical: 5,fontSize:15,color:'black'}}>
@@ -69,7 +96,7 @@ export default class CommentTable extends Component {
 
                                             <TouchableOpacity onPress={this.GoToDetail.bind(this,rowData.to_uid,rowData.to_uid===-1?rowData.to_hid:rowData.to_uid)}>
                                                 <Text style={{marginVertical: 5,fontSize:15,color:'black'}}>
-                                                    评论对象：{rowData.to_uid===-1?'房屋：'+rowData.to_hid:'用户：'+rowData.to_uid}；
+                                                    评论对象：{rowData.to_uid===-1?'房屋ID：'+rowData.to_hid:'用户ID：'+rowData.to_uid}；
                                                 </Text>
                                             </TouchableOpacity>
                                             <Text style={{marginVertical: 5,fontSize:15,color:'black'}}>

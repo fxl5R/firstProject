@@ -37,14 +37,18 @@ export default class HouseDetail extends React.Component {
     }
     GoToGallery(house_id) {
         this.props.navigation.navigate('ImageBrowers',{
-            itemId: house_id});
+            itemId: house_id,
+            });
     };
     /**
      * 根据用户id跳转用户个人主页
      **/
     GoToUserDetail(from_uid) {
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');
         this.props.navigation.navigate('UserPage',{
-            itemId: from_uid});
+            itemId: from_uid,
+            houseID:itemId});
     };
     //渲染房屋图片和简介
     renderHousePic(){
@@ -101,7 +105,10 @@ export default class HouseDetail extends React.Component {
         let thehouse = realm.objects('House_Info').filtered('house_id==$0',house_id)[0];
         let theRelate=realm.objects('Rent_Relate').filtered('owner_id == $0',user.id)
             .filtered('rented_id==$0',house_id);                //.filtered('isRenting == $0', '2')
-        if(theRelate.length>0){
+        let publisher_id=realm.objects('House_Info').filtered('house_id==$0',house_id)[0].publisher_id;//取出从HouseCell传递的对应id的房屋信息
+        let commets=realm.objects('Comments').filtered('from_uid==$0',publisher_id)
+            .filtered('to_hid==$0',house_id).filtered('to_uid==$0',theRelate[0].roomer_id);//查看房主是否对用户进行评价
+        if(theRelate.length>0&&commets.length<1){
             let applierId=theRelate[0].roomer_id;
             let theApplier=realm.objects('User').filtered("id == $0", applierId)[0];
             return(
@@ -115,6 +122,7 @@ export default class HouseDetail extends React.Component {
                             contactText={theApplier.userName}
                             pictureUri={{uri:theApplier.portrait}}
                             onFormClick={() => {
+                                alert(publisher_id+';'+JSON.stringify(commets)+';'+house_id+';'+theRelate[0].roomer_id);
                                 this.props.navigation.navigate('UserPage',{
                                     itemId: applierId,
                                     tradeID:theRelate[0].relate_id,
@@ -135,7 +143,7 @@ export default class HouseDetail extends React.Component {
                     </View>
                     <Image source={require('../res/images/ic_center_line.png')}/>
                     <View style={{alignItems:'center',margin:20}}>
-                        <Text>暂时无人申请</Text>
+                        <Text>暂无租赁记录</Text>
                     </View>
                     <Image style={{padding:4}} source={require('../res/images/ic_center_line.png')}/>
                 </View>
@@ -158,7 +166,6 @@ export default class HouseDetail extends React.Component {
     }
     //进行渲染数据
     renderContent(dataSource) {
-
         return (
             <ListView
                 initialListSize={1}
@@ -464,8 +471,7 @@ export default class HouseDetail extends React.Component {
                         numberOfLines={8}
                         style={styles.expandText}
                         unexpandView={()=>null}
-                        expandView={()=>(<View style={styles.arrow}/>)}
-                    >
+                        expandView={()=>(<View style={styles.arrow}/>)}>
                         {house.house_description}
                     </ExpandableText>
                 </View>
@@ -629,18 +635,51 @@ export default class HouseDetail extends React.Component {
                 }:{title: '申请租赁', onPress:()=>{
                         let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0', user.id);//.filtered('isFinish == $0', '1')
                         console.log('申请后roomerid：'+theRelate.roomer_id);
-                        realm.write(() => {
-                            realm.create('Rent_Relate', {
-                                relate_id:realm.objects('Rent_Relate').length+1,
-                                roomer_id:user.id,
-                                owner_id:thehouse.publisher_id,//房主id
-                                rented_id:itemId,
-                                isRenting:'2',  //房屋状态：被申请中
-                                isFinish:'0'    //交易状态：为完成
+                        if(user.id!==thehouse.publisher_id){
+                            realm.write(() => {
+                                realm.create('Rent_Relate', {
+                                    relate_id:realm.objects('Rent_Relate').length+1,
+                                    roomer_id:user.id,
+                                    owner_id:thehouse.publisher_id,//房主id
+                                    rented_id:itemId,
+                                    isRenting:'2',  //房屋状态：被申请中
+                                    isFinish:'0'    //交易状态：为完成
+                                });
+                                console.log('申请后roomerid：'+theRelate.roomer_id);
+                                toastShort('发送申请成功，请等待');
+                                //申请租赁时默认收藏
+                                realm.create('Collections', {
+                                    id:realm.objects('Collections').length+1,
+                                    collect_id:itemId,
+                                    areaname:thehouse.area_name,
+                                    leasetype:thehouse.lease_type,
+                                    rentfee:thehouse.rent_fee,
+                                    doormodel:thehouse.door_model,
+                                    totalarea:thehouse.total_area,
+                                    collector_id:user.id,
+                                    collect_time:new Date().toLocaleTimeString(),
+                                });
                             });
-                            console.log('申请后roomerid：'+theRelate.roomer_id);
-                            toastShort('发送申请成功，请等待');
-                        });
+                            //申请租赁时默认收藏
+                            /*realm.write(() => {
+                                realm.create('Collections', {
+                                    id:realm.objects('Collections').length+1,
+                                    collect_id:itemId,
+                                    areaname:thehouse.area_name,
+                                    leasetype:thehouse.lease_type,
+                                    rentfee:thehouse.rent_fee,
+                                    doormodel:thehouse.door_model,
+                                    totalarea:thehouse.total_area,
+                                    collector_id:user.id,
+                                    collect_time:new Date().toLocaleTimeString(),
+                                });
+                                console.log('houseDetail-收藏后信息：'+JSON.stringify(realm.objects('Collections')));
+                                //toastShort('收藏成功');
+                            });*/
+                        }else {
+                            toastShort('无法租赁自己的房屋');
+                        }
+
                     }
                 },
             {title: '评论此房屋', onPress:()=>{
@@ -702,19 +741,40 @@ export default class HouseDetail extends React.Component {
                 }:{title: '申请租赁此房屋', onPress:()=>{
                         let theRelate=realm.objects('Rent_Relate').filtered('roomer_id == $0', user.id);//.filtered('isFinish == $0', '1')
                         console.log('申请后roomerid：'+theRelate.roomer_id);
-                        realm.write(() => {
-                            realm.create('Rent_Relate', {
-                                relate_id:realm.objects('Rent_Relate').length+1,
-                                roomer_id:user.id,
-                                owner_id:thehouse.publisher_id,//房主id
-                                rented_id:itemId,
-                                isRenting:'2',  //房屋状态：被申请中
-                                isFinish:'0'    //交易状态：为完成
+                        if(user.id!==thehouse.publisher_id){
+                            realm.write(() => {
+                                realm.create('Rent_Relate', {
+                                    relate_id:realm.objects('Rent_Relate').length+1,
+                                    roomer_id:user.id,
+                                    owner_id:thehouse.publisher_id,//房主id
+                                    rented_id:itemId,
+                                    isRenting:'2',  //房屋状态：被申请中
+                                    isFinish:'0'    //交易状态：为完成
+                                });
+                                console.log('申请后roomerid：'+theRelate.roomer_id);
+                                toastShort('发送申请成功，请等待');
+                                realm.create('House_Info',{house_id:thehouse.house_id,certification:2},true);//阻止显示房源
                             });
-                            console.log('申请后roomerid：'+theRelate.roomer_id);
-                            toastShort('发送申请成功，请等待');
-                            realm.create('House_Info',{house_id:thehouse.house_id,certification:2},true);//阻止显示房源
-                        });
+                            //申请时默认收藏
+                            realm.write(() => {
+                                realm.create('Collections', {
+                                    id:realm.objects('Collections').length+3,
+                                    collect_id:itemId,
+                                    areaname:thehouse.area_name,
+                                    leasetype:thehouse.lease_type,
+                                    rentfee:thehouse.rent_fee,
+                                    doormodel:thehouse.door_model,
+                                    totalarea:thehouse.total_area,
+                                    collector_id:user.id,
+                                    collect_time:new Date().toLocaleTimeString(),
+                                });
+                                console.log('houseDetail-收藏后信息：'+JSON.stringify(realm.objects('Collections')));
+                                //toastShort('收藏成功');
+                            });
+                        }else {
+                            toastShort('无法租赁自己的房屋')
+                        }
+
                     }
                 },
 
@@ -731,6 +791,7 @@ export default class HouseDetail extends React.Component {
         let house=houses[0];*/
         const { navigation } = this.props;
         const isEdit = navigation.getParam('isEdit', 'NO-Edit');        //from管理房屋页面
+        const itemId=navigation.getParam('itemId','No-houseid');
             if(isEdit===1){
                 return (
                     <View>

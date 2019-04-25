@@ -8,6 +8,7 @@
 
 import React, {Component} from 'react';
 import {
+    Alert,
     Image,
     ListView,
     Platform,
@@ -19,6 +20,7 @@ import {
     View
 } from 'react-native';
 import realm from "../util/realm";
+import {ActionSheet} from "teaset";
 export default class TradeTable extends Component {
 
     /**
@@ -28,6 +30,30 @@ export default class TradeTable extends Component {
         this.props.navigation.navigate('TradeDetail',{
             relate_id: relate_id});
     };
+
+    showaction(modal,relate_id) {
+        let items = [
+            {title: '删除此交易内容？', onPress:()=>{
+                    Alert.alert(
+                        '提示',
+                        '删除后信息无法找回',
+                        [
+                            {text:'取消',onPress:(()=>{}),style:'cancel'},
+                            {text:'确定',onPress: (()=>{
+                                    realm.write(() => {
+                                        let thetrade = realm.objects('Rent_Relate').filtered('relate_id==$0',relate_id);
+                                        realm.delete(thetrade);
+                                    });
+                                    this.props.navigation.navigate('TradeTable');
+                                })}]
+                    );
+                }
+            }
+
+        ];
+        let cancelItem = {title: '取消'};
+        ActionSheet.show(items, cancelItem, {modal});
+    }
 
     render() {
         const {navigation}=this.props;
@@ -43,11 +69,12 @@ export default class TradeTable extends Component {
                             dataSource={ds.cloneWithRows(trades)}
                             renderRow={(rowData) =>
                                 <View>
-                                    <TouchableOpacity onPress={this.GoToTradeDetail.bind(this,rowData.relate_id)}>
+                                    <TouchableOpacity onPress={() =>this.showaction(true,rowData.rented_id)}>
                                         <View style={styles.cardcontainer}>
                                                 <View style={styles.briefInfoContainer}>
                                                     <Text style={{marginVertical: 5,fontSize:15,color:'black'}}>
                                                         编号：{rowData.relate_id};状态：{rowData.isRenting==='1'?'正在出租':'正在申请'}；
+                                                        交易：{rowData.isFinish===1?'已结束':'未完成'}
                                                     </Text>
                                                     <Text style={{marginVertical: 5,fontSize:15,color:'black'}}>
                                                         申请人ID：{rowData.roomer_id}；房屋ID：{rowData.rented_id}；房主ID：{rowData.owner_id}

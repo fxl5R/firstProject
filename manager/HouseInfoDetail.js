@@ -273,7 +273,7 @@ export default class HouseInfoDetail extends Component {
                         }}
                     />
                 </View>
-                <View style={{flexDirection:'row'}}>
+                <View style={{flexDirection:'row',marginTop:15}}>
                     <Text style={{marginTop:5}}>联系方式：</Text>
                     <TextInput
                         style={styles.TextInputStyle}

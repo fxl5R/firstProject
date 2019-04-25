@@ -97,7 +97,7 @@ export default class CollectList extends Component {
                                                 <TouchableOpacity onPress={this.GoToGallery.bind(this,rowData.collect_id)}>
                                                     <Image style={styles.enterImage} source={require('../res/images/still_default1.png')} />
                                                     <View style={{justifyContent:'flex-end'}}>
-                                                        <Text style={{color: '#5CACEE',fontSize: 12}}>更多图片</Text>
+                                                        <Text style={{color: '#5CACEE',fontSize: 12}}>查看图片</Text>
                                                     </View>
                                                 </TouchableOpacity>
                                                 <Text style={styles.areaText}>{rowData.totalarea}</Text>

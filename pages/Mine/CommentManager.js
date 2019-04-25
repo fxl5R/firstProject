@@ -18,14 +18,32 @@ export default class CommentManager extends React.Component {
             commentTime:''
         };
         this.GoToUserDetail=this.GoToUserDetail.bind(this);
+        this.GoToHouseDetail=this.GoToHouseDetail.bind(this);
+
     }
 
     /**
      * 根据用户id跳转用户个人主页
      **/
     GoToUserDetail(from_uid) {
+        const { navigation } = this.props;
+        const itemId = navigation.getParam('itemId', 'NO-ID');//从个人中心获取用户的ID
+        let trade=realm.objects('Rent_Relate').filtered('roomer_id==$0',from_uid)
+            .filtered('owner_id==$0',itemId)[0];
+        alert(JSON.stringify(trade));
         this.props.navigation.navigate('UserPage',{
-            itemId: from_uid});
+            itemId: from_uid,
+            houseID:trade.rented_id
+        });
+    };
+    /**
+     * 根据house_id跳转房源详情
+     **/
+    GoToHouseDetail(house_id) {
+        this.props.navigation.navigate('HouseDetail',{
+            itemId: house_id,
+            //isEdit:1 只能在管理房屋页面对房屋进行修改
+        });
     };
 
     _renderSeparatorView(sectionID: number, rowID: number) {
@@ -46,7 +64,13 @@ export default class CommentManager extends React.Component {
                                 <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
                             </TouchableOpacity>
                             <View style={{flex:1,marginLeft:8}}>
+                                <View style={{flexDirection:'row'}}>
                                 <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                                <TouchableOpacity onPress={
+                                    this.GoToHouseDetail.bind(this,rowData.to_hid)}>
+                                    <Text style={styles.link_housetext}>{rowData.to_uid===-1?'点击查看房屋':rowData.h_tile}►</Text>
+                                </TouchableOpacity>
+                                </View>
                                 <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
                             </View>
                             <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
@@ -65,7 +89,7 @@ export default class CommentManager extends React.Component {
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从个人中心获取用户的ID
         let comments=realm.objects('Comments').filtered('to_uid==$0',itemId);
-        console.log('收到的评论收到的评论收到的评论!!!!'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
+        console.log('收到的评论'+JSON.stringify(this.state.dataSource)+JSON.stringify(comments));
         return (
             <View style={{flex:1}}>
                 {this.renderContent(this.state.dataSource.cloneWithRows(
@@ -142,8 +166,13 @@ let styles = StyleSheet.create({
     },
     comment_content:{
         margin:0
-    }
-
+    },
+    link_housetext:{
+        color:'black',
+        fontStyle:'italic',
+        fontSize:12,
+        marginLeft:30
+    },
 });
 /*
 export const title = 'Tabs';

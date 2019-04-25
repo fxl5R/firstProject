@@ -175,14 +175,26 @@ class UserPage extends React.Component {
     renderCenterBar(){
         const { navigation } = this.props;
         const itemId = navigation.getParam('itemId', 'NO-ID');//从评论列表详情获取发布评论的用户的ID
+        const houseID=navigation.getParam('houseID','No-houseID');
         let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
+        let house_pulisher=realm.objects('House_Info').filtered('house_id==$0',houseID)[0];
+        let comment=realm.objects('Comments').filtered('to_uid==$0',itemId).filtered('from_uid==$0',house_pulisher.publisher_id);
         return (
             <View style={{backgroundColor:'white'}}>
                 <View style={{flexDirection:'row',height:45}}>
                     <View style={{flex:1}}>
                         <TouchableOpacity style={{justifyContent:'center',alignItems:'center',flex:1}}
-                                          onPress={()=>{this.props.navigation.navigate('CommentApp',{
-                                              itemId: user_publisher.id})}}>{/*onPress={()=>{this.buttonItemAction(0)}}*/}
+                                          onPress={()=>{
+                                              if(comment.length<1){
+                                                  this.props.navigation.navigate('CommentApp',{
+                                                      itemId: user_publisher.id,
+                                                      houseID: houseID,
+                                                      user_publisherId:user_publisher.id
+                                                  })
+                                              }else {
+                                                  toastShort('你已进行评论')
+                                              }
+                                              }}>{/*onPress={()=>{this.buttonItemAction(0)}}*/}
                             <View style={{justifyContent:'center',alignItems:'center'}}>
                                 <Image source={require('../res/images/ic_hmsg2.png')}
                                        style={{width:20,height:20}}/>
@@ -334,7 +346,13 @@ class UserPage extends React.Component {
                                 <Image source={{uri:rowData.from_portrait}} style={{width:35,height:35}}/>
                             </TouchableOpacity>
                             <View style={{flex:1,marginLeft:8}}>
-                                <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                                <View style={{flexDirection:'row'}}>
+                                    <Text style={styles.comment_username}>{rowData.from_nickName}</Text>
+                                    <TouchableOpacity onPress={
+                                        this.GoToHouseDetail.bind(this,rowData.to_hid)}>
+                                        <Text style={styles.link_housetext}>{rowData.h_tile}►</Text>
+                                    </TouchableOpacity>
+                                </View>
                                 <Text style={{color:'#777',fontSize:12,marginTop:5}}>{rowData.content}</Text>
                             </View>
                             <View style={{marginLeft:5}}><Text style={{color:'#777',fontSize:12}}>{rowData.createTime}</Text></View>
@@ -435,6 +453,10 @@ class UserPage extends React.Component {
         let house_rented=realm.objects('Rent_Relate').filtered('relate_id==$0', tradeID)[0];
         //用发布人ID关联User表查询该用户的相关信息
         let user_applier=realm.objects('User').filtered('id==$0',itemId)[0];
+        const houseID=navigation.getParam('houseID','No-houseID');
+        let user_publisher=realm.objects('User').filtered('id==$0',itemId)[0];
+        let house_pulisher=realm.objects('House_Info').filtered('house_id==$0',houseID)[0];
+        let comment=realm.objects('Comments').filtered('to_uid==$0',itemId).filtered('from_uid==$0',house_pulisher.publisher_id);
         view.measure((x, y, width, height, pageX, pageY) => {
             let items = [
                 isRenting==='2'?
@@ -442,15 +464,34 @@ class UserPage extends React.Component {
                             /*if(this.state.newPwd2){}*/
                             realm.write(() => {
                                 realm.create('Rent_Relate', {relate_id: tradeID, isRenting: '1'}, true);
-                            })
+                                toastShort('已同意交易')
+                            });
+
                     }}:
+                    isRenting==='1'?
                     {title: '交易完成', icon: require('../res/images/ic_finish.png'), onPress: () => {
-                            /*if(this.state.newPwd2){}*/
                             realm.write(() => {
                                 realm.create('Rent_Relate', {relate_id: tradeID, isRenting: '0',isFinish:'1'}, true);
+                            });
+                            realm.write(() => {
+                                realm.create('Rent_Relate', {relate_id: tradeID, isRenting: '0',isFinish:'1'}, true);
+                            });
+                            realm.write(() => {
                                 realm.create('House_Info',{house_id:house_rented.rented_id,certification:null},true);//重新放出房源
-                            })
-                        }},
+                            });
+                            toastShort('交易已完成');
+                        }}:
+                        {title: '评价房客', icon: require('../res/images/ic_finish.png'), onPress: () => {
+                                if(comment.length<1){
+                                    this.props.navigation.navigate('CommentApp',{
+                                        itemId: user_publisher.id,
+                                        houseID: houseID,
+                                        user_publisherId:user_publisher.id
+                                    })
+                                }else {
+                                    toastShort('你已进行评论')
+                                }
+                            }},
                 {title: '清除交易', icon: require('../res/images/ic_del.png'), onPress: () =>{this.delete_Trade()}},
             ];
             Menu.show({x: pageX, y: pageY, width, height}, items,{align});
@@ -480,7 +521,6 @@ class UserPage extends React.Component {
                     })}]
         );
     }
-
     render() {
 
         return (
@@ -535,5 +575,11 @@ let styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: '#E8E8E8'
     },
+    link_housetext:{
+        color:'black',
+        fontStyle:'italic',
+        fontSize:12,
+        marginLeft:30
+    }
 });
 export default UserPage;
